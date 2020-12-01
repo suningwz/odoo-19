@@ -1,0 +1,13 @@
+<odoo>
+    <data>
+        <report
+            string="Informe paquete"
+            id="scld_integration_parcel_report"
+            model="scld_integration.parcel"
+            report_type="qweb-pdf"
+            name="scld_integration.report_parcel_card"
+            file="scld_integration.report_parcel_card"
+            attachment_use="True"
+        />
+    </data>
+</odoo>
