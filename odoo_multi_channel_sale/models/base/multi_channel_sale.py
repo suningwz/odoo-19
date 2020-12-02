@@ -236,7 +236,7 @@ class MultiChannelSale(models.Model):
 		string='Stock Location',
 		help='Stock Location used for imported product.',
 	)
-	company_id = fields.Many2many(
+	company_id = fields.One2many(
 		related='warehouse_id.company_id',
 		string='Company Id',
 	)
