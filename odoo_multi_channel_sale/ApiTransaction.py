@@ -5,23 +5,22 @@
 # License URL : <https://store.webkul.com/license.html/>
 ##############################################################################
 from logging import getLogger
-
 _logger = getLogger(__name__)
 
 METAMAP = {
 	'product.category': {
-		'model': 'channel.category.mappings',
-		'local_field': 'odoo_category_id',
+		'model'       : 'channel.category.mappings',
+		'local_field' : 'odoo_category_id',
 		'remote_field': 'store_category_id'
 	},
 	'product.template': {
-		'model': 'channel.template.mappings',
-		'local_field': 'odoo_template_id',
+		'model'       : 'channel.template.mappings',
+		'local_field' : 'odoo_template_id',
 		'remote_field': 'store_product_id'
 	},
 	'product.product': {
-		'model': 'channel.product.mappings',
-		'local_field': 'erp_product_id',
+		'model'       : 'channel.product.mappings',
+		'local_field' : 'erp_product_id',
 		'remote_field': 'store_variant_id'
 	}
 }
@@ -32,7 +31,6 @@ IMPORT_OPR = [
 	('res.partner', 'Customer'),
 	('delivery.carrier', 'Shipping Method'),
 ]
-
 
 class Transaction:
 	def __init__(self, channel, *args, **kwargs):
@@ -47,17 +45,17 @@ class Transaction:
 		msg = "Current channel doesn't allow it."
 
 		success_ids = []
-		error_ids = []
-		create_ids = []
-		update_ids = []
+		error_ids   = []
+		create_ids  = []
+		update_ids  = []
 		kw.update(
-			page_size=self.instance.api_record_limit
+			page_size = self.instance.api_record_limit
 		)
-		if hasattr(self.instance, 'import_{}'.format(self.channel)):
+		if hasattr(self.instance,'import_{}'.format(self.channel)):
 			msg = ''
 			try:
 				while True:
-					s_ids, e_ids, feeds = [], [], False
+					s_ids,e_ids,feeds = [], [], False
 					data_list, kw = getattr(
 						self.instance, 'import_{}'.format(self.channel))(object, **kw), kw
 					_logger.info(f'~~D~d~{data_list} feeds committed~~~~')
@@ -65,28 +63,25 @@ class Transaction:
 					data_list = [] if data_list in [None, False, ''] or len(data_list) < 1 else data_list[0]
 					if data_list and type(data_list) is list:
 						kw['last_id'] = data_list[-1].get('store_id')
-
+					
 					_logger.info(f'~~D~~{data_list} feeds committed~~~~')
 					_logger.info(f'~~Dsd~~{kw} feeds committed~~~~')
 					if data_list:
 						objectmapping = self.getFeedObjectDictionary()
 						if object in objectmapping:
-							s_ids, e_ids, feeds = self.env[objectmapping.get(object)].with_context(
+							s_ids,e_ids,feeds = self.env[objectmapping.get(object)].with_context(
 								channel_id=self.instance
 							)._create_feeds(data_list)
 						elif object == 'product.attribute':
 							_logger.info(f'~~~~{data_list} feeds committed~~~~')
-							data_list = data_list.get('create_ids', []) if data_list.get(
-								'create_ids') else data_list.get('update_ids', [])
-							msg = "<div class='alert alert-success' role='alert'><h3 class='alert-heading'><i class='fa fa-smile-o'/>  Congratulations !</h3><hr><span class='badge badge-pill badge-success'>Success</span>All attributes are synced along with the <span class='font-weight-bold'> {} attribute sets</span></div>".format(
-								len(
-									data_list)) if data_list else "<div class='alert alert-danger' role='alert'>Attributes are failed to import.</div>"
+							data_list = data_list.get('create_ids', []) if data_list.get('create_ids') else data_list.get('update_ids', [])
+							msg = "<div class='alert alert-success' role='alert'><h3 class='alert-heading'><i class='fa fa-smile-o'/>  Congratulations !</h3><hr><span class='badge badge-pill badge-success'>Success</span>All attributes are synced along with the <span class='font-weight-bold'> {} attribute sets</span></div>".format(len(data_list)) if data_list else "<div class='alert alert-danger' role='alert'>Attributes are failed to import.</div>"
 						else:
 							raise Exception('Invalid object type')
 					else:
 						raise Exception(kw.get('message'))
 
-					# NOTE: To handle api_limit==1 infinity loop
+					#NOTE: To handle api_limit==1 infinity loop
 					if kw.get('page_size', 0) == 1:
 						if locals().get('old_last_id') == kw.get('last_id'):
 							break
@@ -115,23 +110,21 @@ class Transaction:
 				operation = dict(IMPORT_OPR)[object]
 				debug = self.instance.debug
 				last_id = kw.get('last_id')
-				msg = self.getActionMessage(msg, success_ids, error_ids, create_ids, update_ids, last_id, debug,
-											operation)
+				msg = self.getActionMessage(msg, success_ids, error_ids, create_ids, update_ids, last_id, debug, operation)
 			if not msg:
 				msg += f"<div class='alert alert-danger' role='alert'><h3 class='alert-heading'><i class='fa fa-frown-o'/>  Sorry !</h3><hr><span class='badge badge-pill badge-danger'> 404 </span> <span class='font-weight-bold'> No records found for applied filter.</span></div>"
 		return self.display_message(msg)
 
 	def getFeedObjectDictionary(self):
-		return {'product.category': 'category.feed', 'product.template': 'product.feed', 'res.partner': 'partner.feed',
-				'sale.order': 'order.feed', 'delivery.carrier': 'shipping.feed'}
+		return {'product.category': 'category.feed', 'product.template': 'product.feed', 'res.partner': 'partner.feed', 'sale.order': 'order.feed','delivery.carrier': 'shipping.feed'}
 
 	def export_data(self, object, object_ids, operation='export'):
 		msg = "Selected Channel doesn't allow it."
-		success_ids, error_ids = [], []
+		success_ids, error_ids  = [], []
 
 		mappings = self.env[METAMAP.get(object).get('model')].search(
 			[
-				('channel_id', '=', self.instance.id),
+				('channel_id','=',self.instance.id),
 				(
 					METAMAP.get(object).get('local_field'),
 					'in',
@@ -140,12 +133,12 @@ class Transaction:
 			]
 		)
 
-		if operation == 'export' and hasattr(self.instance, 'export_{}'.format(self.channel)):
+		if operation == 'export' and hasattr(self.instance,'export_{}'.format(self.channel)):
 			msg = ''
 			local_ids = mappings.mapped(
-				lambda mapping: int(getattr(mapping, METAMAP.get(object).get('local_field')))
+				lambda mapping: int(getattr(mapping,METAMAP.get(object).get('local_field')))
 			)
-			local_ids = set(object_ids) - set(local_ids)
+			local_ids = set(object_ids)-set(local_ids)
 			if not local_ids:
 				return self.display_message(
 					"""<p style='color:orange'>
@@ -154,18 +147,18 @@ class Transaction:
 				)
 			operation = 'exported'
 			for record in self.env[object].browse(local_ids):
-				res, remote_object = getattr(self.instance, 'export_{}'.format(self.channel))(record)
+				res,remote_object = getattr(self.instance,'export_{}'.format(self.channel))(record)
 				if res:
-					self.create_mapping(record, remote_object)
+					self.create_mapping(record,remote_object)
 					success_ids.append(record.id)
 				else:
 					error_ids.append(record.id)
 
-		elif operation == 'update' and hasattr(self.instance, 'update_{}'.format(self.channel)):
+		elif operation == 'update' and hasattr(self.instance,'update_{}'.format(self.channel)):
 			msg = ''
 			local_ids = mappings.filtered_domain([
 				('need_sync', '=', 'yes')]).mapped(
-				lambda mapping: int(getattr(mapping, METAMAP.get(object).get('local_field')))
+				lambda mapping: int(getattr(mapping,METAMAP.get(object).get('local_field')))
 			)
 			if not local_ids:
 				if mappings:
@@ -182,9 +175,9 @@ class Transaction:
 					)
 			operation = 'updated'
 			for record in self.env[object].browse(local_ids):
-				res, remote_object = getattr(self.instance, 'update_{}'.format(self.channel))(
-					record=record,
-					get_remote_id=self.get_remote_id
+				res,remote_object = getattr(self.instance,'update_{}'.format(self.channel))(
+					record = record,
+					get_remote_id = self.get_remote_id
 				)
 				if res:
 					success_ids.append(record.id)
@@ -192,12 +185,12 @@ class Transaction:
 					error_ids.append(record.id)
 
 		self.env[METAMAP.get(object).get('model')].search([
-			('channel_id', '=', self.instance.id),
-			(
-				METAMAP.get(object).get('local_field'),
-				'in',
-				success_ids
-			)]).write({'need_sync': 'no'})
+				('channel_id','=',self.instance.id),
+				(
+					METAMAP.get(object).get('local_field'),
+					'in',
+					success_ids
+				)]).write({'need_sync': 'no'})
 
 		if not msg:
 			if success_ids:
@@ -206,57 +199,52 @@ class Transaction:
 				msg += f"<p style='color:red'>{error_ids} not {operation}.</p>"
 		return self.display_message(msg)
 
-	def get_remote_id(self, record):
-		mapping = self.env[METAMAP.get(record._name).get('model')].search(
+	def get_remote_id(self,record):
+		mapping =  self.env[METAMAP.get(record._name).get('model')].search(
 			[
-				('channel_id', '=', self.instance.id),
-				(METAMAP.get(record._name).get('local_field'), '=', record.id)
+				('channel_id','=',self.instance.id),
+				(METAMAP.get(record._name).get('local_field'),'=',record.id)
 			]
 		)
-		return getattr(mapping, METAMAP.get(record._name).get('remote_field'))
+		return getattr(mapping,METAMAP.get(record._name).get('remote_field'))
 
-	def create_mapping(self, local_record, remote_object):
+	def create_mapping(self,local_record,remote_object):
 		if local_record._name == 'product.category':
 			self.env['channel.category.mappings'].create(
 				{
-					'channel_id': self.instance.id,
-					'ecom_store': self.instance.channel,
-					'category_name': local_record.id,
-					'odoo_category_id': local_record.id,
-					'store_category_id': remote_object.get('id') if isinstance(remote_object,
-																			   dict) else remote_object.id,
-					'operation': 'export',
+					'channel_id'       : self.instance.id,
+					'ecom_store'       : self.instance.channel,
+					'category_name'    : local_record.id,
+					'odoo_category_id' : local_record.id,
+					'store_category_id': remote_object.get('id') if isinstance(remote_object,dict) else remote_object.id,
+					'operation'        : 'export',
 				}
 			)
 		elif local_record._name == 'product.template':
 			self.env['channel.template.mappings'].create(
 				{
-					'channel_id': self.instance.id,
-					'ecom_store': self.instance.channel,
-					'template_name': local_record.id,
+					'channel_id'      : self.instance.id,
+					'ecom_store'      : self.instance.channel,
+					'template_name'   : local_record.id,
 					'odoo_template_id': local_record.id,
-					'default_code': local_record.default_code,
-					'barcode': local_record.barcode,
-					'store_product_id': remote_object.get('id') if isinstance(remote_object,
-																			  dict) else remote_object.id,
-					'operation': 'export',
+					'default_code'    : local_record.default_code,
+					'barcode'         : local_record.barcode,
+					'store_product_id': remote_object.get('id') if isinstance(remote_object,dict) else remote_object.id,
+					'operation'       : 'export',
 				}
 			)
-			remote_variants = remote_object.get('variants') if isinstance(remote_object,
-																		  dict) else remote_object.variants
-			for local_variant, remote_variant in zip(local_record.product_variant_ids, remote_variants):
+			remote_variants = remote_object.get('variants') if isinstance(remote_object,dict) else remote_object.variants
+			for local_variant,remote_variant in zip(local_record.product_variant_ids,remote_variants):
 				self.env['channel.product.mappings'].create(
 					{
-						'channel_id': self.instance.id,
-						'ecom_store': self.instance.channel,
-						'product_name': local_variant.id,
-						'erp_product_id': local_variant.id,
-						'default_code': local_variant.default_code,
-						'barcode': local_variant.barcode,
-						'store_product_id': remote_object.get('id') if isinstance(remote_object,
-																				  dict) else remote_object.id,
-						'store_variant_id': remote_variant.get('id') if isinstance(remote_variant,
-																				   dict) else remote_variant.id,
+						'channel_id'      : self.instance.id,
+						'ecom_store'      : self.instance.channel,
+						'product_name'    : local_variant.id,
+						'erp_product_id'  : local_variant.id,
+						'default_code'    : local_variant.default_code,
+						'barcode'         : local_variant.barcode,
+						'store_product_id': remote_object.get('id') if isinstance(remote_object,dict) else remote_object.id,
+						'store_variant_id': remote_variant.get('id') if isinstance(remote_variant,dict) else remote_variant.id,
 					}
 				)
 

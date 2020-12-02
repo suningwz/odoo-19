@@ -2,7 +2,6 @@
 <!-- Copyright (c) 2015-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
 <!-- See LICENSE file for full copyright and licensing details. -->
 <!-- "License URL : <https://store.webkul.com/license.html/>" -->
-
 <odoo>
 	<data>
 		<record id="form_feed_sync" model="ir.ui.view">
@@ -29,11 +28,12 @@
 			</field>
 		</record>
 
-		<record id="action_feed_sync" model="ir.actions.act_window" >
-			<field name="name">Evaluate Feed</field>
-			<field name="res_model">feed.sync.wizard</field>
-			<field name="view_mode">form</field>
-			<field name="target">new</field>
-		<record/>
+		<act_window
+			id="action_feed_sync"
+			name="Evaluate Feed"
+			res_model="feed.sync.wizard"
+			view_mode="form"
+			target="new"
+		/>
 	</data>
 </odoo>
