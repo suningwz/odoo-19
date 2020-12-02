@@ -236,16 +236,10 @@ class MultiChannelSale(models.Model):
 		string='Stock Location',
 		help='Stock Location used for imported product.',
 	)
-	#company_id = fields.Many2one(
-	#	related='warehouse_id.company_id',
-	#	string='Company Id',
-	#)
-
-	company_id = fields.Many2many(
+	company_id = fields.Many2one(
 		related='warehouse_id.company_id',
 		string='Company Id',
 	)
-
 	crm_team_id = fields.Many2one(
 		comodel_name='crm.team',
 		string='Sales Team',
