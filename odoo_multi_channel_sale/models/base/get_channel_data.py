@@ -143,9 +143,7 @@ class MultiChannelSale(models.Model):
 			lambda cat:cat.instance_id==channel_id
 		)
 		extra_category_ids = channel_categ.mapped('extra_category_ids')
-		domain = []
-		if extra_category_ids:
-			domain = [('odoo_category_id', 'in',extra_category_ids.ids)]
+		domain = [('odoo_category_id', 'in',extra_category_ids.ids)] if extra_category_ids else []
 		return channel_id.match_category_mappings(domain=domain,limit=limit).mapped('store_category_id')
 
 	@staticmethod
