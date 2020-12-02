@@ -37,9 +37,7 @@ class MultiChannelSale(models.Model):
 				odoo_attribute_id=erp_id.id,
 				attribute_name=erp_id.id,
 			)
-			channel_vals = self.get_channel_vals()
-			vals.update(channel_vals)
-			return self.env['channel.attribute.mappings'].create(vals)
+			return self.create_channel_mapping('channel.attribute.mappings', vals)
 		return self.env['channel.attribute.mappings']
 
 	@api.model
@@ -52,9 +50,7 @@ class MultiChannelSale(models.Model):
 				attribute_value_name=erp_id.id,
 				odoo_attribute_value_id=erp_id.id,
 			)
-			channel_vals = self.get_channel_vals()
-			vals.update(channel_vals)
-			return self.env['channel.attribute.value.mappings'].create(vals)
+			return self.create_channel_mapping('channel.attribute.value.mappings', vals)
 		return self.env['channel.attribute.value.mappings']
 
 	@api.model
@@ -67,9 +63,7 @@ class MultiChannelSale(models.Model):
 				odoo_partner=erp_id.id,
 				type=_type,
 			)
-			channel_vals = self.get_channel_vals()
-			vals.update(channel_vals)
-			return self.env['channel.partner.mappings'].create(vals)
+			return self.create_channel_mapping('channel.partner.mappings', vals)
 		return self.env['channel.partner.mappings']
 
 	@api.model
@@ -89,9 +83,7 @@ class MultiChannelSale(models.Model):
 			odoo_carrier_id=carrier_id.id,
 			odoo_shipping_carrier=carrier_id.id,
 		)
-		channel_vals = self.get_channel_vals()
-		vals.update(channel_vals)
-		self.sudo().env['channel.shipping.mappings'].create(vals)
+		self.create_channel_mapping('channel.shipping.mappings', vals)
 		return carrier_id
 
 	@api.model
@@ -105,9 +97,7 @@ class MultiChannelSale(models.Model):
 			default_code=vals.get('default_code'),
 			barcode=vals.get('barcode'),
 		))
-		channel_vals = self.get_channel_vals()
-		vals.update(channel_vals)
-		return self.env['channel.template.mappings'].create(vals)
+		return self.create_channel_mapping('channel.template.mappings', vals)
 
 	@api.model
 	def create_product_mapping(self, odoo_template_id, odoo_product_id,
@@ -123,9 +113,7 @@ class MultiChannelSale(models.Model):
 			default_code=vals.get('default_code'),
 			barcode=vals.get('barcode'),
 		))
-		channel_vals = self.get_channel_vals()
-		vals.update(channel_vals)
-		return self.env['channel.product.mappings'].create(vals)
+		return self.create_channel_mapping('channel.product.mappings', vals)
 
 	@api.model
 	def create_category_mapping(self, erp_id, store_id, leaf_category=True):
@@ -136,9 +124,7 @@ class MultiChannelSale(models.Model):
 			category_name=erp_id.id,
 			leaf_category=leaf_category,
 		)
-		channel_vals = self.get_channel_vals()
-		vals.update(channel_vals)
-		return self.env['channel.category.mappings'].create(vals)
+		return self.create_channel_mapping('channel.category.mappings', vals)
 
 	@api.model
 	def create_order_mapping(self, erp_id, store_id,store_source=None):
@@ -150,6 +136,9 @@ class MultiChannelSale(models.Model):
 			odoo_order_id=erp_id.id,
 			order_name=erp_id.id,
 		)
+		return self.create_channel_mapping('channel.order.mappings', vals)
+
+	def create_channel_mapping(self, model, vals):
 		channel_vals = self.get_channel_vals()
 		vals.update(channel_vals)
-		return self.env['channel.order.mappings'].create(vals)
+		return self.env[model].create(vals)
