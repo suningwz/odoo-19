@@ -240,6 +240,7 @@ class MultiChannelSale(models.Model):
 		related='warehouse_id.company_id',
 		string='Company Id',
 	)
+	
 	crm_team_id = fields.Many2one(
 		comodel_name='crm.team',
 		string='Sales Team',

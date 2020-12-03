@@ -27,15 +27,15 @@ class ImportWoocommerceProducts(models.TransientModel):
             image_url = product_data.get("images")[0].get('src')
         list_price = product_data.get("price")
         for category in product_data['categories']:
-#             category_id = category['id']
-#             url = 'products/categories/%s' % category_id
-#             category_data = woocommerce.get(url).json()
-#             if "message" in category_data:
-#                 message =  "Error in importing category : {}".format(category_data["message"])
-#                 _logger.info(message)
-#             else:
-#                 self._woocommerce_create_product_categories(
-#                     woocommerce, category_data)
+            category_id = category['id']
+            url = 'products/categories/%s' % category_id
+            category_data = woocommerce.get(url).json()
+            if "message" in category_data:
+                message =  "Error in importing category : {}".format(category_data["message"])
+                _logger.info(message)
+            else:
+                self._woocommerce_create_product_categories(
+                    woocommerce, category_data)
             categ = categ+str(category['id'])+","
 
         length = product_data['dimensions'].get("length")
