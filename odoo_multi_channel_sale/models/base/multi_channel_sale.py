@@ -238,7 +238,7 @@ class MultiChannelSale(models.Model):
 	)
 	company_id = fields.Many2one(
 		related='warehouse_id.company_id',
-		string='Company Id',
+		string='Company ID',
 	)
 
 	crm_team_id = fields.Many2one(

@@ -6,18 +6,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cee65ad8-7cfb-4a9d-95d0-64930dd53c67" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/odoo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/odoo.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/odoo_multi_channel_sale/controllers/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/odoo_multi_channel_sale/controllers/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/odoo_multi_channel_sale/models/base/create_mapping.py" beforeDir="false" afterPath="$PROJECT_DIR$/odoo_multi_channel_sale/models/base/create_mapping.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/odoo_multi_channel_sale/models/base/get_channel_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/odoo_multi_channel_sale/models/base/get_channel_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/odoo_multi_channel_sale/models/base/invoice_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/odoo_multi_channel_sale/models/base/invoice_order.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/odoo_multi_channel_sale/models/base/match_records.py" beforeDir="false" afterPath="$PROJECT_DIR$/odoo_multi_channel_sale/models/base/match_records.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/odoo_multi_channel_sale/models/base/multi_channel_sale.py" beforeDir="false" afterPath="$PROJECT_DIR$/odoo_multi_channel_sale/models/base/multi_channel_sale.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/odoo_multi_channel_sale/models/base/multi_channel_skeleton.py" beforeDir="false" afterPath="$PROJECT_DIR$/odoo_multi_channel_sale/models/base/multi_channel_skeleton.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/woocommerce_odoo_connector/models/inherits.py" beforeDir="false" afterPath="$PROJECT_DIR$/woocommerce_odoo_connector/models/inherits.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/woocommerce_odoo_connector/models/woc_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/woocommerce_odoo_connector/models/woc_config.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,9 +49,9 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="596" y="292" width="597" height="490" key="find.popup" timestamp="1606968244035">
+    <state x="596" y="292" width="973" height="490" key="find.popup" timestamp="1606968756389">
       <screen x="0" y="25" width="1680" height="1025" />
     </state>
-    <state x="596" y="292" width="597" height="490" key="find.popup/0.25.1680.1025@0.25.1680.1025" timestamp="1606968244035" />
+    <state x="596" y="292" width="973" height="490" key="find.popup/0.25.1680.1025@0.25.1680.1025" timestamp="1606968756389" />
   </component>
 </project>
