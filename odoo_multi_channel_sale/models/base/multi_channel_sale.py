@@ -236,18 +236,8 @@ class MultiChannelSale(models.Model):
 		string='Stock Location',
 		help='Stock Location used for imported product.',
 	)
-
-<<<<<<< HEAD
-	channel_company = fields.Many2one('res.company', string='Channel Company', help='Company for the channel',)
-
 	company_id = fields.Many2one(
 		related='warehouse_id.company_id',
-=======
-	channel_company = fields.Many2one('res.company', string='Channel Company', help='Company for the channel')
-
-	company_id = fields.Many2one(
-		related='channel_company',
->>>>>>> parent of de2a2cd... 2.3.3
 		string='Company ID',
 	)
 
