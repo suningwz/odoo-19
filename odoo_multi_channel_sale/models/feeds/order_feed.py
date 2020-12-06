@@ -98,22 +98,8 @@ class OrderFeed(models.Model):
 	)
 	line_ids = fields.One2many('order.line.feed','order_feed_id',string='Line Ids')
 
-	@api.model
-	def _create_feeds(self,order_data_list):
-		success_ids,error_ids = [],[]
-		self = self.contextualize_feeds('order')
-		for order_data in order_data_list:
-			order_feed = self._create_feed(order_data)
-			if order_feed:
-				self += order_feed
-				success_ids.append(order_data.get('store_id'))
-			else:
-				error_ids.append(order_data.get('store_id'))
-		return success_ids,error_ids,self
-
 	def _create_feed(self,order_data):
-		channel_id = order_data.get('channel_id')
-		store_id = str(order_data.get('store_id'))
+		channel_id, store_id = order_data.get('channel_id'), str(order_data.get('store_id'))
 		feed_id = self._context.get('order_feeds').get(channel_id,{}).get(store_id)
 # Todo(Pankaj Kumar): Change feed field from state_id,country_id to state_code,country_code
 		order_data['invoice_state_id'] = order_data.pop('invoice_state_code',False)
@@ -145,8 +131,7 @@ class OrderFeed(models.Model):
 		message = ''
 		status=True
 		lines = []
-		line_ids = vals.pop('line_ids')
-		line_name = vals.pop('line_name')
+		line_ids, line_name = vals.pop('line_ids'), vals.pop('line_name')
 		line_price_unit = vals.pop('line_price_unit')
 		if line_price_unit:
 			line_price_unit = parse_float(line_price_unit)
@@ -177,7 +162,6 @@ class OrderFeed(models.Model):
 						channel_id,
 						line_id.line_product_default_code,
 						line_id.line_product_barcode,
-
 					)
 					product_id = product_res.get('product_id')
 					if product_res.get('message'):
@@ -247,10 +231,7 @@ class OrderFeed(models.Model):
 					name=""
 					tax_type="percent"
 					inclusive=False
-					if tax.get('name'):
-						name = tax['name']
-					else:
-						name = channel+"_"+str(channel_id.id)+"_"+str(float(tax['rate']))
+					name = tax['name'] if tax.get('name') else channel+"_"+str(channel_id.id)+"_"+str(float(tax['rate']))
 					if tax.get('include_in_price'):
 						inclusive=tax['include_in_price']
 						# domain += [('include_in_price','=',tax['include_in_price'])]

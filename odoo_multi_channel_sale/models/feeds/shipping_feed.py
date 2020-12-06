@@ -70,20 +70,6 @@ class ShippingFeed(models.Model):
 			return self.create_shipping_mapping(channel_id,carrier_id.id,vals)
 
 	@api.model
-	def _create_feeds(self, shipping_data_list):
-		_logger.info("==================: %r", shipping_data_list)
-		success_ids, error_ids = [], []
-		self = self.contextualize_feeds('shipping')
-		for shipping_data in shipping_data_list:
-			feed = self._create_feed(shipping_data)
-			if feed:
-				self += feed
-				success_ids.append(shipping_data.get('store_id'))
-			else:
-				error_ids.append(shipping_data.get('store_id'))
-		return success_ids, error_ids, self
-
-	@api.model
 	def _create_feed(self, shipping_data):
 		channel_id = shipping_data.get('channel_id')
 		store_id = str(shipping_data.get('store_id'))

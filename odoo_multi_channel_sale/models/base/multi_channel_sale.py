@@ -10,15 +10,14 @@ import requests
 from dateutil import parser
 from odoo import fields, models, api, _
 from ...tools import ReverseDict
-
 _logger = logging.getLogger(__name__)
 
-HelpImportOrderDate = _(
-	"""A date used for selecting orders created after (or at) a specified time."""
+HelpImportOrderDate  = _(
+"""A date used for selecting orders created after (or at) a specified time."""
 )
 
 HelpUpdateOrderDate = _(
-	"""
+"""
 	A date used for selecting orders that were last updated after (or at) a specified time.
 	 An update is defined as any change in order status,includes updates made by the seller.
 """
@@ -47,15 +46,15 @@ FEED = [
 ]
 
 MAPPINGMODEL = {
-	'product.product': 'channel.product.mappings',
+	'product.product' : 'channel.product.mappings',
 	'product.template': 'channel.template.mappings',
-	'res.partner': 'channel.partner.mappings',
+	'res.partner'     : 'channel.partner.mappings',
 	'product.category': 'channel.category.mappings',
-	'sale.order': 'channel.order.mappings',
+	'sale.order'      : 'channel.order.mappings',
 }
 TaxType = [
-	('include', 'Include In Price'),
-	('exclude', 'Exclude In Price')
+    ('include','Include In Price'),
+    ('exclude','Exclude In Price')
 ]
 
 
@@ -72,7 +71,7 @@ class MultiChannelSale(models.Model):
 	channel_stock_action = fields.Selection([
 		('qoh', 'Quantity on hand'),
 		('fq', 'Forecast Quantity')
-	],
+		],
 		default='qoh',
 		string='Stock Management',
 		help="Manage Stock")
@@ -83,14 +82,14 @@ class MultiChannelSale(models.Model):
 		res.use_core_feature = True if res.channel in self.get_core_feature_compatible_channels() else False
 		return res
 
-	url = fields.Char("URL")
-	email = fields.Char(string='Api User')
+	url     = fields.Char("URL")
+	email   = fields.Char(string='Api User')
 	api_key = fields.Char("Password")
 
 	def test_connection(self):
 		self.ensure_one()
 		if hasattr(self, 'connect_%s' % self.channel):
-			res, msg = getattr(self, 'connect_%s' % self.channel)()
+			res,msg = getattr(self, 'connect_%s' % self.channel)()
 			self.state = 'validate' if res else 'error'
 			return self.display_message(msg)
 		elif hasattr(self, 'test_%s_connection' % self.channel):
@@ -101,6 +100,7 @@ class MultiChannelSale(models.Model):
 			return getattr(self, 'test_%s_connection' % self.channel)()
 		else:
 			return self.display_message('Connection protocol missing.')
+
 
 	def set_to_draft(self):
 		self.state = 'draft'
@@ -141,20 +141,20 @@ class MultiChannelSale(models.Model):
 	def _get_count(self):
 		for rec in self:
 			domain = [('channel_id', '=', rec.id)]
-			rec.channel_products = self.env['channel.template.mappings'].search_count(domain)
+			rec.channel_products   = self.env['channel.template.mappings'].search_count(domain)
 			rec.channel_categories = self.env['channel.category.mappings'].search_count(domain)
-			rec.channel_orders = self.env['channel.order.mappings'].search_count(domain)
+			rec.channel_orders     = self.env['channel.order.mappings'].search_count(domain)
 			domain.append(('odoo_partner.parent_id', '=', False))
-			rec.channel_customers = self.env['channel.partner.mappings'].search_count(domain)
+			rec.channel_customers  = self.env['channel.partner.mappings'].search_count(domain)
 
 	active = fields.Boolean(default=True)
 	color_index = fields.Integer(string='Color Index')
 
 	def set_info_urls(self):
 		for instance in self:
-			url_info = self.get_info_urls().get(instance.channel, {})
-			instance.blog_url = url_info.get('blog', 'https://webkul.com/blog/odoo-multi-channel-sale/')
-			instance.store_url = url_info.get('store', 'https://store.webkul.com/Odoo-Multi-Channel-Sale.html')
+			url_info = self.get_info_urls().get(instance.channel,{})
+			instance.blog_url = url_info.get('blog','https://webkul.com/blog/odoo-multi-channel-sale/')
+			instance.store_url = url_info.get('store','https://store.webkul.com/Odoo-Multi-Channel-Sale.html')
 
 	use_core_feature = fields.Boolean(readonly=True)
 	channel = fields.Selection(selection='get_channel', required=True, inverse=set_info_urls)
@@ -172,12 +172,12 @@ class MultiChannelSale(models.Model):
 		default='sandbox',
 		help="""Set environment to  production while using live credentials.""",
 	)
-	is_child_store = fields.Boolean(string='Is Child-Store')
-	default_store_id = fields.Many2one(
-		comodel_name='multi.channel.sale',
-		string='Parent Store',
-		help=DefaultStore,
-	)
+	is_child_store = fields.Boolean(string = 'Is Child-Store')
+	default_store_id =fields.Many2one(
+        comodel_name = 'multi.channel.sale',
+        string='Parent Store',
+        help = DefaultStore,
+    )
 	sku_sequence_id = fields.Many2one(
 		comodel_name='ir.sequence',
 		string='Sequence For SKU',
@@ -185,11 +185,11 @@ class MultiChannelSale(models.Model):
 	)
 	language_id = fields.Many2one(
 		comodel_name='res.lang',
-		default=lambda self: self.env['res.lang'].search([], limit=1),
+		default = lambda self: self.env['res.lang'].search([], limit=1),
 		help="""The language used over e-commerce store/marketplace.""",
 	)
 
-	pricelist_id = fields.Many2one('channel.pricelist.mappings', 'Pricelist Mapping')
+	pricelist_id = fields.Many2one('channel.pricelist.mappings','Pricelist Mapping')
 
 	pricelist_name = fields.Many2one(
 		comodel_name='product.pricelist',
@@ -204,14 +204,14 @@ class MultiChannelSale(models.Model):
 		help="""Default category used as product internal category for imported products.""",
 	)
 	channel_default_product_categ_id = fields.Many2one(
-		comodel_name='channel.category.mappings',
-		string='Channel Category'
-	)
+        comodel_name = 'channel.category.mappings',
+        string = 'Channel Category'
+    )
 	default_tax_type = fields.Selection(
-		selection=TaxType,
-		string='Tax Type',
-		default='exclude',
-		required=1
+		selection = TaxType,
+		string = 'Tax Type',
+		default = 'exclude',
+		required = 1
 	)
 	delivery_product_id = fields.Many2one(
 		comodel_name='product.product',
@@ -236,14 +236,10 @@ class MultiChannelSale(models.Model):
 		string='Stock Location',
 		help='Stock Location used for imported product.',
 	)
-
-	channel_company = fields.Many2one('res.company', string='Channel Company', help='Company for the channel')
-
 	company_id = fields.Many2one(
-		related='channel_company',
-		string='Company ID',
+		related='warehouse_id.company_id',
+		string='Company Id',
 	)
-
 	crm_team_id = fields.Many2one(
 		comodel_name='crm.team',
 		string='Sales Team',
@@ -251,13 +247,13 @@ class MultiChannelSale(models.Model):
 		help='Sales Team used for imported order.',
 	)
 	payment_term_id = fields.Many2one(
-		'account.payment.term',
-		string="Ecommerce Payment Term",
-		help="""Default Payment Term Used In Sale Order.""")
+        'account.payment.term',
+        string="Ecommerce Payment Term",
+        help="""Default Payment Term Used In Sale Order.""")
 	sales_person_id = fields.Many2one(
-		'res.users',
-		string="Sales Person",
-		help="""Default Sales Person Used In Sale Order.""")
+        'res.users',
+        string="Sales Person",
+        help="""Default Sales Person Used In Sale Order.""")
 	order_state_ids = fields.One2many(
 		comodel_name='channel.order.states',
 		inverse_name='channel_id',
@@ -265,7 +261,7 @@ class MultiChannelSale(models.Model):
 		help='Imported order will process in odoo on basis of these state mappings.',
 	)
 
-	feed = fields.Selection(FEED, default='all', required=True)
+	feed = fields.Selection(FEED,default='all', required=True)
 
 	auto_evaluate_feed = fields.Boolean(
 		string='Auto Evaluate Feed',
@@ -290,39 +286,39 @@ class MultiChannelSale(models.Model):
 		help='Enable for update shipment status at E-commerce',
 	)
 
-	import_order_date = fields.Datetime(
+	import_order_date =  fields.Datetime(
 		string='Order Imported',
-		help=HelpImportOrderDate
+		help = HelpImportOrderDate
 	)
 
-	update_order_date = fields.Datetime(
+	update_order_date =  fields.Datetime(
 		string='Order Updated',
-		help=HelpUpdateOrderDate
+		help = HelpUpdateOrderDate
 	)
 
-	import_product_date = fields.Datetime(string='Product Imported')
+	import_product_date =  fields.Datetime(string='Product Imported')
 	update_product_price = fields.Boolean(string='Update Price')
 	update_product_stock = fields.Boolean(string='Update Stock')
 	update_product_image = fields.Boolean(string='Update Image')
-	update_product_date = fields.Datetime(string='Product Updated')
+	update_product_date =  fields.Datetime(string='Product Updated')
 
-	import_customer_date = fields.Datetime(string='Customer Imported')
-	update_customer_date = fields.Datetime(string='Customer Updated')
-	use_api_limit = fields.Boolean(string='Use API Limit', default=True)
-	api_record_limit = fields.Integer(string='API Record Limit', default=100)
+	import_customer_date =  fields.Datetime(string='Customer Imported')
+	update_customer_date =  fields.Datetime(string='Customer Updated')
+	use_api_limit = fields.Boolean(string = 'Use API Limit', default = True)
+	api_record_limit = fields.Integer(string = 'API Record Limit', default = 100)
 
-	channel_products = fields.Integer(compute='_get_count')
+	channel_products   = fields.Integer(compute='_get_count')
 	channel_categories = fields.Integer(compute='_get_count')
-	channel_orders = fields.Integer(compute='_get_count')
-	channel_customers = fields.Integer(compute='_get_count')
+	channel_orders     = fields.Integer(compute='_get_count')
+	channel_customers  = fields.Integer(compute='_get_count')
 
 	@api.constrains('api_record_limit')
 	def check_api_record_limit(self):
-		if self.api_record_limit <= 0:
+		if self.api_record_limit<=0:
 			raise Warning("""The api record limit should be postive.""")
 
 	@api.model
-	def set_channel_date(self, operation='import', record='product'):
+	def set_channel_date(self, operation = 'import',record = 'product'):
 		current_date = fields.Datetime.now()
 		if operation == 'import':
 			if record == 'order':
@@ -366,10 +362,10 @@ class MultiChannelSale(models.Model):
 			if date_string:
 				om_date = parser.parse(date_string).astimezone().replace(tzinfo=None)
 		except Exception as e:
-			message += '%r' % e
+			message += '%r'%e
 		return dict(
-			message=message,
-			om_date=om_date
+			message = message,
+			om_date = om_date
 		)
 
 	@api.model
@@ -385,10 +381,10 @@ class MultiChannelSale(models.Model):
 			data = self.env[model_name]
 			for val in vals:
 				if kwargs.get('extra_val'):
-					val.update(kwargs.get('extra_val'))
-				match = False
+					val.update( kwargs.get('extra_val'))
+				match =False
 				if val.get('store_id'):
-					obj = ObjModel.search([('store_id', '=', val.get('store_id'))], limit=1)
+					obj = ObjModel.search([('store_id', '=', val.get('store_id'))], limit= 1)
 					if obj:
 						obj.write(val)
 						data += obj
@@ -396,11 +392,11 @@ class MultiChannelSale(models.Model):
 				if not match:
 					data += ObjModel.create(val)
 		except Exception as e:
-			_logger.error("#1CreateModelObject Error  \n %r" % (e))
-			message += "%r" % (e)
+			_logger.error("#1CreateModelObject Error  \n %r"%(e))
+			message += "%r"%(e)
 		return dict(
-			data=data,
-			message=message,
+			data = data,
+			message = message,
 		)
 
 	@api.model
@@ -416,7 +412,7 @@ class MultiChannelSale(models.Model):
 
 	@api.model
 	def _create_sync(self, vals):
-		if self.debug == 'enable':
+		if self.debug=='enable':
 			nvals = vals.copy()
 			channel_vals = self.get_channel_vals()
 			nvals.update(channel_vals)
@@ -444,25 +440,25 @@ class MultiChannelSale(models.Model):
 			if res.status_code == 200:
 				data = binascii.b2a_base64((res.content))
 		except Exception as e:
-			_logger.error("#1ReadImageUrlError  \n %r" % (e))
+			_logger.error("#1ReadImageUrlError  \n %r"%(e))
 		return data
 
 	@api.model
-	def set_order_by_status(self, channel_id, store_id,
-							status, order_state_ids, default_order_state,
-							payment_method=None):
+	def set_order_by_status(self,channel_id,store_id,
+			status,order_state_ids,default_order_state,
+			payment_method = None):
 		result = dict(
-			order_match=None,
-			message=''
+			order_match  = None,
+			message = ''
 		)
 		order_match = channel_id.match_order_mappings(store_id)
 		order_state_ids = order_state_ids.filtered(
 			lambda state: state.channel_state == status)
 		state = order_state_ids[0] if order_state_ids else default_order_state
-		if order_match and order_match.order_name.state == 'draft' and (
+		if order_match  and order_match.order_name.state =='draft' and (
 				state.odoo_create_invoice or state.odoo_ship_order):
 			result['message'] += self.env['multi.channel.skeleton']._SetOdooOrderState(
-				order_match.order_name, channel_id, status, payment_method
+				order_match.order_name, channel_id,  status, payment_method
 			)
-			result['order_match'] = order_match
+			result['order_match']=order_match
 		return result

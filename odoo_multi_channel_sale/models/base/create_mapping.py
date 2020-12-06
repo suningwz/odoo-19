@@ -7,7 +7,6 @@
 
 from odoo import models, api, _
 
-
 class MultiChannelSale(models.Model):
 	_inherit = 'multi.channel.sale'
 
@@ -29,7 +28,7 @@ class MultiChannelSale(models.Model):
 		return self.with_context(obj_type='feed')._create_obj(mapping_obj, vals)
 
 	@api.model
-	def create_attribute_mapping(self, erp_id, store_id, store_attribute_name=''):
+	def create_attribute_mapping(self, erp_id, store_id,store_attribute_name=''):
 		self.ensure_one()
 		if store_id and store_id not in ['0', -1]:
 			vals = dict(
@@ -42,9 +41,9 @@ class MultiChannelSale(models.Model):
 		return self.env['channel.attribute.mappings']
 
 	@api.model
-	def create_attribute_value_mapping(self, erp_id, store_id, store_attribute_value_name=''):
+	def create_attribute_value_mapping(self, erp_id, store_id,store_attribute_value_name=''):
 		self.ensure_one()
-		if store_id and store_id not in ['0', ' ', -1]:
+		if store_id and store_id not in ['0',' ', -1]:
 			vals = dict(
 				store_attribute_value_id=store_id,
 				store_attribute_value_name=store_attribute_value_name,
@@ -72,7 +71,7 @@ class MultiChannelSale(models.Model):
 		carrier_obj = self.env['delivery.carrier']
 		partner_id = self.env.user.company_id.partner_id
 		carrier_vals = dict(
-			product_id=self.delivery_product_id.id,
+			product_id = self.delivery_product_id.id,
 			name=name,
 			fixed_price=0,
 		)
@@ -90,7 +89,7 @@ class MultiChannelSale(models.Model):
 	@api.model
 	def create_template_mapping(self, erp_id, store_id, vals=None):
 		self.ensure_one()
-		vals = vals or dict()
+		vals =vals or dict()
 		vals.update(dict(
 			store_product_id=store_id,
 			odoo_template_id=erp_id.id,
@@ -102,9 +101,9 @@ class MultiChannelSale(models.Model):
 
 	@api.model
 	def create_product_mapping(self, odoo_template_id, odoo_product_id,
-							   store_id, store_variant_id, vals=None):
+		store_id, store_variant_id, vals=None):
 		self.ensure_one()
-		vals = dict(vals or dict())
+		vals =dict(vals or dict())
 		vals.update(dict(
 			store_product_id=store_id,
 			store_variant_id=store_variant_id,
@@ -128,7 +127,7 @@ class MultiChannelSale(models.Model):
 		return self.create_channel_mapping('channel.category.mappings', vals)
 
 	@api.model
-	def create_order_mapping(self, erp_id, store_id, store_source=None):
+	def create_order_mapping(self, erp_id, store_id,store_source=None):
 		self.ensure_one()
 		vals = dict(
 			odoo_partner_id=erp_id.partner_id,

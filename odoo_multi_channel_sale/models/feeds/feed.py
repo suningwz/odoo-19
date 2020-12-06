@@ -78,6 +78,18 @@ class WkFeed(models.Model):
 		string  = 'Channel',
 	)
 
+	@api.model
+	def _create_feeds(self, data_list, opr=""):
+		success_ids, error_ids = [], []
+		self = self.contextualize_feeds(opr)
+		for data in data_list:
+			feed = self._create_feed(data)
+			if feed:
+				self += feed
+				success_ids.append(data.get('store_id'))
+			else:
+				error_ids.append(data.get('store_id'))
+		return success_ids, error_ids, self
 
 	@api.model
 	def get_product_fields(self):
