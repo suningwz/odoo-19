@@ -702,17 +702,6 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-12 col-md-6 o_setting_box" attrs="{'readonly':[('state','=','validate')]}">
-									<div class="o_setting_left_pane">
-										<b><field name="sync_cancel"/></b>
-									</div>
-									<div class="o_setting_right_pane">
-										<label string="Cancel Status" for="sync_cancel"/>
-										<div class="text-muted">
-											Enable for update cancel status at Channel
-										</div>
-									</div>
-								</div>
 							</div>
 						</page>
 
@@ -857,6 +846,15 @@
 									</div>
 								</div>
 							</div>
+						</page>
+
+						<page string="Other Settings" name="other_setting">
+							<h2 style="margin-top: 10px !important;background-color: #e9ecef;padding-left: 8px;">
+								Default Settings
+							</h2>
+							<p class="text-muted" style="margin-left:5%">
+								Other Configurations used by Connector
+							</p>
 						</page>
 
 						<page name="order_state_config" string="Order State Mapping">
