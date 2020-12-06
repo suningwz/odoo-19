@@ -240,7 +240,7 @@ class MultiChannelSale(models.Model):
 	channel_company = fields.Many2one('res.company', string='Channel Company', help='Company for the channel',)
 
 	company_id = fields.Many2one(
-		related='channel_company',
+		related='warehouse_id.company_id',
 		string='Company ID',
 	)
 
