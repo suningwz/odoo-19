@@ -237,10 +237,10 @@ class MultiChannelSale(models.Model):
 		help='Stock Location used for imported product.',
 	)
 
-	#channel_company = fields.Many2one('res.company', string='Channel Company', help='Company for the channel')
+	channel_company = fields.Many2one('res.company', string='Channel Company', help='Company for the channel')
 
 	company_id = fields.Many2one(
-		related='channel_company.company_id',
+		related='warehouse_id.company_id',
 		string='Company ID',
 	)
 
