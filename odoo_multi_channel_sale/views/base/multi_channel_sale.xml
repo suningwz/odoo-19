@@ -704,11 +704,12 @@
 								</div>
 								<div class="col-xs-12 col-md-6 o_setting_box" attrs="{'readonly':[('state','=','validate')]}">
 									<div class="o_setting_left_pane">
-										<label string="Channel Company" for="channel_company"/>
+										<b><field name="sync_cancel"/></b>
+									</div>
+									<div class="o_setting_right_pane">
+										<label string="Cancel Status" for="sync_cancel"/>
 										<div class="text-muted">
-											<b><field name="channel_company"
-												options="{'no_create' : True}"
-												attrs="{'readonly':[('state','=','validate')]}"/></b>
+											Enable for update cancel status at Channel
 										</div>
 									</div>
 								</div>
