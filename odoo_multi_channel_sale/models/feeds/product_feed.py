@@ -374,7 +374,8 @@ class ProductFeed(models.Model):
 			vals ,variant_lines=feed_variants)
 		vals.pop('website_message_ids','')
 		vals.pop('message_follower_ids','')
-
+		if 'length' in vals:
+			vals['wk_length'] = vals.pop('length')
 		if state == 'done':
 			if match:
 				match = self.env['channel.template.mappings'].browse(match)

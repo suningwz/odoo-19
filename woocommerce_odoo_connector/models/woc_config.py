@@ -89,6 +89,7 @@ class MultiChannelSale(models.Model):
     def import_woocommerce(self, object, **kwargs):
         woocommerce = self.get_woocommerce_connection()
         data_list = []
+        kwargs['message'] = 'Nothing to import!!'
         if object == 'product.category':
             data_list = self.import_woocommerce_categories(
                 woocommerce, **kwargs)
