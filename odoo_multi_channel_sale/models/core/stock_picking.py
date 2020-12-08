@@ -10,10 +10,10 @@ from odoo import api,fields,models
 class StockPicking(models.Model):
 	_inherit = 'stock.picking'
 
-	def action_done(self):
+	def _action_done(self):
 		self.ensure_one()
 		self.wk_pre_do_transfer()
-		result = super(StockPicking,self).action_done()
+		result = super(StockPicking,self)._action_done()
 		self.wk_post_do_transfer(result)
 		return result
 

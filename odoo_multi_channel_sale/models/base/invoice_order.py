@@ -49,16 +49,10 @@ class MultiChannelSkeleton(models.TransientModel):
 			exists = MapObj.search(
 				[('store_journal_name', '=', PaymentMethod)])
 			if not exists:
-				res = self.env['account.journal'].search(
-					[('type', '=', 'bank')], limit=1)
-				credit_account_id = res.default_credit_account_id.id
-				debit_account_id = res.default_debit_account_id.id
 				journal = {
 					'name': self._get_journal_name(PaymentMethod),
 					'code': self._get_journal_code(PaymentMethod),
 					'type': 'bank',
-					'default_credit_account_id': credit_account_id,
-					'default_debit_account_id': debit_account_id,
 				}
 				journal_obj = self.env['account.journal'].create(journal)
 				journal_id = journal_obj.id

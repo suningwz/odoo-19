@@ -12,7 +12,7 @@
 				<xpath expr="//notebook/page[1]" position="inside">
 					<group>
 						<group>
-							<field name="length"/>
+							<field name="wk_length"/>
 							<field name="width"/>
 						</group>
 						<group>

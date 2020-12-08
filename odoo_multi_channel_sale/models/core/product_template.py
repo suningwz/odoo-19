@@ -11,7 +11,7 @@ class ProductTemplate(models.Model):
 	_inherit = 'product.template'
 
 	wk_parent_default_code = fields.Char('Parent Code')
-	length                 = fields.Float('Length')
+	wk_length              = fields.Float('Length')
 	width                  = fields.Float('Width')
 	height                 = fields.Float('Height')
 
