@@ -217,10 +217,11 @@ class MultiChannelSale(models.Model):
 				if 'product_template_attribute_value_ids' in vals and 'product_tmpl_id' in vals:
 					_ids = vals['product_template_attribute_value_ids'][0][2]
 					ids = ','.join([str(i) for i in sorted(_ids)])
-					record = oe_env.search([('product_tmpl_id', '=', vals['product_tmpl_id']),
-											('product_template_attribute_value_ids', 'in', _ids)]
-										   ).filtered(
-						lambda prod: prod.product_template_attribute_value_ids._ids2str() == ids)
+					domain = [('product_tmpl_id','=',vals['product_tmpl_id'])]
+					if ids:
+						domain += [('product_template_attribute_value_ids','in', _ids)]
+					record = oe_env.search(domain) \
+					.filtered(lambda prod: prod.product_template_attribute_value_ids._ids2str()==ids)
 		return record
 
 	@api.model

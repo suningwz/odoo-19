@@ -4,6 +4,7 @@
 # See LICENSE file for full copyright and licensing details.
 # License URL : <https://store.webkul.com/license.html/>
 ##############################################################################
+from ...tools import chunks
 
 from odoo import models, api, _
 
@@ -17,7 +18,9 @@ class MultiChannelSale(models.Model):
 				("state","!=","done"),
 				("channel_id.state","=","validate")
 			])
-			records.import_items()
+			for record_set in chunks(records):
+				record_set.with_context(channel_id=records.mapped('channel_id')).import_items()
+				self._cr.commit()
 		return True
 
 	@api.model

@@ -133,7 +133,7 @@ class ProductProduct(models.Model):
 
 		attribute_mapping = self.env['channel.attribute.mappings'].search(
 			[
-				('channel_id','=',context.get('channel_id')),
+				('channel_id','=',context.get('channel_id').id),
 				('store_attribute_id','=',store_attribute_id)
 			],
 			limit=1
@@ -158,7 +158,7 @@ class ProductProduct(models.Model):
 					'store_attribute_name': attribute_id.get('name'),
 					'attribute_name'      : product_attribute_id,
 					'odoo_attribute_id'   : product_attribute_id,
-					'channel_id'          : context.get('channel_id'),
+					'channel_id'          : context.get('channel_id').id,
 					'ecom_store'          : context.get('channel')
 				}
 			)
@@ -172,7 +172,7 @@ class ProductProduct(models.Model):
 
 		attribute_value_mapping = self.env['channel.attribute.value.mappings'].search(
 			[
-				('channel_id','=',context.get('channel_id')),
+				('channel_id','=',context.get('channel_id').id),
 				('store_attribute_value_id','=',store_attribute_value_id),
 				('attribute_value_name.attribute_id','=',product_attribute_id)
 			],
@@ -206,7 +206,7 @@ class ProductProduct(models.Model):
 					'store_attribute_value_name': attribute_id.get('value'),
 					'attribute_value_name'      : product_attribute_value_id,
 					'odoo_attribute_value_id'   : product_attribute_value_id,
-					'channel_id'                : context.get('channel_id'),
+					'channel_id'                : context.get('channel_id').id,
 					'ecom_store'                : context.get('channel')
 				}
 			)

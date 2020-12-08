@@ -113,7 +113,8 @@ class ProductFeed(models.Model):
 		prod_env = self.env['product.product']
 		message  = ''
 		context  = dict(self._context or {})
-		context.update({'channel_id': channel_id.id})
+		if 'channel_id' not in context:
+			context.update({'channel_id': channel_id})
 		context.update({'channel': channel_id.channel})
 
 		variant_objs = self.env['product.variant.feed'].browse(variant_ids)
@@ -188,7 +189,8 @@ class ProductFeed(models.Model):
 	def _create_product_line(self,variant,template_id,store_id,location_id,channel_id):
 		context  = dict(self._context or {})
 		prod_env = self.env['product.product']
-		context.update({'channel_id': channel_id.id})
+		if 'channel_id' not in context:
+			context.update({'channel_id': channel_id})
 		context.update({'channel': channel_id.channel})
 
 		message = ''
