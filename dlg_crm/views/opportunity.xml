@@ -80,7 +80,7 @@
                                     </div>
                                     <div class="o_kanban_record_bottom">
                                         <div class="oe_kanban_bottom_left">
-                                            <field name="show" attrs="{'invisible':True"/>
+                                            <field name="show" attrs="{'invisible':True}"/>
                                             <field name="priority" widget="priority" groups="base.group_user" attrs="{'invisible':[('show', '!=', False)]}"/>
                                         </div>
                                         <div class="oe_kanban_bottom_right">
