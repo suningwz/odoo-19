@@ -18,8 +18,6 @@
                                 <field name="date"/>
                                 <field name="date_event"/>
                                 <field name="date_end"/>
-
-                                <field name="image" widget="image"/>
                             </group>
                             <group name="group_right">
                                 <field name="name"/>
