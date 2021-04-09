@@ -53,6 +53,8 @@ class ActionController(http.Controller):
                                                                                 'image',
                                                                                 'opportunity_id',
                                                                                 'phase',
+                                                                                'file',
+                                                                                'file_name',
                                                                                 'color'])
             res = json.dumps(action, ensure_ascii=False).encode('utf-8')
             return Response(res, content_type='application/json;charset=utf-8', status=200)

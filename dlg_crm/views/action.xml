@@ -23,6 +23,8 @@
                                 <field name="name"/>
                                 <field name="type"/>
                                 <field name="phase"/>
+                                <field name="file" filename="file_name"/>
+                                <field name="file_name"/>
                                 <field name="done"/>
                                 <field name="id"/>
                             </group>
