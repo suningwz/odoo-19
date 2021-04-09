@@ -18,16 +18,19 @@
                                 <field name="date"/>
                                 <field name="date_event"/>
                                 <field name="date_end"/>
-                                <field name="phase"/>
+
                                 <field name="image" widget="image"/>
                             </group>
                             <group name="group_right">
                                 <field name="name"/>
                                 <field name="type"/>
-                                <field name="notes"/>
+                                <field name="phase"/>
                                 <field name="done"/>
                                 <field name="id"/>
                             </group>
+                        </group>
+                        <group name="group_bottom">
+                            <field name="notes"/>
                         </group>
                     </sheet>
                 </form>
