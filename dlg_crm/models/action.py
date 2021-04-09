@@ -24,6 +24,7 @@ class Action(models.Model):
     phase = fields.Many2one('dlg_crm.phase', string="Fase", required=False)
     file = fields.Binary("Attachment")
     file_name = fields.Char("File Name")
+    url_field = fields.Char("Archivo")
 
     color = fields.Integer()
 

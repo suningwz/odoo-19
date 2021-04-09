@@ -28,11 +28,9 @@
                                 <field name="id"/>
                                 <notebook>
                                     <page string="Adjuntos">
-                                        <field name="URL" mode="tree" delete="true">
-                                            <tree string="Adjuntos" create="false">
-                                                <field name="url_field" widget="url"/>
-                                           </tree>
-                                        </field>
+                                        <tree string="Adjuntos" create="false" delete="true">
+                                            <field name="url_field" widget="url"/>
+                                        </tree>
                                     </page>
                                 </notebook>
                             </group>
