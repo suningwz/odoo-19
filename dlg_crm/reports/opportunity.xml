@@ -1,0 +1,13 @@
+<odoo>
+    <data>
+        <report
+            string="Informe oportunidad"
+            id="dlg_crm_opportunity_report"
+            model="dlg_crm.opportunity"
+            report_type="qweb-pdf"
+            name="dlg_crm.report_opportunity_card"
+            file="dlg_crm.report_opportunity_card"
+            attachment_use="True"
+        />
+    </data>
+</odoo>
