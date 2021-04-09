@@ -21,6 +21,7 @@ class Action(models.Model):
                              ('D', 'Comida'), ('E', 'email')], string='Tipo', required=False)
     done = fields.Boolean(string='Finalizada')
     image = fields.Binary(string='Imagen')
+    phase = fields.Many2one('dlg_crm.phase', string="Fase", required=False)
 
     color = fields.Integer()
 
