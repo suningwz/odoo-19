@@ -47,6 +47,9 @@
             <field name="name">view.dlg.crm.action.kanban</field>
             <field name="model">dlg_crm.action</field>
             <field name="arch" type="xml">
+                <kanban default_group_by="opportunity"
+                        on_create="quick_create"
+                        quick_create_view="view_dlg_crm_action_form" archivable="false" sample="1">
                 <kanban default_group_by="phase"
                         on_create="quick_create"
                         quick_create_view="view_dlg_crm_action_form" archivable="false" sample="1">
@@ -76,14 +79,10 @@
                                         <div class="oe_kanban_bottom_right">
                                             <table>
                                                 <tr>
-                                                    <td>
-                                                        <field name="type"/>
-                                                    </td>
+                                                    <td><field name="type"/></td>
                                                  </tr>
                                                 <tr>
-                                                    <td>
-                                                        <field name="customer"/>
-                                                    </td>
+                                                    <td><field name="customer"/></td>
                                                 </tr>
                                             </table>
                                         </div>
@@ -92,6 +91,7 @@
                             </div>
                         </div>
                     </templates>
+                </kanban>
                 </kanban>
             </field>
         </record>
