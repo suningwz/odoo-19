@@ -146,7 +146,7 @@
         </record>
 
         <record id="action_dlg_crm_opportunity_view" model="ir.actions.act_window">
-            <field name="name">Oportunidad</field>
+            <field name="name">Oportunidades</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">dlg_crm.opportunity</field>
             <field name="view_mode">kanban,tree,form</field>

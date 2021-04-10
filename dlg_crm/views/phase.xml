@@ -72,7 +72,7 @@
         </record>
 
         <record id="action_dlg_crm_phase_view" model="ir.actions.act_window">
-            <field name="name">Fase</field>
+            <field name="name">Fases</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">dlg_crm.phase</field>
             <field name="view_mode">tree,kanban,form</field>
