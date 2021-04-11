@@ -25,8 +25,8 @@ class Action(models.Model):
     file = fields.Binary("Attachment")
     file_name = fields.Char("File Name")
     url_field = fields.Char("Archivo")
-    #user = fields.Char("Usuario", default=lambda self: self.env.user.name)
-    user = fields.Many2one('res.users', 'Current User', default=lambda self: self.env.user)
+    user = fields.Char("Usuario", default=lambda self: self.env.user.name)
+    #user = fields.Many2one('res.users', 'Current User', default=lambda self: self.env.user)
     empty = fields.Char(" ")
     color = fields.Integer()
 

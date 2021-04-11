@@ -30,8 +30,8 @@ class Opportunity(models.Model):
     orders_year = fields.Integer(String='Pedidos/año (estimación)')
     show = fields.Boolean('No Mostrar')
     actions = fields.One2many('dlg_crm.action', 'opportunity_id', string='Actions', copy=True, auto_join=True)
-    #user = fields.Char("Usuario", default=lambda self: self.env.user.name)
-    user = fields.Many2one('res.users', 'Current User', default=lambda self: self.env.user)
+    user = fields.Char("Usuario", default=lambda self: self.env.user.name)
+    #user = fields.Many2one('res.users', 'Current User', default=lambda self: self.env.user)
 
     _order = 'header asc, priority desc'
 
