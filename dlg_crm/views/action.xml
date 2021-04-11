@@ -67,12 +67,15 @@
                                         <field name="name"/>
                                     </strong>
                                     <div class="o_kanban_record_subtitle">
+                                        <field name="date"/>
+                                    </div>
+                                    <div class="o_kanban_record_subtitle">
                                         <field name="date_event"/>
                                     </div>
-                                    <div class="o_kanban_record_bottom">
-                                        <div class="oe_kanban_bottom_left">
+                                    <div class="oe_kanban_bottom_left">
                                             <field name="date_end"/>
-                                        </div>
+                                    </div>
+                                    <div class="o_kanban_record_bottom">
                                         <div class="oe_kanban_bottom_right">
                                             <table>
                                                 <tr>

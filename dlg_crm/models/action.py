@@ -28,7 +28,7 @@ class Action(models.Model):
 
     color = fields.Integer()
 
-    _order = 'date_event asc'
+    _order = 'date_event desc'
 
     def toggle_state(self):
         self.done = not self.done
