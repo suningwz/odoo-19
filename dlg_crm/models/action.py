@@ -27,7 +27,6 @@ class Action(models.Model):
     url_field = fields.Char("Archivo")
     user = fields.Char("Usuario", default=lambda self: self.env.user.name)
     #user = fields.Many2one('res.users', 'Current User', default=lambda self: self.env.user)
-    empty = fields.Char(" ")
     color = fields.Integer()
 
     _order = 'date_event desc'

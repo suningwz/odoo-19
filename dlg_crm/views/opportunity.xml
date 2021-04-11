@@ -10,7 +10,7 @@
                             <button name="f_create_action" type="object"
                                     string="Crear Acción" icon="fa-phone"
                                     context="{'default_opportunity_id':id, 'default_customer':customer,
-                                    'default_opportunity':name, 'default_phase':phase, 'default_date':current_date}"/>
+                                    'default_user':user, 'default_opportunity':name, 'default_phase':phase, 'default_date':current_date}"/>
                             <button name="toggle_state" type="object" class="oe_stat_button"
                                     string="Oportunidad realizada" icon="fa-play-circle"/>
                         </div>

@@ -55,7 +55,7 @@ class ActionController(http.Controller):
                                                                                 'phase',
                                                                                 'file',
                                                                                 'file_name',
-                                                                                'color', 'user', 'empty'])
+                                                                                'color', 'user'])
             res = json.dumps(action, ensure_ascii=False).encode('utf-8')
             return Response(res, content_type='application/json;charset=utf-8', status=200)
         except Exception as e:
