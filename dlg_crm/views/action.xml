@@ -69,19 +69,20 @@
                                     </strong>
                                     <div class="o_kanban_record_subtitle">
                                         <field name="customer"/>
-                                        <field name="type"/>
                                     </div>
 
                                     <div class="o_kanban_record_bottom">
                                         <div class="oe_kanban_bottom_left">
                                             <table>
                                                 <tr><td>Inicio <field name="date"/></td></tr>
+                                                <tr><td>Terminada <field name="done"/></td></tr>
                                             </table>
                                         </div>
                                         <div class="oe_kanban_bottom_right">
                                             <table>
+                                                <field name="type"/>
                                                 <tr><td>Evento <field name="date_event"/></td></tr>
-                                                <tr><td>Fin    <field name="date_end"/></td></tr>
+                                                <tr><td>Fin <field name="date_end"/></td></tr>
                                             </table>
                                         </div>
                                     </div>
