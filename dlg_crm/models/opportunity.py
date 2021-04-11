@@ -19,7 +19,7 @@ class Opportunity(models.Model):
     name = fields.Char(string='Descripción')
     notes = fields.Text(string='Notas')
     customer = fields.Many2one(string='Cliente', comodel_name='res.partner')
-    date = fields.Datetime(string='Fecha creación')
+    date = fields.Date(string='Fecha creación')
     done = fields.Boolean(string='Realizada', readonly=True)
     image = fields.Binary(string='Imagen')
     phase = fields.Many2one('dlg_crm.phase', string="Fase", required=True)
@@ -30,6 +30,8 @@ class Opportunity(models.Model):
     orders_year = fields.Integer(String='Pedidos/año (estimación)')
     show = fields.Boolean('No Mostrar')
     actions = fields.One2many('dlg_crm.action', 'opportunity_id', string='Actions', copy=True, auto_join=True)
+    #user = fields.Char("Usuario", default=lambda self: self.env.user.name)
+    user = fields.Many2one('res.users', 'Current User', default=lambda self: self.env.user)
 
     _order = 'header asc, priority desc'
 

@@ -14,9 +14,9 @@ class Action(models.Model):
     name = fields.Char(string='Descripción')
     notes = fields.Text(string='Notas')
     customer = fields.Many2one(string='Cliente', comodel_name='res.partner', readonly=True)
-    date = fields.Datetime(string='Fecha creación')
-    date_event = fields.Datetime(string='Fecha evento')
-    date_end = fields.Datetime(string='Fecha fin')
+    date = fields.Date(string='Fecha creación')
+    date_event = fields.Date(string='Fecha evento')
+    date_end = fields.Date(string='Fecha fin')
     type = fields.Selection([('C', 'Call'), ('R', 'Reunión'), ('L', 'Llamada'),
                              ('D', 'Comida'), ('E', 'email')], string='Tipo', required=False)
     done = fields.Boolean(string='Finalizada')
@@ -25,6 +25,8 @@ class Action(models.Model):
     file = fields.Binary("Attachment")
     file_name = fields.Char("File Name")
     url_field = fields.Char("Archivo")
+    #user = fields.Char("Usuario", default=lambda self: self.env.user.name)
+    user = fields.Many2one('res.users', 'Current User', default=lambda self: self.env.user)
 
     color = fields.Integer()
 

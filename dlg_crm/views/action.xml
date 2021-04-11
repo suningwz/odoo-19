@@ -26,6 +26,7 @@
                                 <field name="file" filename="file_name"/>
                                 <field name="done"/>
                                 <field name="id"/>
+                                <field name="user"/>
                                 <notebook>
                                     <page string="Adjuntos">
                                         <tree string="Adjuntos" create="false" delete="true">

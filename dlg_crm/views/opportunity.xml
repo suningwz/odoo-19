@@ -30,6 +30,7 @@
                                 <field name="id"/>
                                 <field name="header"/>
                                 <field name="show"/>
+                                <field name="user"/>
                             </group>
                         </group>
                         <group name="group_bottom">
