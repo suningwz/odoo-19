@@ -6,12 +6,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cee65ad8-7cfb-4a9d-95d0-64930dd53c67" name="Default Changelist" comment="">
+<<<<<<< HEAD
 <<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/dlg_crm/views/opportunity.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dlg_crm/views/opportunity.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dlg_crm/views/phase.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dlg_crm/views/phase.xml" afterDir="false" />
 =======
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
 >>>>>>> Stashed changes
+=======
+      <change beforePath="$PROJECT_DIR$/dlg_crm/models/action.py" beforeDir="false" afterPath="$PROJECT_DIR$/dlg_crm/models/action.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dlg_crm/models/opportunity.py" beforeDir="false" afterPath="$PROJECT_DIR$/dlg_crm/models/opportunity.py" afterDir="false" />
+>>>>>>> parent of c3f5861 (Update workspace.xml)
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
