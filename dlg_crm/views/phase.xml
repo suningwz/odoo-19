@@ -85,7 +85,7 @@
                 </p>
             </field>
         </record>
-        <menuitem id="menu_dlg_crm_root" name="dlg219 CRM" sequence="10"/>
+        <menuitem id="menu_dlg_crm_root" name="dlg219 CRM" web_icon="dlg_crm,static/description/icon.png" sequence="10"/>
         <menuitem id="menu_dlg_crm_phase" name="Fases" parent="menu_dlg_crm_root" action="action_dlg_crm_phase_view" sequence="2"/>
     </data>
 </odoo>
