@@ -9,7 +9,7 @@
         Módulo PROYECTOS para la gestión de proyectos...
     """,
 
-    'author': "dlg219",
+    'author': "DLG219",
     'website': "http://www.delegalog.com",
 
     'category': 'Uncategorized',

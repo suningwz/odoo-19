@@ -9,7 +9,7 @@
         Módulo CRM para la gestión de oportunidades...
     """,
 
-    'author': "dlg219",
+    'author': "DLG219",
     'website': "http://www.delegalog.com",
 
     # Categories can be used to filter modules in modules listing
