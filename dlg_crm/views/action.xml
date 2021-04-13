@@ -10,6 +10,7 @@
                             <button name="toggle_state" type="object" class="oe_stat_button"
                                     string="Acción finalizada" icon="fa-play-circle"
                             />
+                            <button class="oe_stat_button" icon="fa-file-o" type="action" name="560" string="Adjuntar"/>
                         </div>
                         <group name="group_top">
                             <group name="group_left">
@@ -27,13 +28,6 @@
                                 <field name="done"/>
                                 <field name="id"/>
                                 <field name="user"/>
-                                <notebook>
-                                    <page string="Adjuntos">
-                                        <tree string="Adjuntos" create="false" delete="true">
-                                            <field name="url_field" widget="url"/>
-                                        </tree>
-                                    </page>
-                                </notebook>
                             </group>
                         </group>
                         <group name="group_bottom">
