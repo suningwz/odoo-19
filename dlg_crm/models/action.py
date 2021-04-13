@@ -24,9 +24,11 @@ class Action(models.Model):
     phase = fields.Many2one('dlg_crm.phase', string="Fase", required=False)
     file = fields.Binary("Attachment")
     file_name = fields.Char("File Name")
+    attachment_ids = fields.many2many('ir.attachment', 'class_ir_attachments_rel', 'class_id', 'attachment_id',
+                                      'Adjuntos')
     url_field = fields.Char("Archivo")
     user = fields.Char("Usuario", default=lambda self: self.env.user.name)
-    #user = fields.Many2one('res.users', 'Current User', default=lambda self: self.env.user)
+    # user = fields.Many2one('res.users', 'Current User', default=lambda self: self.env.user)
     color = fields.Integer()
 
     _order = 'date_event desc'
