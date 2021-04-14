@@ -7,7 +7,7 @@
                 <form string="Acción">
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            
+
                             <button name="toggle_state" type="object" class="oe_stat_button"
                                     string="Acción finalizada" icon="fa-play-circle"
                             />
@@ -102,19 +102,6 @@
                     <field name="date_end"/>
                     <field name="name"/>
                     <field name="type"/>
-                </tree>
-            </field>
-        </record>
-
-        <record id="view_dlg_crm_action_attachment_tree" model="ir.attachment">
-            <field name="name">view.dlg.crm.action.attachment.tree</field>
-            <field name="model">dlg_crm.action</field>
-            <field name="arch" type="xml">
-                <tree string="Adjuntos">
-                    <field name="id"/>
-                    <field name="customer"/>
-                    <field name="opportunity"/>
-                    <field name="name"/>
                 </tree>
             </field>
         </record>
