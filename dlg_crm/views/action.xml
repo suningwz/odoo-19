@@ -10,7 +10,7 @@
                             <button name="toggle_state" type="object" class="oe_stat_button"
                                     string="Acción finalizada" icon="fa-play-circle"
                             />
-                            
+
                         </div>
                         <group name="group_top">
                             <group name="group_left">
@@ -24,7 +24,6 @@
                             </group>
                             <group name="group_right">
                                 <field name="name"/>
-                                <field name="file" filename="file_name" widget="many2many_binary"/>
                                 <field name="done"/>
                                 <field name="id"/>
                                 <field name="user"/>
