@@ -10,7 +10,7 @@
                             <button name="toggle_state" type="object" class="oe_stat_button"
                                     string="Acción finalizada" icon="fa-play-circle"
                             />
-                            <button class="oe_stat_button" icon="fa-file-o" type="action" name="560" string="Adjuntar"/>
+                            
                         </div>
                         <group name="group_top">
                             <group name="group_left">
