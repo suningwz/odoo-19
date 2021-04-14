@@ -13,6 +13,5 @@
                 </p>
             </field>
         </record>
-
     <menuitem id="menu_dlg_crm_attachment" name="Adjuntos" parent="menu_dlg_crm_root" action="action_dlg_crm_attachment_view" sequence="3"/>
 </odoo>
