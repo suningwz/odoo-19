@@ -7,9 +7,7 @@
             <field name="domain">[('res_model','=','dlg_crm.action'),('res_id','=',action_dlg_crm_attachment_view)]</field>
             <field name="context">{'res_id':action_dlg_crm_attachment_view,'res_model':'dlg_crm.action'}</field>
             <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
-                    Adjunto
-                </p>
+                <p class="oe_view_nocontent_create">Adjunto</p>
                 <p>
                     Click 'Nuevo' para añadir nuevos adjuntos
                 </p>
