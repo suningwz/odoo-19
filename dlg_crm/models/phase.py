@@ -7,7 +7,7 @@ class Phase(models.Model):
     _name = 'dlg_crm.phase'
     _description = 'Fase'
 
-    id = fields.Integer(string='ID')
+    id = fields.Char(string='ID')
     name = fields.Char(string='Nombre')
     total_volume = fields.Integer(string='Total €/año')
     total_orders = fields.Integer(string='Total pedidos/año')

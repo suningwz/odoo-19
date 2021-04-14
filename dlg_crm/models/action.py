@@ -10,7 +10,7 @@ class Action(models.Model):
 
     opportunity = fields.Text(string='Oportunidad', readonly=True)
     opportunity_id = fields.Integer(string="ID oportunidad", readonly=True)
-    id = fields.Integer()
+    id = fields.Char(string='ID')
     name = fields.Char(string='Descripción')
     notes = fields.Text(string='Notas')
     customer = fields.Many2one(string='Cliente', comodel_name='res.partner', readonly=True)
