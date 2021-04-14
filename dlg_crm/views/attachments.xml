@@ -1,14 +1,5 @@
 <odoo>
-
-                <tree string="Attachments" editable="top" >
-                    <field name="datas" widget="download_link" filename="name" string="File"/>
-                    <field name="name" invisible="1"/>
-                    <field name="company_id" groups="base.group_multi_company"/>
-                    <field name="create_uid"/>
-                    <field name="create_date"/>
-                </tree>
-
-        <record id="action_dlg_crm_attachment_view" model="ir.actions.act_window">
+     <record id="action_dlg_crm_attachment_view" model="ir.actions.act_window">
             <field name="name">Adjuntos</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">ir.attachment</field>
@@ -22,4 +13,6 @@
                 </p>
             </field>
         </record>
+
+    <menuitem id="menu_dlg_crm_attachment" name="Adjuntos" parent="menu_dlg_crm_root" action="action_dlg_crm_attachment_view" sequence="3"/>
 </odoo>
