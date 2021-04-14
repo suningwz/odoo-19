@@ -106,6 +106,19 @@
             </field>
         </record>
 
+        <record id="view_dlg_crm_action_attachment_tree" model="ir.attachment">
+            <field name="name">view.dlg.crm.action.attachment.tree</field>
+            <field name="model">dlg_crm.action</field>
+            <field name="arch" type="xml">
+                <tree string="Adjuntos">
+                    <field name="id"/>
+                    <field name="customer"/>
+                    <field name="opportunity"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
         <record id="view_dlg_crm_action_search" model="ir.ui.view">
             <field name="name">view.dlg.crm.action.search</field>
             <field name="model">dlg_crm.action</field>
