@@ -1,7 +1,6 @@
 <odoo>
     <data>
         <record id="view_dlg_crm_attachment_tree" model="ir.attachment">
-            <field name="name">view.dlg.crm.attachment.tree</field>
                 <tree string="Attachments" editable="top" >
                     <field name="datas" widget="download_link" filename="name" string="File"/>
                     <field name="name" invisible="1"/>
