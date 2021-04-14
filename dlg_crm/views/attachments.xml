@@ -9,7 +9,6 @@
                     <field name="create_uid"/>
                     <field name="create_date"/>
                 </tree>
-            </field>
         </record>
 
         <record id="action_dlg_crm_attachment_view" model="ir.actions.act_window">
