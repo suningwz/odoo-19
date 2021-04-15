@@ -45,8 +45,8 @@
                             <field name="notes"/>
                         </group>
                         <notebook>
-                            <page string="Adjuntos" name="attachments">
-                                <field name="attachments" mode="tree" delete="true">
+                            <page string="Adjuntos" name="attachment">
+                                <field name="attachment" mode="tree" delete="true">
                                     <tree string="Adjunto" create="false">
                                         <field name="id"/>
                                     </tree>
