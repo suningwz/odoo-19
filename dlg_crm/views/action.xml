@@ -1,7 +1,7 @@
 <odoo>
     <record id="view_dlg_crm_action_attachment_tree" model="ir.ui.view">
             <field name="name">view.dlg.crm.action.attachment.tree</field>
-            <field name="model">dlg_crm.action</field>
+            <field name="model">ir.attachment</field>
             <field name="arch" type="xml">
                 <tree string="Adjunto">
                     <field name="datas" widget="download_link" filename="name" string="File"/>
