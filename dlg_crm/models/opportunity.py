@@ -15,7 +15,7 @@ class Opportunity(models.Model):
     _name = 'dlg_crm.opportunity'
     _description = 'Oportunidades'
 
-    id = fields.Char(string='ID')
+    id = fields.Integer(string='ID')
     name = fields.Char(string='Descripción')
     notes = fields.Text(string='Notas')
     customer = fields.Many2one(string='Cliente', comodel_name='res.partner')
