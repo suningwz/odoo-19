@@ -49,8 +49,7 @@
                             <page string="Adjuntos" name="attachment">
                                 <field name="attachment" mode="tree" delete="true">
                                     <tree string="Adjunto" create="false">
-                                        <field name="doc_id"/>
-                                        <field name="attachment_id3"/>
+                                        <field name="res_id"/>
                                     </tree>
                                 </field>
                             </page>
