@@ -36,7 +36,7 @@
                             <page string="Adjuntos" name="attachments">
                                 <field name="attachments" mode="tree" delete="true">
                                     <tree string="Adjunto" create="false">
-                                        <field name="attachments"/>
+                                        <field name="id"/>
                                     </tree>
                                 </field>
                             </page>
