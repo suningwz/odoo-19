@@ -21,11 +21,11 @@ class Action(models.Model):
     done = fields.Boolean(string='Finalizada')
     image = fields.Binary(string='Imagen')
     phase = fields.Many2one('dlg_crm.phase', string="Fase", required=False)
-    #user = fields.Char("Usuario", default=lambda self: self.env.user.name)
+    # user = fields.Char("Usuario", default=lambda self: self.env.user.name)
     user = fields.Many2one('res.users', 'Current User', default=lambda self: self.env.user)
     color = fields.Integer()
-    #attachment = fields.Many2many('ir.attachment', 'attach_rel', 'doc_id', 'attachment_id3', string="Adjunto", help='Adjunta un archivo', copy=False)
-    attachment = fields.Many2one('ir.attachment', string="Adjunto", help='Adjunta un archivo', copy=False)
+    # attachment = fields.Many2many('ir.attachment', 'attach_rel', 'doc_id', 'attachment_id3', string="Adjunto", help='Adjunta un archivo', copy=False)
+    attachment = fields.One2Many('ir.attachment', 'res_id', string='Adjunto', copy=True, auto_join=True)
     _order = 'date_event desc'
 
     def toggle_state(self):
