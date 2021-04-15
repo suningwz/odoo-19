@@ -50,7 +50,7 @@ class Action(models.Model):
             'view_type': 'tree',
             'view_mode': 'tree',
             'res_model': 'ir.attachment',
-            'view_id': self.env.ref("ir.attachment.custom").id,
+            'view_id': self.env.ref("view_dlg_crm_action_attachment_tree").id,
             'type': 'ir.actions.act_window',
             'context': {},
         }
