@@ -25,6 +25,7 @@ class Action(models.Model):
     #user = fields.Char("Usuario", default=lambda self: self.env.user.name)
     user = fields.Many2one('res.users', 'Current User', default=lambda self: self.env.user)
     color = fields.Integer()
+    action_id = fields.Integer()
 
     _order = 'date_event desc'
 
