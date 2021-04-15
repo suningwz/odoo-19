@@ -21,7 +21,8 @@
                 <form string="Acción">
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-
+                            <button class="oe_stat_button" icon="fa-file-o" type="action"
+                                    name="564" string="Adjuntar"/>
                             <button name="toggle_state" type="object" class="oe_stat_button" string="Acción finalizada" icon="fa-play-circle"/>
                         </div>
                         <group name="group_top">
@@ -48,7 +49,9 @@
                             <page string="Adjuntos" name="attachment">
                                 <field name="attachment" mode="tree" delete="true">
                                     <tree string="Adjunto" create="false">
-                                        <field name="id"/>
+                                        <field name="attach_rel"/>
+                                        <field name="doc_id"/>
+                                        <field name="attachment_id3"/>
                                     </tree>
                                 </field>
                             </page>
