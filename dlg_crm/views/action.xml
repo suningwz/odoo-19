@@ -22,8 +22,7 @@
                     <sheet>
                         <div class="oe_button_box" name="button_box">
                             <button class="oe_stat_button" icon="fa-file-o" type="action" name="564" string="Adjuntar"
-
-                                    context="{'default_res_id':id,'default_res_model':action}"/>
+                                    context="{'default_res_id':id}"/>
                             <button name="toggle_state" type="object" class="oe_stat_button" string="Acción finalizada" icon="fa-play-circle"/>
                         </div>
                         <group name="group_top">
