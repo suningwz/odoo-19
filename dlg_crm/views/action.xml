@@ -1,15 +1,5 @@
 <odoo>
     <data>
-        <record id="action_dlg_crm_attachment_view" model="ir.actions.act_window">
-    <field name="name">Adjuntos</field>
-    <field name="type">ir.actions.act_window</field>
-    <field name="res_model">dlg_crm.attachment</field>
-    <field name="view_mode">tree</field>
-    <field name="help" type="html">
-        <p class="oe_view_nocontent_create">Adjunto</p>
-        <p>Click 'Nuevo' para añadir nuevos adjuntos</p>
-    </field>
-
         <record id="view_dlg_crm_action_form" model="ir.ui.view">
             <field name="name">view.dlg.crm.action.form</field>
             <field name="model">dlg_crm.action</field>
@@ -130,6 +120,17 @@
             </field>
         </record>
 
+        <record id="action_dlg_crm_attachment_view" model="ir.actions.act_window">
+            <field name="name">Adjuntos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">dlg_crm.attachment</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Adjunto</p>
+                <p>Click 'Nuevo' para añadir nuevos adjuntos</p>
+            </field>
+        </record>
+
         <record id="view_dlg_crm_action_search" model="ir.ui.view">
             <field name="name">view.dlg.crm.action.search</field>
             <field name="model">dlg_crm.action</field>
@@ -160,7 +161,6 @@
                 </search>
             </field>
         </record>
-
 
         <record id="action_dlg_crm_action_view" model="ir.actions.act_window">
             <field name="name">Acciones</field>
