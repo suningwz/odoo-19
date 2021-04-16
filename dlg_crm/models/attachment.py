@@ -5,6 +5,4 @@ class Attachment(models.Model):
     _name = 'attachment'
     _inherit = 'ir.attachment'
 
-    _columns = {
-        'action_id': fields.Integer(string="ID acción", readonly=True)
-    }
+    action_id = fields.Integer(string="ID acción", readonly=True)
