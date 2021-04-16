@@ -46,11 +46,11 @@
                             <field name="notes"/>
                         </group>
                         <notebook>
-                            <page string="Adjuntos" name="attachment">
-                                <field name="attachment" mode="tree" delete="true">
+                            <page string="Adjuntos" name="ir.attachment">
+                                <field name="ir.attachment" mode="tree" delete="true">
                                     <tree string="Adjunto" create="true">
                                         <field name="res_id"/>
-
+                                        <field name="action_id"/>
                                         <field name="name"/>
                                         <field name="file_size"/>
                                         <field name="create_date"/>
