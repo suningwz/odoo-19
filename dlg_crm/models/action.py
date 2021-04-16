@@ -25,7 +25,7 @@ class Action(models.Model):
     user = fields.Many2one('res.users', 'Current User', default=lambda self: self.env.user)
     color = fields.Integer()
     # attachment = fields.Many2many('ir.attachment', 'attach_rel', 'doc_id', 'attachment_id3', string="Adjunto", help='Adjunta un archivo', copy=False)
-    attachment = fields.One2many('dlg_crm.attachment', 'action_id', string='Adjunto', copy=True, auto_join=True)
+    attachment = fields.One2many('ir..attachment', 'action_id', string='Adjunto', copy=True, auto_join=True)
     _order = 'date_event desc'
 
     def toggle_state(self):
