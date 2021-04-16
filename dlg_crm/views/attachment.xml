@@ -1,0 +1,15 @@
+<odoo>
+    <data>
+        <record id="view_dlg_crm_attachment_tree" model="ir.ui.view">
+            <field name="name">view.dlg.crm.attachment.tree</field>
+            <field name="model">dlg_crm.attachment</field>
+            <field name="arch" type="xml">
+                <tree string="Acción">
+                    <field name="res_id"/>
+                    <field name="name"/>
+                    <field name="action_id"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+ </odoo>

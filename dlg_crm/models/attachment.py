@@ -2,7 +2,8 @@ from odoo import models, fields
 
 
 class Attachment(models.Model):
-    _name = 'attachment'
+    _name = 'dlg_crm.attachment'
     _inherit = 'ir.attachment'
+    _description = 'Adjuntos'
 
-    action_id = fields.Many2one('dlg_crm.action', 'attachments', string="Attachment", invisible=1)
+    action_id = fields.Many2one('dlg_crm.action', 'attachments', string="Adjunto")
