@@ -3,4 +3,5 @@
 from . import opportunity
 from . import phase
 from . import action
+from . import attachment
 
