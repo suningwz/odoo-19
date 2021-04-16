@@ -50,7 +50,7 @@
                                 <field name="attachment" mode="tree" delete="true">
                                     <tree string="Adjunto" create="true">
                                         <field name="res_id"/>
-                                        <field name="action_id"/>
+                                     
                                         <field name="name"/>
                                         <field name="file_size"/>
                                         <field name="create_date"/>
