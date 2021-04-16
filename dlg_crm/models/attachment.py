@@ -2,6 +2,7 @@ from odoo import models, fields
 
 
 class Attachment(models.Model):
+    _name = 'attachment'
     _inherit = 'ir.attachment'
 
     _columns = {
