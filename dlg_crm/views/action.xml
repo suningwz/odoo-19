@@ -22,7 +22,7 @@
                     <sheet>
                         <div class="oe_button_box" name="button_box">
                             <button class="oe_stat_button" icon="fa-file-o" type="action" name="564" string="Adjuntar"
-                                    context="{'default_res_id':id, 'default_res_name':name, 'default_res_model':'dlg_crm.action'}"/>
+                                    context="{'default_res_id':id, 'default_action_id':id, 'default_res_name':name}"/>
                             <button name="toggle_state" type="object" class="oe_stat_button" string="Acción finalizada" icon="fa-play-circle"/>
                         </div>
                         <group name="group_top">
@@ -50,6 +50,7 @@
                                 <field name="attachment" mode="tree" delete="true">
                                     <tree string="Adjunto" create="true">
                                         <field name="res_id"/>
+                                        <field name="action_id"/>
                                         <field name="name"/>
                                         <field name="file_size"/>
                                         <field name="create_date"/>
