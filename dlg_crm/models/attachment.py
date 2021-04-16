@@ -4,4 +4,6 @@ from odoo import models, fields
 class Attachment(models.Model):
     _inherit = 'ir.attachment'
 
-    action_id = fields.Integer(string="ID acción", readonly=True)
+    _columns = {
+        'action_id': fields.Integer(string="ID acción", readonly=True)
+    }
