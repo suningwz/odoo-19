@@ -49,7 +49,7 @@ class Action(models.Model):
             'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'dlg_crm.attachment',
-            'view_id': self.env.ref("dlg_crm.view_dlg_crm_attachment_tree").id,
+            'view_id': self.env.ref("dlg_crm.view_dlg_crm_attachment_form").id,
             'type': 'ir.actions.act_window',
             'context': {},
         }
