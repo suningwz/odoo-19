@@ -46,8 +46,8 @@ class Action(models.Model):
     @staticmethod
     def f_create_attachment(self):
         return {
-            'view_type': 'form',
-            'view_mode': 'form',
+            'view_type': 'tree',
+            'view_mode': 'tree',
             'res_model': 'dlg_crm.attachment',
             'view_id': self.env.ref("dlg_crm.view_dlg_crm_attachment_tree").id,
             'type': 'ir.actions.act_window',
