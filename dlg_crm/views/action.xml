@@ -1,5 +1,15 @@
 <odoo>
     <data>
+        <record id="action_dlg_crm_attachment_view" model="ir.actions.act_window">
+    <field name="name">Adjuntos</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">dlg_crm.attachment</field>
+    <field name="view_mode">tree</field>
+    <field name="help" type="html">
+        <p class="oe_view_nocontent_create">Adjunto</p>
+        <p>Click 'Nuevo' para añadir nuevos adjuntos</p>
+    </field>
+
         <record id="view_dlg_crm_action_form" model="ir.ui.view">
             <field name="name">view.dlg.crm.action.form</field>
             <field name="model">dlg_crm.action</field>
@@ -7,6 +17,10 @@
                 <form string="Acción">
                     <sheet>
                         <div class="oe_button_box" name="button_box">
+
+                            <button name="f_create_attachment" type="object"
+                                    string="Crear Adjunto" icon="fa-file-o"
+                                    context="{'default_res_id':id, 'default_action_id':id}"/>
 
                             <button name="toggle_state" type="object" class="oe_stat_button" string="Acción finalizada" icon="fa-play-circle"/>
                         </div>

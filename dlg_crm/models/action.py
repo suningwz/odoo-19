@@ -25,7 +25,7 @@ class Action(models.Model):
     user = fields.Many2one('res.users', 'Current User', default=lambda self: self.env.user)
     color = fields.Integer()
     # attachment = fields.Many2many('ir.attachment', 'attach_rel', 'doc_id', 'attachment_id3', string="Adjunto", help='Adjunta un archivo', copy=False)
-    attachments = fields.One2many('ir.attachment', 'res_id', string='Adjunto', copy=True, auto_join=True)
+    attachments = fields.One2many('dlg_crm.attachment', 'res_id', string='Adjunto', copy=True, auto_join=True)
     _order = 'date_event desc'
 
     def toggle_state(self):
@@ -39,6 +39,17 @@ class Action(models.Model):
             'view_mode': 'form',
             'res_model': 'dlg_crm.action',
             'view_id': self.env.ref("dlg_crm.view_dlg_crm_action_form").id,
+            'type': 'ir.actions.act_window',
+            'context': {},
+        }
+
+    @staticmethod
+    def f_create_attachment(self):
+        return {
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'dlg_crm.attachment',
+            'view_id': self.env.ref("dlg_crm.view_dlg_crm_attachment_tree").id,
             'type': 'ir.actions.act_window',
             'context': {},
         }
