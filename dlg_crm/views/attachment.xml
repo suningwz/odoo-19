@@ -1,11 +1,17 @@
 <odoo>
-        <data>
-    <tree string="Attachments" editable="top">
-        <field name="datas" widget="download_link" filename="name" string="File"/>
-        <field name="name" invisible="1"/>
-        <field name="res_id"/>
-        <field name="create_uid"/>
-        <field name="create_date"/>
-    </tree>
-        </data>
+    <data>
+        <record id="view_dlg_crm_attachment_tree" model="ir.ui.view">
+            <field name="name">view.dlg.crm.attachment.tree</field>
+            <field name="model">ir.attachment</field>
+            <field name="arch" type="xml">
+                <tree string="Attachments" editable="top">
+                    <field name="datas" widget="download_link" filename="name" string="File"/>
+                    <field name="name" invisible="1"/>
+                    <field name="res_id"/>
+                    <field name="create_uid"/>
+                    <field name="create_date"/>
+                </tree>
+            </field>
+        </record>
+    </data>
 </odoo>
