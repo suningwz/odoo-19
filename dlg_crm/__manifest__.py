@@ -27,6 +27,7 @@
         'views/phase.xml',
         'views/opportunity.xml',
         'views/action.xml',
+        'views/attachment.xml',
         'views/templates.xml',
         'reports/phase.xml',
         'reports/opportunity.xml',
