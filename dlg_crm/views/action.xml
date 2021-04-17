@@ -7,8 +7,6 @@
                 <form string="Acción">
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <button class="oe_stat_button" icon="fa-file-o" type="action" string="Adjunto" name="572"
-                            domain = "[('res_id','=',3)]"/>
                             <button name="toggle_state" type="object" class="oe_stat_button"
                                     string="Acción finalizada" icon="fa-play-circle"/>
                         </div>
@@ -32,6 +30,19 @@
                         <group name="group_bottom">
                             <field name="notes"/>
                         </group>
+                        <notebook>
+                            <page string="Adjuntos" name="attachments">
+                                <field name="attachments" mode="tree" default_order="create_date" delete="true">
+                                    <tree string="Adjunto" create="true">
+                                        <field name="datas" widget="download_link" filename="name" string="File"/>
+                                        <field name="name" invisible="1"/>
+                                        <field name="res_id"/>
+                                        <field name="create_uid"/>
+                                        <field name="create_date"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
