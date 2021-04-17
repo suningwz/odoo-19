@@ -36,19 +36,6 @@
             </field>
         </record>
 
-        <record id="action_dlg_crm_attachment_view" model="ir.actions.act_window">
-            <field name="name">action.dlg.crm.attachment.view</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">ir.attachment</field>
-            <field name="view_mode">tree</field>
-            <field name="domain">[('res_id','=',id),('res_model','=','dlg_crm.action')]</field>
-            <field name="context">{'default_res_id':id,'default_res_model':'dlg_crm.action'}</field>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">Adjunto</p>
-                <p>Click 'Nuevo' para añadir nuevos adjuntos</p>
-            </field>
-        </record>
-
         <record id="view_dlg_crm_action_kanban" model="ir.ui.view">
             <field name="name">view.dlg.crm.action.kanban</field>
             <field name="model">dlg_crm.action</field>
