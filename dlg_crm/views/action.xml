@@ -194,7 +194,7 @@
             <field name="res_model">ir.attachment</field>
             <field name="view_mode">tree</field>
             <field name="domain">[('res_id','=','dlg_crm.action.id'),('res_model','=','dlg_crm.action')]</field>
-            <field name="context">{'default_res_id':id,'default_res_model':'dlg_crm.action'}</field>
+            <field name="context">{'default_res_id':'dlg_crm.action.id','default_res_model':'dlg_crm.action'}</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">Adjunto</p>
                 <p>Click 'Nuevo' para añadir nuevos adjuntos</p>
