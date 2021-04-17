@@ -1,4 +1,5 @@
 <odoo>
+        <data>
     <tree string="Attachments" editable="top">
         <field name="datas" widget="download_link" filename="name" string="File"/>
         <field name="name" invisible="1"/>
@@ -6,4 +7,5 @@
         <field name="create_uid"/>
         <field name="create_date"/>
     </tree>
+        </data>
 </odoo>
