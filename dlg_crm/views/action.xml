@@ -19,14 +19,14 @@
                                 <field name="date"/>
                                 <field name="date_event"/>
                                 <field name="date_end"/>
-                                <field name="type"/>
-                                <field name="phase"/>
                             </group>
                             <group name="group_right">
                                 <field name="name"/>
+                                <field name="user"/>
+                                <field name="type"/>
+                                <field name="phase"/>
                                 <field name="done"/>
                                 <field name="id"/>
-                                <field name="user"/>
                             </group>
                         </group>
                         <group name="group_bottom">
@@ -49,11 +49,14 @@
                         <div t-name="kanban-box">
                             <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''} oe_kanban_global_click">
                                 <div class="o_dropdown_kanban dropdown">
-                                    <a class="dropdown-toggle o-no-caret btn" role="button" data-toggle="dropdown" data-display="static" href="#" aria-label="Dropdown menu" title="Dropdown menu">
+                                    <a class="dropdown-toggle o-no-caret btn" role="button" data-toggle="dropdown"
+                                       data-display="static" href="#" aria-label="Dropdown menu" title="Dropdown menu">
                                         <span class="fa fa-ellipsis-v"/>
                                     </a>
                                     <div class="dropdown-menu" role="menu">
-                                        <t t-if="widget.editable"><a role="menuitem" type="edit" class="dropdown-item">Edit</a></t>
+                                        <t t-if="widget.editable">
+                                            <a role="menuitem" type="edit" class="dropdown-item">Edit</a>
+                                        </t>
                                     </div>
                                 </div>
                                 <div class="oe_kanban_content">
@@ -67,15 +70,35 @@
                                     <div class="o_kanban_record_bottom">
                                         <div class="oe_kanban_bottom_left">
                                             <table>
-                                                <tr><td>Inicio: <field name="date"/></td></tr>
-                                                <tr><td>Lista: <field name="done"/></td></tr>
+                                                <tr>
+                                                    <td>Inicio:
+                                                        <field name="date"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Lista:
+                                                        <field name="done"/>
+                                                    </td>
+                                                </tr>
                                             </table>
                                         </div>
                                         <div class="oe_kanban_bottom_right">
                                             <table>
-                                                <tr><td>Tipo: <field name="type"/></td></tr>
-                                                <tr><td>Evento: <field name="date_event"/></td></tr>
-                                                <tr><td>Fin: <field name="date_end"/></td></tr>
+                                                <tr>
+                                                    <td>Tipo:
+                                                        <field name="type"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Evento:
+                                                        <field name="date_event"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Fin:
+                                                        <field name="date_end"/>
+                                                    </td>
+                                                </tr>
                                             </table>
                                         </div>
                                     </div>
@@ -123,7 +146,8 @@
                                 help="Agrupar por fase"/>
                         <filter name="groupby_type" string="Tipo" domain="[]" context="{'group_by':'type'}"
                                 help="Agrupar por tipo"/>
-                        <filter name="groupby_opportunity" string="Oportunidad" domain="[]" context="{'group_by':'opportunity'}"
+                        <filter name="groupby_opportunity" string="Oportunidad" domain="[]"
+                                context="{'group_by':'opportunity'}"
                                 help="Agrupar por oportunidad"/>
                         <filter name="groupby_date" string="Fecha" context="{'group_by':'date:year'}"
                                 help="Agrupar por fecha"/>
@@ -151,6 +175,7 @@
             </field>
         </record>
 
-        <menuitem id="menu_dlg_crm_action" name="Acciones" parent="menu_dlg_crm_root" action="action_dlg_crm_action_view" sequence="1"/>
+        <menuitem id="menu_dlg_crm_action" name="Acciones" parent="menu_dlg_crm_root"
+                  action="action_dlg_crm_action_view" sequence="1"/>
     </data>
- </odoo>
+</odoo>
