@@ -193,8 +193,6 @@
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">ir.attachment</field>
             <field name="view_mode">tree</field>
-
-
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">Adjunto</p>
                 <p>Click 'Nuevo' para añadir nuevos adjuntos</p>
