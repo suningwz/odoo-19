@@ -201,5 +201,7 @@
 
         <menuitem id="menu_dlg_crm_action" name="Acciones" parent="menu_dlg_crm_root"
                   action="action_dlg_crm_action_view" sequence="1"/>
+        <menuitem id="menu_dlg_crm_attachment" name="Adjuntos" parent="menu_dlg_crm_root"
+                  action="action_dlg_crm_attachment_view" sequence="3"/>
     </data>
 </odoo>
