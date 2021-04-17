@@ -7,7 +7,7 @@
                 <form string="Acción">
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-
+                            <button class="oe_stat_button" icon="fa-file-o" type="action" string="Adjunto" name="572"/>
                             <button name="toggle_state" type="object" class="oe_stat_button"
                                     string="Acción finalizada" icon="fa-play-circle"/>
                         </div>
