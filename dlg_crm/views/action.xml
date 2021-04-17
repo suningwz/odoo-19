@@ -7,12 +7,11 @@
                 <form string="Acción">
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-
                             <button name="f_create_attachment" type="object"
                                     string="Crear Adjunto" icon="fa-file-o"
-                                    context="{'default_res_id':id, 'default_action_id':id}"/>
-
-                            <button name="toggle_state" type="object" class="oe_stat_button" string="Acción finalizada" icon="fa-play-circle"/>
+                                    context="{'default_action_id':id}"/>
+                            <button name="toggle_state" type="object" class="oe_stat_button"
+                                    string="Acción finalizada" icon="fa-play-circle"/>
                         </div>
                         <group name="group_top">
                             <group name="group_left">
