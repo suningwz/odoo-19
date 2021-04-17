@@ -34,16 +34,14 @@
                             <page string="Adjuntos" name="attachments">
                                 <record id="view_dlg_crm_action_attachment_tree" model="ir.ui.view">
                                     <field name="name">view.dlg.crm.action.attachment.tree</field>
-                                    <field name="arch" type="xml">
-                                        <tree string="Attachments" editable="top">
-                                            <field name="model">ir.attachment</field>
-                                            <field name="datas" widget="download_link" filename="name" string="File"/>
-                                            <field name="name" invisible="1"/>
-                                            <field name="company_id" groups="base.group_multi_company"/>
-                                            <field name="create_uid"/>
-                                            <field name="create_date"/>
-                                        </tree>
-                                    </field>
+                                    <tree string="Attachments" editable="top">
+                                        <field name="model">ir.attachment</field>
+                                        <field name="datas" widget="download_link" filename="name" string="File"/>
+                                        <field name="name" invisible="1"/>
+                                        <field name="company_id" groups="base.group_multi_company"/>
+                                        <field name="create_uid"/>
+                                        <field name="create_date"/>
+                                    </tree>
                                 </record>
                             </page>
                         </notebook>
