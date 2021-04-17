@@ -174,7 +174,19 @@
             </field>
         </record>
 
-
+        <record id="view_dlg_crm_attachment_tree" model="ir.ui.view">
+            <field name="name">view.dlg.crm.attachment.tree</field>
+            <field name="model">ir.attachment</field>
+            <field name="arch" type="xml">
+                <tree string="Attachments" editable="top">
+                    <field name="datas" widget="download_link" filename="name" string="File"/>
+                    <field name="name" invisible="1"/>
+                    <field name="res_id"/>
+                    <field name="create_uid"/>
+                    <field name="create_date"/>
+                </tree>
+            </field>
+        </record>
 
         <menuitem id="menu_dlg_crm_action" name="Acciones" parent="menu_dlg_crm_root"
                   action="action_dlg_crm_action_view" sequence="1"/>
