@@ -6,5 +6,5 @@ class Attachment(models.Model):
     _inherit = 'ir.attachment'
     _description = 'Adjuntos'
 
-    #action_id = fields.Many2one('dlg_crm.action', 'attachments', string="Adjunto")
-    action_id = fields.Integer(string="ID acción", readonly=True)
+    action_id = fields.Many2many('dlg_crm.action', 'attachments', string="Adjunto")
+    #action_id = fields.Integer(string="ID acción", readonly=True)
