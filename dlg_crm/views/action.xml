@@ -32,15 +32,19 @@
                         </group>
                         <notebook>
                             <page string="Adjuntos" name="attachments">
-                                <field name="attachments" mode="tree" default_order="create_date" delete="true">
-                                    <tree string="Adjunto" create="true">
-                                        <field name="datas" widget="download_link" filename="name" string="File"/>
-                                        <field name="name" invisible="1"/>
-                                        <field name="res_id"/>
-                                        <field name="create_uid"/>
-                                        <field name="create_date"/>
-                                    </tree>
-                                </field>
+                                <record id="view_dlg_crm_attachment_tree" model="ir.ui.view">
+                                    <field name="name">view.dlg.crm.attachment.tree</field>
+                                    <field name="model">ir.attachment</field>
+                                    <field name="arch" type="xml">
+                                        <tree string="Adjuntos" editable="top">
+                                            <field name="datas" widget="download_link" filename="name" string="File"/>
+                                            <field name="name" invisible="1"/>
+                                            <field name="res_id"/>
+                                            <field name="create_uid"/>
+                                            <field name="create_date"/>
+                                        </tree>
+                                    </field>
+                                </record>
                             </page>
                         </notebook>
                     </sheet>
