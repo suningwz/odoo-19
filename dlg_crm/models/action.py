@@ -43,17 +43,6 @@ class Action(models.Model):
             'context': {},
         }
 
-    @staticmethod
-    def f_create_attachment(self):
-        return {
-            'view_type': 'form',
-            'view_mode': 'form',
-            'res_model': 'dlg_crm.attachment',
-            'view_id': self.env.ref("dlg_crm.view_dlg_crm_attachment_form").id,
-            'type': 'ir.actions.act_window',
-            'context': {},
-        }
-
     def f_search_update(self):
         action = self.env['dlg_crm.action'].search([('name', '=', 'ORM test')])
         print('search()', action, action.name)
