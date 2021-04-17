@@ -28,13 +28,6 @@
                                 <field name="done"/>
                                 <field name="id"/>
                                 <field name="user"/>
-                                <notebook>
-                                    <page string="Adjuntos">
-                                        <tree string="Adjuntos" create="false" delete="true">
-                                            <field name="url_field" widget="url"/>
-                                        </tree>
-                                    </page>
-                                </notebook>
                             </group>
                         </group>
                         <group name="group_bottom">
