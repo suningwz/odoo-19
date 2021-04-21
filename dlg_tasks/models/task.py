@@ -29,7 +29,7 @@ class Task(models.Model):
     volume_year = fields.Integer(String='€/año (estimación)')
     orders_year = fields.Integer(String='Pedidos/año (estimación)')
     show = fields.Boolean('No Mostrar')
-    actions = fields.One2many('dlg_task.action', 'task_id', string='Actions', copy=True, auto_join=True)
+    actions = fields.One2many('dlg_tasks.action', 'task_id', string='Actions', copy=True, auto_join=True)
     user = fields.Char("Usuario", default=lambda self: self.env.user.name)
     #user = fields.Many2one('res.users', 'Current User', default=lambda self: self.env.user)
 
