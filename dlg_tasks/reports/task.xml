@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+        <report
+            string="Informe tarea"
+            id="dlg_crm_task_report"
+            model="dlg_crm.task"
+            report_type="qweb-pdf"
+            name="dlg_crm.report_tasky_card"
+            attachment_use="True"
+        />
+    </data>
+</odoo>
