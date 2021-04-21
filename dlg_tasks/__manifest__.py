@@ -3,10 +3,10 @@
     'name': "dlg_tasks",
 
     'summary': """
-        Módulo CRM para la gestión de tareass""",
+        Módulo TAREAS para la gestión de tareas""",
 
     'description': """
-        Módulo CRM para la gestión de tareas...
+        Módulo TAREAS para la gestión de tareas...
     """,
 
     'author': "DLG219",
