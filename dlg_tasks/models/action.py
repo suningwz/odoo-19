@@ -13,7 +13,6 @@ class Action(models.Model):
     id = fields.Integer()
     name = fields.Char(string='Descripción')
     notes = fields.Text(string='Notas')
-    customer = fields.Many2one(string='Cliente', comodel_name='res.partner', readonly=True)
     date = fields.Date(string='Fecha creación')
     date_event = fields.Date(string='Fecha evento')
     date_end = fields.Date(string='Fecha fin')
