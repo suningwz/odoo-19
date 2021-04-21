@@ -1,7 +1,7 @@
 <odoo>
     <data>
         <record id="view_dlg_tasks_action_form" model="ir.ui.view">
-            <field name="name">view.dlg.crm.action.form</field>
+            <field name="name">view.dlg.tasks.action.form</field>
             <field name="model">dlg_tasks.action</field>
             <field name="arch" type="xml">
                 <form string="Acción">
@@ -38,7 +38,7 @@
         </record>
 
         <record id="view_dlg_tasks_action_kanban" model="ir.ui.view">
-            <field name="name">view.dlg.crm.action.kanban</field>
+            <field name="name">view.dlg.tasks.action.kanban</field>
             <field name="model">dlg_tasks.action</field>
             <field name="arch" type="xml">
                 <kanban default_group_by="phase"
@@ -111,7 +111,7 @@
         </record>
 
         <record id="view_dlg_tasks_action_tree" model="ir.ui.view">
-            <field name="name">view.dlg.crm.action.tree</field>
+            <field name="name">view.dlg.tasks.action.tree</field>
             <field name="model">dlg_tasks.action</field>
             <field name="arch" type="xml">
                 <tree string="Acción">
@@ -129,7 +129,7 @@
         </record>
 
         <record id="view_dlg_tasks_action_search" model="ir.ui.view">
-            <field name="name">view.dlg.crm.action.search</field>
+            <field name="name">view.dlg.tasks.action.search</field>
             <field name="model">dlg_tasks.action</field>
             <field name="arch" type="xml">
                 <search string="Filtrar tareas">

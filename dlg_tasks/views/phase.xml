@@ -1,7 +1,7 @@
 <odoo>
     <data>
         <record id="view_dlg_tasks_phase_form" model="ir.ui.view">
-            <field name="name">view.dlg.crm.phase.form</field>
+            <field name="name">view.dlg.tasks.phase.form</field>
             <field name="model">dlg_tasks.phase</field>
             <field name="arch" type="xml">
                 <form string="Fase">
@@ -18,7 +18,7 @@
         </record>
 
         <record id="view_dlg_tasks_phase_kanban" model="ir.ui.view">
-            <field name="name">view.dlg.crm.phase.kanban</field>
+            <field name="name">view.dlg.tasks.phase.kanban</field>
             <field name="model">dlg_tasks.phase</field>
             <field name="arch" type="xml">
                 <kanban class="o_dlg_tasks_phase_kanban">
@@ -44,7 +44,7 @@
         </record>
 
        <record id="view_dlg_tasks_phase_tree" model="ir.ui.view">
-            <field name="name">view.dlg.crm.phase.tree</field>
+            <field name="name">view.dlg.tasks.phase.tree</field>
             <field name="model">dlg_tasks.phase</field>
             <field name="arch" type="xml">
                 <tree string="Fase">
@@ -55,7 +55,7 @@
         </record>
 
         <record id="view_dlg_tasks_phase_search" model="ir.ui.view">
-            <field name="name">view.dlg.crm.phase.search</field>
+            <field name="name">view.dlg.tasks.phase.search</field>
             <field name="model">dlg_tasks.phase</field>
             <field name="arch" type="xml">
                 <search string="Filtrar Fases">
