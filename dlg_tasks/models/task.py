@@ -12,7 +12,7 @@ PRIORITIES = [
 
 
 class Task(models.Model):
-    _name = 'dlg_crm.task'
+    _name = 'dlg_tasks.task'
     _description = 'Tareas'
 
     id = fields.Integer(string='ID')
@@ -22,7 +22,7 @@ class Task(models.Model):
     date = fields.Date(string='Fecha creación')
     done = fields.Boolean(string='Realizada', readonly=True)
     image = fields.Binary(string='Imagen')
-    phase = fields.Many2one('dlg_crm.phase', string="Fase", required=True)
+    phase = fields.Many2one('dlg_tasks.phase', string="Fase", required=True)
     color = fields.Integer()
     header = fields.Char('Cabecera')
     priority = fields.Selection(PRIORITIES, string='Prioridad', index=True, default=PRIORITIES[0][0])
@@ -50,28 +50,28 @@ class Task(models.Model):
             'priority': '1'
         }
         print(task)
-        self.env['dlg_crm.task'].create(task)
+        self.env['dlg_tasks.task'].create(task)
 
     @staticmethod
     def f_create_action(self):
         return {
             'view_type': 'form',
             'view_mode': 'form',
-            'res_model': 'dlg_crm.action',
-            'view_id': self.env.ref("dlg_crm.view_dlg_crm_action_form").id,
+            'res_model': 'dlg_tasks.action',
+            'view_id': self.env.ref("dlg_tasks.view_dlg_tasks_action_form").id,
             'type': 'ir.actions.act_window',
             'context': {},
         }
 
     def f_update_action(self):
-        action = self.env['dlg_crm.action'].browse([8])
+        action = self.env['dlg_tasks.action'].browse([8])
         print('browse()', action, action.name)
 
     def f_search_update(self):
-        task = self.env['dlg_crm.task'].search([('name', '=', 'ORM test')])
+        task = self.env['dlg_tasks.task'].search([('name', '=', 'ORM test')])
         print('search()', task, task.name)
 
-        task_b = self.env['dlg_crm.task'].browse([8])
+        task_b = self.env['dlg_tasks.task'].browse([8])
         print('browse()', task_b, task_b.name)
 
         task.write({
@@ -79,19 +79,19 @@ class Task(models.Model):
         })
 
     def f_delete(self):
-        task = self.env['dlg_crm.task'].browse([8])
+        task = self.env['dlg_tasks.task'].browse([8])
         task.unlink()
 
 
 class TaskReport(models.AbstractModel):
-    _name = 'report.dlg_crm.report_task_card'
+    _name = 'report.dlg_tasks.report_task_card'
 
     @api.model
     def _get_report_values(self, docids, data=None):
         report_obj = self.env['ir.actions.report']
-        report = report_obj._get_report_from_name('dlg_crm.report_task_card')
+        report = report_obj._get_report_from_name('dlg_tasks.report_task_card')
         return {
             'doc_ids': docids,
-            'doc_model': self.env['dlg_crm.task'],
-            'docs': self.env['dlg_crm.task'].browse(docids)
+            'doc_model': self.env['dlg_tasks.task'],
+            'docs': self.env['dlg_tasks.task'].browse(docids)
         }

@@ -1,6 +1,6 @@
 <odoo>
     <data>
-        <record id="task0" model="dlg_crm.task">
+        <record id="task0" model="dlg_tasks.task">
             <field name="name">Tarea importada</field>
             <field name="customer">Cliente importado</field>
             <field name="date">2020-01-01</field>
@@ -8,7 +8,7 @@
             <field name="done">1</field>
         </record>
 
-        <record id="phase0" model="dlg_crm.phase">
+        <record id="phase0" model="dlg_tasks.phase">
             <field name="name">Fase importada</field>
             <field name="id">Fase id importada</field>
         </record>
