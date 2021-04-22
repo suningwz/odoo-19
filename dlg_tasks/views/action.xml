@@ -151,8 +151,8 @@
                         <filter name="groupby_date" string="Fecha" context="{'group_by':'date:year'}"
                                 help="Agrupar por fecha"/>
                     </group>
-                    <filter name="filter_by_done" string="Finalizada" domain="[('done','=','True')]"
-                            help="Acciones finalizadas"/>
+                    <filter name="filter_by_done" string="No finalizadas" domain="[('done','=','True')]"
+                            help="Acciones no finalizadas"/>
                     <filter name="filter_by_task" string="Tarea"
                             help="Tareas"/>
                 </search>
