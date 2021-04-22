@@ -27,7 +27,6 @@
                                 <field name="priority"/>
                                 <field name="id"/>
                                 <field name="header"/>
-
                                 <field name="show"/>
                             </group>
                         </group>
