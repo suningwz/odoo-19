@@ -32,6 +32,17 @@
                         <group name="group_bottom">
                             <field name="notes"/>
                         </group>
+                        <notebook>
+                            <page string="Adjuntos" name="attachments">
+                                <field name="attachments" mode="tree" default_order="date_create" delete="true">
+                                    <tree string="Adjunto" create="false">
+                                        <field name="res_id"/>
+                                        <field name="res_name"/>
+                                        <field name="date_create"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
