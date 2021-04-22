@@ -75,7 +75,7 @@
                                         <field name="name"/>
                                     </strong>
                                     <div class="o_kanban_record_subtitle">
-                                        <field name="user"/>
+                                        <field name="user" attrs="{'invisible':[('show', '!=', False)]}"/>
                                     </div>
                                     <div class="o_kanban_record_bottom">
                                         <div class="oe_kanban_bottom_left">
