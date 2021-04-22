@@ -164,7 +164,7 @@
                         <filter name="groupby_date" string="Fecha" context="{'group_by':'date:year'}"
                                 help="Agrupar por fecha"/>
                     </group>
-                    <filter name="filter_by_done" string="No finalizada" domain="[('done','=','False')]"
+                    <filter name="filter_by_done" string="No finalizadas" domain="[('done','=','False')]"
                             help="Acciones no finalizadas"/>
                     <filter name="filter_by_opportunity" string="Oportunidad"
                             help="Oportunidades"/>
