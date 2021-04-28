@@ -22,7 +22,6 @@
                             </group>
                             <group name="group_right">
                                 <field name="name"/>
-                                <field name="type"/>
                                 <field name="phase"/>
                                 <field name="done"/>
                                 <field name="id"/>
@@ -122,7 +121,6 @@
                     <field name="date_event"/>
                     <field name="date_end"/>
                     <field name="name"/>
-                    <field name="type"/>
                 </tree>
             </field>
         </record>
@@ -139,12 +137,9 @@
                     <field name="date_end"/>
                     <field name="name"/>
                     <field name="phase"/>
-                    <field name="type"/>
                     <group expand="0" string="Group By">
                         <filter name="groupby_phase" string="Fase" domain="[]" context="{'group_by':'phase'}"
                                 help="Agrupar por fase"/>
-                        <filter name="groupby_type" string="Tipo" domain="[]" context="{'group_by':'type'}"
-                                help="Agrupar por tipo"/>
                         <filter name="groupby_task" string="Tarea" domain="[]"
                                 context="{'group_by':'task'}"
                                 help="Agrupar por tarea"/>
