@@ -1,0 +1,48 @@
+<odoo>
+    <data>
+        <template id="report_task_card">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <h2>Tarea</h2>
+                            <p>Cliente:
+                                <span t-field="o.customer.name"/>
+                            </p>
+                            <p>Descripción:
+                                <span t-field="o.name"/>
+                            </p>
+                            <p>Situación:
+                                <span t-field="o.status"/>
+                            </p>
+                            <p>Notas:
+                                <span t-field="o.notes"/>
+                            </p>
+                            <p>Fecha:
+                                <span t-field="o.date" t-options='{"format": "dd/MM/yyyy"}' />
+                            </p>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="report_phase_card">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <h2>Fase</h2>
+                            <p>ID:
+                                <span t-field="o.id"/>
+                            </p>
+                            <p>Nombre:
+                                <span t-field="o.name"/>
+                            </p>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
