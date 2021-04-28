@@ -16,12 +16,10 @@ class Action(models.Model):
     date = fields.Date(string='Fecha creación')
     date_event = fields.Date(string='Fecha evento')
     date_end = fields.Date(string='Fecha fin')
-    type = fields.Selection([('C', 'Call'), ('R', 'Reunión'), ('L', 'Llamada'),
-                             ('D', 'Comida'), ('E', 'email')], string='Tipo', required=False)
     done = fields.Boolean(string='Finalizada')
     image = fields.Binary(string='Imagen')
     phase = fields.Many2one('dlg_tasks.phase', string="Fase", required=False)
-    user = fields.Char("Usuario", default=lambda self: self.env.user.name)
+    user = fields.Char("Asignado a", default=lambda self: self.env.user.name)
     #user = fields.Many2one('res.users', 'Current User', default=lambda self: self.env.user)
     color = fields.Integer()
 
