@@ -83,11 +83,6 @@
                                         <div class="oe_kanban_bottom_right">
                                             <table>
                                                 <tr>
-                                                    <td>Tipo:
-                                                        <field name="type"/>
-                                                    </td>
-                                                </tr>
-                                                <tr>
                                                     <td>Evento:
                                                         <field name="date_event"/>
                                                     </td>
