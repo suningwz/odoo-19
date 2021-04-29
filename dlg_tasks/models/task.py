@@ -27,8 +27,7 @@ class Task(models.Model):
     priority = fields.Selection(PRIORITIES, string='Prioridad', index=True, default=PRIORITIES[0][0])
     show = fields.Boolean('No Mostrar')
     actions = fields.One2many('dlg_tasks.action', 'task_id', string='Actions', copy=True, auto_join=True)
-    user = fields.Char("Usuario", default=lambda self: self.env.user.name)
-    #user = fields.Many2one('res.users', 'Current User', default=lambda self: self.env.user)
+    user = fields.Char("Usuario", default=lambda self: self.env.user.name, readonly=True)
 
     _order = 'header asc, priority desc'
 
