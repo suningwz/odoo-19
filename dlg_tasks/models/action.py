@@ -19,8 +19,8 @@ class Action(models.Model):
     done = fields.Boolean(string='Finalizada')
     image = fields.Binary(string='Imagen')
     phase = fields.Many2one('dlg_tasks.phase', string="Fase", required=False)
-    user = fields.Char("Asignado a", default=lambda self: self.env.user.name)
-    #user = fields.Many2one('res.users', 'Current User', default=lambda self: self.env.user)
+    #user = fields.Char("Asignado a", default=lambda self: self.env.user.name)
+    user = fields.Many2one('res.users', 'Current User', string='Asignada a', default=lambda self: self.env.user)
     color = fields.Integer()
 
     _order = 'date_event desc'
