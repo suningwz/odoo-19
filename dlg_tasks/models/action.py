@@ -19,7 +19,7 @@ class Action(models.Model):
     done = fields.Boolean(string='Finalizada')
     image = fields.Binary(string='Imagen')
     phase = fields.Many2one('dlg_tasks.phase', string="Fase", required=False)
-    user = fields.Char("Asignado a", default=lambda self: self.env.user.name, readonly=True)
+    user = fields.Char("Creador", default=lambda self: self.env.user.name, readonly=True)
     user_assigned = fields.Many2one('res.users', sring="Asignado a")
     color = fields.Integer()
 
