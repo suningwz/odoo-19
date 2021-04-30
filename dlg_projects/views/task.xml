@@ -7,6 +7,7 @@
                 <form string="Tarea">
                     <sheet>
                         <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" icon="fa-file-o" type="action" name="561" string="Adjuntos"/>
                             <button name="toggle_state" type="object" class="oe_stat_button"
                                     string="Tarea finalizada" icon="fa-play-circle"
                             />
@@ -26,13 +27,18 @@
                                 <field name="done"/>
                                 <field name="id"/>
                                 <field name="user"/>
-                                <notebook>
-                                    <page string="Adjuntos">
-                                        <tree string="Adjuntos" create="false" delete="true">
-                                            <field name="url_field" widget="url"/>
-                                        </tree>
-                                    </page>
-                                </notebook>
+                            <notebook>
+                            <page string="Adjuntos" name="attachments">
+                                <field name="attachments" mode="tree" default_order="create_date" delete="true">
+                                    <tree string="Adjunto" create="false">
+                                        <field name="res_id"/>
+                                        <field name="res_name"/>
+                                        <field name="create_date"/>
+                                        <field name="create_uid"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
                             </group>
                         </group>
                         <group name="group_bottom">
