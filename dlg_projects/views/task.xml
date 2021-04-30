@@ -70,6 +70,7 @@
                                 <div class="oe_kanban_content">
                                     <strong class="o_kanban_record_title">
                                         <field name="name"/>
+                                        <field name="user_assigned" attrs="{'invisible':[('show', '!=', False)]}"/>
                                     </strong>
                                     <strong class="o_kanban_record_subtitle">
                                         <field name="type"/>

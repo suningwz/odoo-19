@@ -16,13 +16,13 @@
                         </div>
                         <group name="group_top">
                             <group name="group_left">
+                                <field name="name"/>
                                 <field name="date"/>
                                 <field name="phase"/>
+                                <field name="priority"/>
                             </group>
                             <group name="group_right">
-                                <field name="name"/>
                                 <field name="done"/>
-                                <field name="priority"/>
                                 <field name="id"/>
                                 <field name="header"/>
                                 <field name="show"/>
