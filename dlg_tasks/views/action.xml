@@ -77,17 +77,17 @@
                                             <table>
                                                 <tr>
                                                     <td>
-                                                        <field name="date" attrs="{'invisible':[('show', '!=', False)]}"/>
+                                                        <field name="date" string="Creada"  attrs="{'invisible':[('show', '!=', False)]}"/>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <field name="date_event" attrs="{'invisible':[('show', '!=', False)]}"/>
+                                                        <field name="date_event" string="Evento" attrs="{'invisible':[('show', '!=', False)]}"/>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <field name="date_end" attrs="{'invisible':[('show', '!=', False)]}"/>
+                                                        <field name="date_end" string="Deadline" attrs="{'invisible':[('show', '!=', False)]}"/>
                                                     </td>
                                                 </tr>
                                             </table>
