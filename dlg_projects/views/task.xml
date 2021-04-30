@@ -26,18 +26,23 @@
                                 <field name="done"/>
                                 <field name="id"/>
                                 <field name="user"/>
-                                <notebook>
-                                    <page string="Adjuntos">
-                                        <tree string="Adjuntos" create="false" delete="true">
-                                            <field name="url_field" widget="url"/>
-                                        </tree>
-                                    </page>
-                                </notebook>
                             </group>
                         </group>
                         <group name="group_bottom">
                             <field name="notes"/>
                         </group>
+                        <notebook>
+                            <page string="Adjuntos" name="attachments">
+                                <field name="attachments" mode="tree" default_order="create_date" delete="true">
+                                    <tree string="Adjunto" create="false">
+                                        <field name="res_id"/>
+                                        <field name="res_name"/>
+                                        <field name="create_date"/>
+                                        <field name="create_uid"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
