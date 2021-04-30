@@ -33,7 +33,7 @@ class Action(models.Model):
     show = fields.Boolean('No Mostrar')
     header = fields.Char('Cabecera')
 
-    _order = 'priority desc, date_event desc'
+    _order = 'header asc, priority desc, date_event desc'
 
     def toggle_state(self):
         self.done = not self.done
