@@ -23,10 +23,11 @@
                             </group>
                             <group name="group_right">
                                 <field name="name"/>
-                                <field name="file" filename="file_name"/>
                                 <field name="done"/>
                                 <field name="id"/>
                                 <field name="user"/>
+                                <field name="header"/>
+                                <field name="show"/>
                             </group>
                         </group>
                         <group name="group_bottom">
