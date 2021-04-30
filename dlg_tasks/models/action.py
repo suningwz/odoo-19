@@ -30,6 +30,7 @@ class Action(models.Model):
     user_assigned = fields.Many2one('res.users', sring="Asignado a")
     color = fields.Integer()
     priority = fields.Selection(PRIORITIES, string='Prioridad', index=True, default=PRIORITIES[0][0])
+    show = fields.Boolean('No Mostrar')
 
     _order = 'date_event desc'
 
