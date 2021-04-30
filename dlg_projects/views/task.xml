@@ -75,10 +75,6 @@
                                         <field name="name"/>
                                         <field name="user_assigned" attrs="{'invisible':[('show', '!=', False)]}"/>
                                     </strong>
-                                    <strong class="o_kanban_record_subtitle">
-                                        <field name="type"/>
-                                    </strong>
-
                                     <div class="o_kanban_record_bottom">
                                         <div class="oe_kanban_bottom_left">
                                             <table>
@@ -111,7 +107,6 @@
                     <field name="date"/>
                     <field name="date_end"/>
                     <field name="name"/>
-                    <field name="type"/>
                 </tree>
             </field>
         </record>
@@ -126,7 +121,6 @@
                     <field name="date_end"/>
                     <field name="name"/>
                     <field name="phase"/>
-                    <field name="type"/>
                     <group expand="0" string="Group By">
                         <filter name="groupby_phase" string="Fase" domain="[]" context="{'group_by':'phase'}"
                                 help="Agrupar por fase"/>
