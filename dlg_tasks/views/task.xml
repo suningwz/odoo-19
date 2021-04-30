@@ -75,9 +75,6 @@
                                     <strong class="o_kanban_record_title">
                                         <field name="name" attrs="{'invisible':[('show', '!=', False)]}"/>
                                     </strong>
-                                    <strong class="o_kanban_record_subtitle">
-                                        <field name="user_assigned" attrs="{'invisible':[('show', '!=', False)]}"/>
-                                    </strong>
                                     <div class="o_kanban_record_bottom">
                                         <div class="oe_kanban_bottom_left">
                                             <field name="show" attrs="{'invisible':True}"/>
