@@ -64,7 +64,6 @@
                                         <field name="name"/>
                                     </strong>
                                     <strong class="o_kanban_record_subtitle">
-                                        <field name="user"/>
                                         <field name="user_assigned"/>
                                     </strong>
                                     <div class="o_kanban_record_bottom">
