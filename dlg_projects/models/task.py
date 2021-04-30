@@ -22,7 +22,7 @@ class Task(models.Model):
     file_name = fields.Char("File Name")
     url_field = fields.Char("Archivo")
     user = fields.Char("Usuario", default=lambda self: self.env.user.name)
-    #user = fields.Many2one('res.users', 'Current User', default=lambda self: self.env.user)
+    user_assigned = fields.Many2one('res.users', sring="Asignado a")
     color = fields.Integer()
     attachments = fields.One2many('ir.attachment', 'res_id', string='Attachments', copy=True, auto_join=True)
 

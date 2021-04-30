@@ -27,7 +27,6 @@ class Project(models.Model):
     show = fields.Boolean('No Mostrar')
     tasks = fields.One2many('dlg_projects.task', 'project_id', string='Tareas', copy=True, auto_join=True)
     user = fields.Char("Usuario", default=lambda self: self.env.user.name)
-    #user = fields.Many2one('res.users', 'Current User', default=lambda self: self.env.user)
 
     _order = 'header asc, priority desc'
 
