@@ -81,6 +81,9 @@
                                                     </td>
                                                 </tr>
                                             </table>
+                                            <field name="show" attrs="{'invisible':True}"/>
+                                            <field name="priority" widget="priority" groups="base.group_user" attrs="{'invisible':[('show', '!=', False)]}"/>
+
                                         </div>
                                         <div class="oe_kanban_bottom_right">
                                             <table>
@@ -96,7 +99,6 @@
                                                 </tr>
                                             </table>
                                         </div>
-                                        <field name="priority" widget="priority" groups="base.group_user" attrs="{'invisible':[('show', '!=', False)]}"/>
                                     </div>
                                 </div>
                             </div>
