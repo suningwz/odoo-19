@@ -26,6 +26,8 @@
                                 <field name="phase"/>
                                 <field name="priority"/>
                                 <field name="done"/>
+                                <field name="header"/>
+                                <field name="show"/>
                                 <field name="id"/>
                             </group>
                         </group>

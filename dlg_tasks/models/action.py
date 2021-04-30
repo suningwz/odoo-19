@@ -31,6 +31,7 @@ class Action(models.Model):
     color = fields.Integer()
     priority = fields.Selection(PRIORITIES, string='Prioridad', index=True, default=PRIORITIES[0][0])
     show = fields.Boolean('No Mostrar')
+    header = fields.Char('Cabecera')
 
     _order = 'priority desc, date_event desc'
 
