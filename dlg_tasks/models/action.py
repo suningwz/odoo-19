@@ -4,6 +4,13 @@ from odoo import models, fields, api
 import datetime
 
 
+PRIORITIES = [
+    ('0', 'Baja'),
+    ('1', 'Media'),
+    ('2', 'Alta'),
+    ('3', 'Muy Alta'),
+]
+
 class Action(models.Model):
     _name = 'dlg_tasks.action'
     _description = 'Acciones'
@@ -22,6 +29,7 @@ class Action(models.Model):
     user = fields.Char("Creador", default=lambda self: self.env.user.name, readonly=True)
     user_assigned = fields.Many2one('res.users', sring="Asignado a")
     color = fields.Integer()
+    priority = fields.Selection(PRIORITIES, string='Prioridad', index=True, default=PRIORITIES[0][0])
 
     _order = 'date_event desc'
 

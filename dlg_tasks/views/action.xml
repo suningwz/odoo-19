@@ -24,6 +24,7 @@
                             <group name="group_right">
                                 <field name="name"/>
                                 <field name="phase"/>
+                                <field name="priority"/>
                                 <field name="done"/>
                                 <field name="id"/>
                             </group>
@@ -66,7 +67,6 @@
                                         <field name="user"/>
                                         <field name="user_assigned"/>
                                     </strong>
-
                                     <div class="o_kanban_record_bottom">
                                         <div class="oe_kanban_bottom_left">
                                             <table>
@@ -96,6 +96,7 @@
                                                 </tr>
                                             </table>
                                         </div>
+                                        <field name="priority" widget="priority" groups="base.group_user" attrs="{'invisible':[('show', '!=', False)]}"/>
                                     </div>
                                 </div>
                             </div>
@@ -114,6 +115,7 @@
                     <field name="user"/>
                     <field name="user_assigned"/>
                     <field name="task"/>
+                    <field name="priority"/>
                     <field name="phase"/>
                     <field name="date"/>
                     <field name="date_event"/>
@@ -144,11 +146,15 @@
                                 help="Agrupar por tarea"/>
                         <filter name="groupby_date" string="Fecha" context="{'group_by':'date:year'}"
                                 help="Agrupar por fecha"/>
+                        <filter name="groupby_priority" string="Prioridad" context="{'group_by':'priority'}"
+                                help="Agrupar por prioridad"/>
                     </group>
                     <filter name="filter_by_done" string="No finalizadas" domain="[('done','=','True')]"
                             help="Acciones no finalizadas"/>
                     <filter name="filter_by_task" string="Tarea"
                             help="Tareas"/>
+                    <filter name="filter_by_priority" string="Prioridad"
+                            help="Prioridad"/>
                 </search>
             </field>
         </record>
