@@ -32,7 +32,7 @@ class Action(models.Model):
     priority = fields.Selection(PRIORITIES, string='Prioridad', index=True, default=PRIORITIES[0][0])
     show = fields.Boolean('No Mostrar')
 
-    _order = 'date_event desc'
+    _order = 'priority desc, date_event desc'
 
     def toggle_state(self):
         self.done = not self.done
