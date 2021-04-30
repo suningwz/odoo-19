@@ -18,13 +18,12 @@ class Task(models.Model):
                              ('D', 'Comida'), ('E', 'email')], string='Tipo', required=False)
     done = fields.Boolean(string='Finalizada')
     phase = fields.Many2one('dlg_projects.phase', string="Fase", required=False)
-    file = fields.Binary("Attachment")
-    file_name = fields.Char("File Name")
-    url_field = fields.Char("Archivo")
     user = fields.Char("Usuario", default=lambda self: self.env.user.name)
     user_assigned = fields.Many2one('res.users', sring="Asignado a")
     color = fields.Integer()
     attachments = fields.One2many('ir.attachment', 'res_id', string='Attachments', copy=True, auto_join=True)
+    show = fields.Boolean('No Mostrar')
+    header = fields.Char('Cabecera')
 
     _order = 'date_end desc'
 

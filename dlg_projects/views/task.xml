@@ -26,6 +26,7 @@
                                 <field name="done"/>
                                 <field name="id"/>
                                 <field name="user"/>
+                                <field name="show"/>
                             </group>
                         </group>
                         <group name="group_bottom">
@@ -70,6 +71,7 @@
                                 <div class="oe_kanban_content">
                                     <strong class="o_kanban_record_title">
                                         <field name="name"/>
+                                        <field name="show" attrs="{'invisible':True}"/>
                                         <field name="user_assigned" attrs="{'invisible':[('show', '!=', False)]}"/>
                                     </strong>
                                     <strong class="o_kanban_record_subtitle">
