@@ -28,7 +28,7 @@ class Task(models.Model):
     show = fields.Boolean('No Mostrar')
     actions = fields.One2many('dlg_tasks.action', 'task_id', string='Actions', copy=True, auto_join=True)
     user = fields.Char("Usuario", default=lambda self: self.env.user.name, readonly=True)
-
+    user_assigned = fields.Many2one('res.users', sring="Asignado a")
 
     _order = 'header asc, priority desc'
 
