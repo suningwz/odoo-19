@@ -14,16 +14,14 @@ class Task(models.Model):
     notes = fields.Text(string='Notas')
     date = fields.Date(string='Fecha creación')
     date_end = fields.Date(string='Fecha fin')
-    type = fields.Selection([('C', 'Call'), ('R', 'Reunión'), ('L', 'Llamada'),
-                             ('D', 'Comida'), ('E', 'email')], string='Tipo', required=False)
     done = fields.Boolean(string='Finalizada')
     phase = fields.Many2one('dlg_projects.phase', string="Fase", required=False)
     user = fields.Char("Usuario", default=lambda self: self.env.user.name)
     user_assigned = fields.Many2one('res.users', sring="Asignado a")
     color = fields.Integer()
     attachments = fields.One2many('ir.attachment', 'res_id', string='Attachments', copy=True, auto_join=True)
-    show = fields.Boolean('No Mostrar')
     header = fields.Char('Cabecera')
+    show = fields.Boolean('No Mostrar')
 
     _order = 'date_end desc'
 

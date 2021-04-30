@@ -26,6 +26,7 @@
                                 <field name="done"/>
                                 <field name="id"/>
                                 <field name="user"/>
+                                <field name="header"/>
                                 <field name="show"/>
                             </group>
                         </group>
