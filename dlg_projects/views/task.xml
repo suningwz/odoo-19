@@ -129,8 +129,8 @@
                         <filter name="groupby_date_end" string="Fecha" context="{'group_by':'date_end:year'}"
                                 help="Agrupar por fecha fin"/>
                     </group>
-                    <filter name="filter_by_done" string="Finalizada" domain="[('done','=','True')]"
-                            help="Acciones finalizadas"/>
+                    <filter name="filter_by_done" string="No finalizada" domain="[('done','!=','True')]"
+                            help="Acciones no finalizadas"/>
                     <filter name="filter_by_project" string="Proyecto"
                             help="Proyectos"/>
                 </search>
