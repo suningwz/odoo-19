@@ -117,8 +117,8 @@
                         <filter name="groupby_date" string="Fecha" context="{'group_by':'date:year'}"
                                 help="Agrupar por fecha"/>
                     </group>
-                    <filter name="filter_by_done" string="Realizada" domain="[('done','=','True')]"
-                            help="Proyectos tratados"/>
+                    <filter name="filter_by_done" string="No realizada" domain="[('done','!=','True')]"
+                            help="Proyectos no realizados"/>
                 </search>
             </field>
         </record>
