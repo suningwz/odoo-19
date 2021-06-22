@@ -1,0 +1,13 @@
+<odoo>
+    <data>
+        <report
+            string="Informe fases"
+            id="dlg_crm_phase_report"
+            model="dlg_crm.phase"
+            report_type="qweb-pdf"
+            name="dlg_crm.report_phase_card"
+            file="dlg_crm.report_phase_card"
+            attachment_use="True"
+        />
+    </data>
+</odoo>

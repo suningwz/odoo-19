@@ -1,0 +1,11 @@
+<odoo>
+    <data>
+        <report
+            string="Informe acción"
+            id="dlg_crm_action_report"
+            model="dlg_crm.action"
+            report_type="qweb-pdf"
+            name="dlg_crm.report_action_card"
+        />
+    </data>
+</odoo>
