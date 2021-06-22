@@ -1,0 +1,11 @@
+<odoo>
+    <data>
+        <report
+            string="Informe acción"
+            id="dlg_tasks_action_report"
+            model="dlg_tasks.action"
+            report_type="qweb-pdf"
+            name="dlg_tasks.report_action_card"
+        />
+    </data>
+</odoo>

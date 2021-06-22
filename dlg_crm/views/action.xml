@@ -1,0 +1,193 @@
+<odoo>
+    <data>
+        <record id="view_dlg_crm_action_form" model="ir.ui.view">
+            <field name="name">view.dlg.crm.action.form</field>
+            <field name="model">dlg_crm.action</field>
+            <field name="arch" type="xml">
+                <form string="Acción">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" icon="fa-file-o" type="action" name="561" string="Adjuntos"/>
+                            <button name="toggle_state" type="object" class="oe_stat_button"
+                                    string="Acción finalizada" icon="fa-play-circle"
+                            />
+                        </div>
+                        <group name="group_top">
+                            <group name="group_left">
+                                <field name="customer"/>
+                                <field name="opportunity"/>
+                                <field name="date"/>
+                                <field name="date_event"/>
+                                <field name="date_end"/>
+                            </group>
+                            <group name="group_right">
+                                <field name="name"/>
+                                <field name="user"/>
+                                <field name="type"/>
+                                <field name="phase"/>
+                                <field name="done"/>
+                                <field name="id"/>
+                            </group>
+                        </group>
+                        <group name="group_bottom">
+                            <field name="notes"/>
+                        </group>
+                        <notebook>
+                            <page string="Adjuntos" name="attachments">
+                                <field name="attachments" mode="tree" default_order="create_date" delete="true">
+                                    <tree string="Adjunto" create="false">
+                                        <field name="res_id"/>
+                                        <field name="res_name"/>
+                                        <field name="create_date"/>
+                                        <field name="create_uid"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_dlg_crm_action_kanban" model="ir.ui.view">
+            <field name="name">view.dlg.crm.action.kanban</field>
+            <field name="model">dlg_crm.action</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="phase"
+                        on_create="quick_create"
+                        quick_create_view="view_dlg_crm_action_form" archivable="false" sample="1">
+                    <field name="color"/>
+                    <templates>
+                        <div t-name="kanban-box">
+                            <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''} oe_kanban_global_click">
+                                <div class="o_dropdown_kanban dropdown">
+                                    <a class="dropdown-toggle o-no-caret btn" role="button" data-toggle="dropdown"
+                                       data-display="static" href="#" aria-label="Dropdown menu" title="Dropdown menu">
+                                        <span class="fa fa-ellipsis-v"/>
+                                    </a>
+                                    <div class="dropdown-menu" role="menu">
+                                        <t t-if="widget.editable">
+                                            <a role="menuitem" type="edit" class="dropdown-item">Edit</a>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="oe_kanban_content">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                    <strong class="o_kanban_record_subtitle">
+                                        <field name="customer"/>
+                                    </strong>
+
+                                    <div class="o_kanban_record_bottom">
+                                        <div class="oe_kanban_bottom_left">
+                                            <table>
+                                                <tr>
+                                                    <td>Inicio:
+                                                        <field name="date"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Lista:
+                                                        <field name="done"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="oe_kanban_bottom_right">
+                                            <table>
+                                                <tr>
+                                                    <td>Tipo:
+                                                        <field name="type"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Evento:
+                                                        <field name="date_event"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Fin:
+                                                        <field name="date_end"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="view_dlg_crm_action_tree" model="ir.ui.view">
+            <field name="name">view.dlg.crm.action.tree</field>
+            <field name="model">dlg_crm.action</field>
+            <field name="arch" type="xml">
+                <tree string="Acción">
+                    <field name="id"/>
+                    <field name="customer"/>
+                    <field name="opportunity"/>
+                    <field name="phase"/>
+                    <field name="date"/>
+                    <field name="date_event"/>
+                    <field name="date_end"/>
+                    <field name="name"/>
+                    <field name="type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_dlg_crm_action_search" model="ir.ui.view">
+            <field name="name">view.dlg.crm.action.search</field>
+            <field name="model">dlg_crm.action</field>
+            <field name="arch" type="xml">
+                <search string="Filtrar oportunidades">
+                    <field name="customer"/>
+                    <field name="opportunity"/>
+                    <field name="date"/>
+                    <field name="date_event"/>
+                    <field name="date_end"/>
+                    <field name="name"/>
+                    <field name="phase"/>
+                    <field name="type"/>
+                    <group expand="0" string="Group By">
+                        <filter name="groupby_phase" string="Fase" domain="[]" context="{'group_by':'phase'}"
+                                help="Agrupar por fase"/>
+                        <filter name="groupby_type" string="Tipo" domain="[]" context="{'group_by':'type'}"
+                                help="Agrupar por tipo"/>
+                        <filter name="groupby_opportunity" string="Oportunidad" domain="[]"
+                                context="{'group_by':'opportunity'}"
+                                help="Agrupar por oportunidad"/>
+                        <filter name="groupby_date" string="Fecha" context="{'group_by':'date:year'}"
+                                help="Agrupar por fecha"/>
+                    </group>
+                    <filter name="filter_by_done" string="No finalizadas" domain="[('done','=','False')]"
+                            help="Acciones no finalizadas"/>
+                    <filter name="filter_by_opportunity" string="Oportunidad"
+                            help="Oportunidades"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_dlg_crm_action_view" model="ir.actions.act_window">
+            <field name="name">Acciones</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">dlg_crm.action</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Acción
+                </p>
+                <p>
+                    Click 'Nueva' para añadir nuevas acciones
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_dlg_crm_action" name="Acciones" parent="menu_dlg_crm_root"
+                  action="action_dlg_crm_action_view" sequence="1"/>
+    </data>
+</odoo>

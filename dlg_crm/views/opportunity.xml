@@ -1,0 +1,158 @@
+<odoo>
+    <data>
+        <record id="view_dlg_crm_opportunity_form" model="ir.ui.view">
+            <field name="name">view.dlg.crm.opportunity.form</field>
+            <field name="model">dlg_crm.opportunity</field>
+            <field name="arch" type="xml">
+                <form string="Oportunidad">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="f_create_action" type="object"
+                                    string="Crear Acción" icon="fa-phone"
+                                    context="{'default_action_id':id, 'default_opportunity_id':id, 'default_customer':customer,
+                                    'default_user':user, 'default_opportunity':name, 'default_phase':phase, 'default_date':current_date}"/>
+                            <button name="toggle_state" type="object" class="oe_stat_button"
+                                    string="Oportunidad realizada" icon="fa-play-circle"/>
+                        </div>
+                        <group name="group_top">
+                            <group name="group_left">
+                                <field name="customer"/>
+                                <field name="date"/>
+                                <field name="phase"/>
+                                <field name="orders_year"/>
+                                <field name="volume_year"/>
+                                <field name="image" widget="image"/>
+                            </group>
+                            <group name="group_right">
+                                <field name="name"/>
+                                <field name="done"/>
+                                <field name="priority"/>
+                                <field name="id"/>
+                                <field name="header"/>
+                                <field name="show"/>
+                                <field name="user"/>
+                            </group>
+                        </group>
+                        <group name="group_bottom">
+                            <field name="notes"/>
+                        </group>
+                        <notebook>
+                            <page string="Acciones" name="actions">
+                                <field name="actions" mode="tree" default_order="date_event" delete="true">
+                                    <tree string="Acción" create="false">
+                                        <field name="id"/>
+                                        <field name="name"/>
+                                        <field name="date_event"/>
+                                        <field name="date_end"/>
+                                        <field name="done"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_dlg_crm_opportunity_kanban" model="ir.ui.view">
+            <field name="name">view.dlg.crm.opportunity.kanban</field>
+            <field name="model">dlg_crm.opportunity</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="phase"
+                        on_create="quick_create"
+                        quick_create_view="view_dlg_crm_opportunity_form" archivable="false" sample="1">
+                    <field name="color"/>
+                    <templates>
+                        <div t-name="kanban-box">
+                            <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''} oe_kanban_global_click">
+                                <div class="o_dropdown_kanban dropdown">
+                                    <a class="dropdown-toggle o-no-caret btn" role="button" data-toggle="dropdown" data-display="static" href="#" aria-label="Dropdown menu" title="Dropdown menu">
+                                        <span class="fa fa-ellipsis-v"/>
+                                    </a>
+                                    <div class="dropdown-menu" role="menu">
+                                        <t t-if="widget.editable"><a role="menuitem" type="edit" class="dropdown-item">Edit</a></t>
+                                    </div>
+                                </div>
+                                <div class="oe_kanban_content">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="customer"/>
+                                    </strong>
+                                    <div class="o_kanban_record_subtitle">
+                                        <field name="name"/>
+                                    </div>
+                                    <div class="o_kanban_record_bottom">
+                                        <div class="oe_kanban_bottom_left">
+                                            <field name="show" attrs="{'invisible':True}"/>
+                                            <field name="priority" widget="priority" groups="base.group_user" attrs="{'invisible':[('show', '!=', False)]}"/>
+                                        </div>
+                                        <div class="oe_kanban_bottom_right">
+                                            <table>
+                                                <tr><td><div><field name="orders_year"/> pedidos/año</div></td></tr>
+                                                <tr><td><div><field name="volume_year" widget="monetary"/> €/año</div></td></tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="view_dlg_crm_opportunity_tree" model="ir.ui.view">
+            <field name="name">view.dlg.crm.opportunity.tree</field>
+            <field name="model">dlg_crm.opportunity</field>
+            <field name="arch" type="xml">
+                <tree string="Oportunidad">
+                    <field name="customer"/>
+                    <field name="name"/>
+                    <field name="phase"/>
+                    <field name="priority"/>
+                    <field name="date"/>
+                    <button name="f_delete" string="Eliminar" class="oe_highlight" type="object"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_dlg_crm_opportunity_search" model="ir.ui.view">
+            <field name="name">view.dlg.crm.opportunity.search</field>
+            <field name="model">dlg_crm.opportunity</field>
+            <field name="arch" type="xml">
+                <search string="Filtrar oportunidades">
+                    <field name="name"/>
+                    <field name="notes"/>
+                    <field name="customer"/>
+                    <field name="phase"/>
+                    <field name="priority"/>
+                    <field name="date"/>
+                    <group expand="0" string="Group By">
+                        <filter name="groupby_type" string="Fase" domain="[]" context="{'group_by':'phase'}"
+                                help="Agrupar por situación"/>
+                        <filter name="groupby_date" string="Fecha" context="{'group_by':'date:year'}"
+                                help="Agrupar por fecha"/>
+                    </group>
+                    <filter name="filter_by_done" string="Realizada" domain="[('done','=','True')]"
+                            help="Oportunidades tratadas"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_dlg_crm_opportunity_view" model="ir.actions.act_window">
+            <field name="name">Oportunidades</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">dlg_crm.opportunity</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Oportunidad
+                </p>
+                <p>
+                    Click 'Nueva' para añadir nuevas oportunidades
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_dlg_crm_opportunity" name="Oportunidades" parent="menu_dlg_crm_root" action="action_dlg_crm_opportunity_view" sequence="0"/>
+    </data>
+ </odoo>
