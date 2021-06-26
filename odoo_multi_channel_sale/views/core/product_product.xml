@@ -27,8 +27,10 @@
 				</field>
 				<xpath expr="//notebook" position="inside">
 					<page name="channel" string="Channel">
-						<separator name="mapping" string="Mappings"/>
-						<field name="channel_mapping_ids" readonly="1"/>
+						<group name="mapping" string="Mappings">
+							<field name="channel_mapping_ids" readonly="1" nolabel="1"/>
+						</group>
+						<notebook name="channel"></notebook>
 					</page>
 				</xpath>
 			</field>

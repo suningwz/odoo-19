@@ -184,13 +184,15 @@
 								</group>
 							</page>
 							<page name="variants" string="Variants">
-								<field name="feed_variants">
-									<tree>
-										<field name="qty_available"/>
-										<field name="list_price"/>
-										<field name="name_value"/>
-									</tree>
-								</field>
+								<group>
+									<field name="feed_variants" nolabel="1">
+										<tree>
+											<field name="qty_available"/>
+											<field name="list_price"/>
+											<field name="name_value"/>
+										</tree>
+									</field>
+								</group>
 							</page>
 							<page name="extra" string='Extra'>
 								<group>
