@@ -11,9 +11,7 @@ import codecs
 from PIL import Image
 from ...tools import DomainVals
 import logging
-
 _logger = logging.getLogger(__name__)
-
 
 class MultiChannelSale(models.Model):
 	_inherit = 'multi.channel.sale'
@@ -32,10 +30,8 @@ class MultiChannelSale(models.Model):
 				'location': self.location_id.id
 			})
 		qty = obj_pro.with_context(ctx)._product_available(None, False)
-		quantity = qty[obj_pro.id]['qty_available'] if self.channel_stock_action == "qoh" else qty[obj_pro.id][
-			'virtual_available']
-		quantity = quantity.split('.')[0] if type(quantity) == str else quantity.as_integer_ratio()[0] if type(
-			quantity) == float else quantity
+		quantity = qty[obj_pro.id]['qty_available'] if self.channel_stock_action =="qoh" else qty[obj_pro.id]['virtual_available']
+		quantity = quantity.split('.')[0] if type(quantity) == str else quantity.as_integer_ratio()[0] if type(quantity) == float else quantity
 		return quantity
 
 	def get_core_feature_compatible_channels(self):
@@ -58,11 +54,11 @@ class MultiChannelSale(models.Model):
 		return {}
 
 	@api.model
-	def get_data_isoformat(self, date_time):
+	def get_data_isoformat(self,date_time):
 		try:
 			return date_time and fields.Datetime.from_string(date_time).isoformat()
 		except Exception as e:
-			_logger.info("==%r=" % (e))
+			_logger.exception("==%r="%(e))
 
 	@api.model
 	def get_state_id(self, state_code, country_id, state_name=None):
@@ -75,10 +71,10 @@ class MultiChannelSale(models.Model):
 			('country_id', '=', country_id.id)
 		]
 		state_id = country_id.state_ids.filtered(
-			lambda st: (
-							   st.code in [state_code, state_name[:3], state_name])
-					   or (st.name == state_name)
-		)
+			lambda st:(
+				st.code in [state_code,state_name[:3],state_name])
+				or (st.name == state_name )
+			)
 		if not state_id:
 			vals = DomainVals(domain)
 			vals['name'] = state_name and state_name or state_code
@@ -86,7 +82,7 @@ class MultiChannelSale(models.Model):
 				vals['code'] = state_name[:2]
 			state_id = self.env['res.country.state'].create(vals)
 		else:
-			state_id = state_id[0]
+			state_id =state_id[0]
 		return state_id
 
 	@api.model
@@ -111,7 +107,7 @@ class MultiChannelSale(models.Model):
 		return self.env['uom.uom'].search(domain)
 
 	@api.model
-	def get_store_attribute_id(self, name, create_obj=False):
+	def get_store_attribute_id(self, name, create_obj = False):
 		domain = [
 			('name', '=', name),
 		]
@@ -121,7 +117,7 @@ class MultiChannelSale(models.Model):
 		return match
 
 	@api.model
-	def get_store_attribute_value_id(self, name, attribute_id, create_obj=False):
+	def get_store_attribute_value_id(self, name, attribute_id , create_obj = False):
 		domain = [
 			('name', '=', name),
 			('attribute_id', '=', attribute_id),
@@ -135,20 +131,20 @@ class MultiChannelSale(models.Model):
 	def get_channel_vals(self):
 		return dict(
 			channel_id=self.id,
-			ecom_store=self.channel
+			ecom_store = self.channel
 		)
 
 	@api.model
-	def get_channel_category_id(self, template_id, channel_id, limit=1):
+	def get_channel_category_id(self,template_id,channel_id,limit=1):
 		mapping_obj = self.env['channel.category.mappings']
 		channel_category_ids = (template_id.channel_category_ids or
-								template_id.categ_id.channel_category_ids)
+		template_id.categ_id.channel_category_ids)
 		channel_categ = channel_category_ids.filtered(
-			lambda cat: cat.instance_id == channel_id
+			lambda cat:cat.instance_id==channel_id
 		)
 		extra_category_ids = channel_categ.mapped('extra_category_ids')
-		domain = [('odoo_category_id', 'in', extra_category_ids.ids)] if extra_category_ids else []
-		return channel_id.match_category_mappings(domain=domain, limit=limit).mapped('store_category_id')
+		domain = [('odoo_category_id', 'in',extra_category_ids.ids)] if extra_category_ids else []
+		return channel_id.match_category_mappings(domain=domain,limit=limit).mapped('store_category_id')
 
 	@staticmethod
 	def get_image_type(image_data):
@@ -156,9 +152,9 @@ class MultiChannelSale(models.Model):
 		image = Image.open(image_stream)
 		image_type = image.format.lower()
 		if not image_type:
-			image_type = 'jpg'
+			image_type='jpg'
 		return image_type
 
-# @api.model
-# def get_channel(self):
-# 	return self.fields_get(allfields=['channel'])['channel']['selection']
+	# @api.model
+	# def get_channel(self):
+	# 	return self.fields_get(allfields=['channel'])['channel']['selection']

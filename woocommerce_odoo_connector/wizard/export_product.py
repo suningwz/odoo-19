@@ -31,298 +31,215 @@ class ExportWoocommerceProducts(models.TransientModel):
 class ExportWoocommerceTemplates(models.TransientModel):
     _inherit = "export.templates"
 
-    def action_woocommerce_export_template(self):
-        return self.export_button()
-
     def woocommerce_export_now(self, record):
+        remote_object = {}
         channel = self._context.get('channel_id')
         woocommerce = self._context.get('woocommerce')
-        response = self.woocommerce_export_template(woocommerce, channel, record)
-        wc_template_id = response[0]
-        variant_list = response[1]
-        remote_object = {}
-        remote_object["id"] = wc_template_id
+        response = self._woocommerce_export_update_template(woocommerce, channel, record)
+        remote_object["id"], variant_list = response
         remote_object["variants"] = [{"id": variant_id} for variant_id in variant_list]
         return True, remote_object
 
-    def woocommerce_export_template(self, woocommerce, channel, template_record):
-        data_list = []
+    def _woocommerce_export_update_template(self, woocommerce, channel, template_record):
         if template_record.attribute_line_ids:
-            return_list = self.create_woocommerce_variable_product(
+            data_list = self._create_update_woocommerce_variable_product(
                 woocommerce, channel, template_record)
-            data_list = return_list
         else:
-            returnid = self.create_woocommerce_simple_product(
+            returnid = self._create_update_woocommerce_simple_product(
                 woocommerce, channel, template_record)
             data_list = [returnid, ["No Variants"]]
         return data_list
 
-    def set_woocommerce_image_path(self, name, product):
+    def _set_woocommerce_image_path(self, product_id):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-        image_url = '/channel/image/product.product/%s/image_1920/492x492.png' % (
-            product.id)
-        full_image_url = '%s' % urlparse.urljoin(base_url, image_url)
-        return full_image_url, name
+        # multi-channel new image endpoint, new image size based on image field
+        image_url = f'/channel/image/product.product/{product_id.id}/image_1920/{product_id.display_name}.png'
+        return urlparse.urljoin(base_url, image_url) 
 
-    def create_woocommerce_product_image(self, template, variant=False):
-        if template.image_1920:
-            image_list = []
-            count = 0
-            template_url, name = self.set_woocommerce_image_path(
-                template.name, template.product_variant_ids[0])
-            image_list.append({
-                'src'		: template_url,
-                'name'		: name,
-                'position'	: 0,
-            })
-            if variant:
-                for variation in template.product_variant_ids:
-                    count += 1
-                    variant_url, name = self.set_woocommerce_image_path(
-                        variation.name+str(count), variation)
-                    image_list.append({
-                        'src'		: variant_url,
-                        'name'		: name,
-                        'position'	: count,
-                    })
-            return image_list
+    def _create_woocommerce_product_image(self, template, is_multi_variant=False):
+        image_list = []
+        count = 0
+        template_url = self._set_woocommerce_image_path(
+            template.product_variant_id)
+        image_list.append({
+            'src' : template_url,
+            'position' : 0,
+        })
+        if is_multi_variant:
+            for variant_id in template.product_variant_ids:
+                count += 1
+                variant_url = self._set_woocommerce_image_path(variant_id)
+                image_list.append({
+                    'src' : variant_url,
+                    'position' : count,
+                })
+        return image_list
 
-    def get_woocommerce_attribute_dict(self, woocommerce, channel, variant):
-        if variant:
-            attribute_dict = []
-            if variant.product_template_attribute_value_ids:
-                for attribute_line in variant.product_template_attribute_value_ids:
-                    attr_name, attr_id = self.get_woocommerce_attribute(
-                        woocommerce, channel, attribute_line.attribute_id,attribute_line.product_attribute_value_id)
-                    value_name = attribute_line.product_attribute_value_id.name
-                    attribute_dict.append({
-                        'id'	: attr_id,
-                        'name'	: attr_name,
-                        'option': value_name,
-                    })
-                return attribute_dict
+    def _get_woocommerce_attribute_dict(self, woocommerce, channel, variant):
+        attribute_dict = []
+        if variant.product_template_attribute_value_ids:
+            for attribute_line in variant.product_template_attribute_value_ids:
+                attr_name, attr_id = self.export_attribute(
+                    woocommerce, channel, attribute_line.attribute_id,attribute_line.product_attribute_value_id)
+                value_name = attribute_line.product_attribute_value_id.name
+                attribute_dict.append({
+                    'id'	: attr_id,
+                    'name'	: attr_name,
+                    'option': value_name,
+                })
+        return attribute_dict
 
-    def get_woocommerce_attribute_value(self, attribute_line):
-        value_list = []
-        if attribute_line:
-            for value in attribute_line.value_ids:
-                value_list.append(value.name)
-        return value_list
+    def _get_woocommerce_attribute_value(self, attribute_line):
+        return [value.name for value in attribute_line.value_ids]
 
-    def get_woocommerce_attribute(self, woocommerce, channel, attribute_id,attribute_value_ids):
-        if attribute_id:
-            vals_list = [attribute_id.name,""]
-            exported = self.env["export.woocommerce.attributes"].with_context({
-                "channel_id":channel,
-                "woocommerce":woocommerce,
-                }).export_attribute(attribute_id,attribute_value_ids)
-            if exported[0]:
-                vals_list[1] = exported[1]
-            return vals_list
+    def export_attribute(self, woocommerce, channel, attribute,attribute_values):
+        store_attribute_id = False
+        is_attribute_mapped = self.env['channel.attribute.mappings'].search([
+            ('odoo_attribute_id', '=', attribute.id),
+            ('channel_id', '=', channel.id)])
+        if not is_attribute_mapped:
+            return_dict = woocommerce.post(
+                'products/attributes', {
+                "name"			: attribute.name,
+                "type"			: "select",
+                "order_by"		: "menu_order",
+                "has_archives"	: True
+            }).json()
+            if 'message' in return_dict:
+                raise UserError(f"Error in Creating Attributes : {return_dict['message']}")
+            store_attribute_id = return_dict['id']
+            channel.create_attribute_mapping(attribute, store_attribute_id,store_attribute_name = attribute.name)
+        else:
+            store_attribute_id = is_attribute_mapped.store_attribute_id
+        for attribute_value in attribute_values:
+            self.export_attribute_values(
+                woocommerce, channel, attribute_value, store_attribute_id)
+        return attribute.name, store_attribute_id
 
-    def set_woocommerce_attribute_line(self, woocommerce, channel, template):
+    def export_attribute_values(self, woocommerce, channel, attribute_value, store_attribute_id):
+        attr_value_mapping = self.env['channel.attribute.value.mappings'].search([
+            ("channel_id", '=', channel.id),
+            ("attribute_value_name", '=', attribute_value.id)
+        ])
+        if not attr_value_mapping:
+            return_dict = woocommerce.post(f'products/attributes/{store_attribute_id}/terms', {
+                "name": attribute_value.name,
+            }).json()
+            if 'message' in return_dict:
+                raise UserError(f"Error in Creating terms {return_dict['message']}")
+            channel.create_attribute_value_mapping(attribute_value,return_dict["id"],store_attribute_value_name = attribute_value.name)
+
+    def _set_woocommerce_attribute_line(self, woocommerce, channel, template):
         attribute_list = []
         attribute_count = 0
         if template.attribute_line_ids:
             for attribute_line in template.attribute_line_ids:
-                attr_name, attr_id = self.get_woocommerce_attribute(
-                    woocommerce, channel, attribute_line.attribute_id,attribute_line.value_ids)
-                values = self.get_woocommerce_attribute_value(attribute_line)
-                attribute_dict = {
+                attr_name, attr_id = self.export_attribute(woocommerce, channel, attribute_line.attribute_id,attribute_line.value_ids)
+                values = self._get_woocommerce_attribute_value(attribute_line)
+                attribute_list.append({
                     'name'	: attr_name,
                     'id'    	: attr_id,
                     'variation'	: "true",
                     'visible'	: "true",
                     'position'	: attribute_count,
                     'options'	: values,
-                }
+                })
                 attribute_count += 1
-                attribute_list.append(attribute_dict)
         return attribute_list
 
-    def create_woocommerce_variation(self, woocommerce, channel, store_product_id, template,
+    def _create_woocommerce_variation(self, woocommerce, channel, store_product_id, template,
             image_ids=False):
         count = 0
         variant_list = []
-        if store_product_id and template:
-            for variant in template.product_variant_ids:
-                match_record = self.env['channel.product.mappings'].search([
-                    ('product_name', '=', variant.id),
-                    ('channel_id', '=', channel.id)])
-                if not match_record:
-                    quantity = channel.get_quantity(variant)
-                    variant_data = {
-                        'regular_price'	: str(variant.price) or "",
-                        'visible'		: "true",
-                        'sku'			: variant.default_code or "",
-                        'stock_quantity': quantity,
-                        'description'	: variant.description or "",
-                        'price'			: str(variant.price),
-                        'manage_stock'	: True,
-                        'in_stock'		: True,
-                        'attributes'	: self.get_woocommerce_attribute_dict(woocommerce, channel, variant),
-                    }
-                    if variant.length or variant.width or variant.height:
-                        dimensions = {
-                            'width': str(variant.width) or "",
-                            'length': str(variant.length) or "",
-                            'unit': str(variant.dimensions_uom_id.name) or "",
-                            'height': str(variant.height) or "",
-                        }
-                        variant_data['dimensions'] = dimensions
-                    if variant.weight:
-                        variant_data['weight'] = str(variant.weight) or ""
-                    if image_ids:
-                        variant_data.update(
-                            {'image': {'id': image_ids[count]}})
-
-                    if woocommerce:
-                        return_dict = woocommerce.post(
-                            "products/"+str(store_product_id)+"/variations", variant_data).json()
-                        count += 1
-                        if 'id' in return_dict:
-                            variant_list.append(return_dict['id'])
-                        else:
-                            _logger.info("Error in Creating Variants .")
-                else:
-                    _logger.info(
-                        ' product already exported to woocommerce with id(%r).',variant)
-            return variant_list
-        else:
-            raise UserError(
-                _('Error in creating Product Variant with id (%s)' ))% variant.id
-
-    def create_woocommerce_variable_product(self, woocommerce, channel, template):
-        if template:
-            product_dict = {
-                'name'				: template.name,
-                'sku' 				: "",
-                'images'			: self.create_woocommerce_product_image(template,True),
-                'type'				: 'variable',
-                'categories'		: self.set_woocommerce_product_categories(woocommerce, channel, template),
-                'status'			: 'publish',
-                'manage_stock'		: False,
-                'attributes'		: self.set_woocommerce_attribute_line(woocommerce, channel, template),
-                'default_attributes'    : self.get_woocommerce_attribute_dict(
-                    woocommerce, channel, template.product_variant_ids[0]),
-                'short_description'	: template.description_sale or "",
-                'description'		: template.description or "",
+        for variant in template.product_variant_ids:
+            variant_data = {
+                'regular_price'	: str(variant.with_context(pricelist=channel.pricelist_name.id).price) or "",
+                'visible'		: True,
+                'sku'			: variant.default_code or "",
+                'stock_quantity': channel.get_quantity(variant),
+                'description'	: variant.description or "",
+                'manage_stock'	: True,
+                'in_stock'		: True,
+                'attributes'	: self._get_woocommerce_attribute_dict(woocommerce, channel, variant),
+                'weight':str(variant.weight)
             }
-            if template.length or template.width or template.height:
-                dimensions = {
-                    'width': str(template.width) or "",
-                    'length': str(template.length) or "",
-                    'unit': str(template.dimensions_uom_id.name) or "",
-                    'height': str(template.height) or "",
-                }
-                product_dict['dimensions'] = dimensions
-            if template.weight:
-                product_dict['weight'] = str(template.weight) or ""
-            if woocommerce:
-                return_dict = woocommerce.post('products', product_dict).json()
-                image_ids = []
-                if 'images' in return_dict:
-                    for image in return_dict['images']:
-                        if image['position'] != 0:
-                            image_ids.append(image['id'])
-                if 'id' in return_dict:
-                    store_template_id = return_dict['id']
-                    if image_ids:
-                        return_list = self.create_woocommerce_variation(
-                            woocommerce, channel, store_template_id, template, image_ids=image_ids)
-                    else:
-                        return_list = self.create_woocommerce_variation(
-                            woocommerce, channel, store_template_id, template)
-                    if len(return_list):
-                        return (store_template_id, return_list)
-                else:
-                    raise UserError(
-                        _("Error in Creating Product Template in Woocommerce."))
+            if image_ids:
+                variant_data.update(
+                    {'image': {'id': image_ids[count]}})
+            return_dict = woocommerce.post(f'products/{store_product_id}/variations', variant_data).json()
+            count += 1
+            if "message" in return_dict:
+                raise UserError(f"Error in creating variant : {return_dict['message']}")
+            variant_list.append(return_dict['id'])
+        return variant_list
 
-    def create_woocommerce_simple_product(self, woocommerce, channel, template):
-        quantity = channel.get_quantity(template)
-        product_dict = {
+    def _create_update_woocommerce_variable_product(self, woocommerce, channel, template):
+        request = woocommerce.post
+        resource = 'products'
+        toUpdate = self._context.get('update')
+        remoteId = self._context.get('remoteId')
+        operation = self._create_woocommerce_variation
+        if toUpdate and remoteId :
+            request = woocommerce.put
+            resource = f'products/{remoteId}'
+            operation = self._update_woocommerce_variation
+        productDict = {
+            'name'				: template.name,
+            'sku' 				: "",
+            'images'			: self._create_woocommerce_product_image(template,
+                                    is_multi_variant = True),
+            'type'				: 'variable',
+            'categories'		: self._set_woocommerce_product_categories(woocommerce, channel, template),
+            'status'			: 'publish',
+            'manage_stock'		: False,
+            'attributes'		: self._set_woocommerce_attribute_line(woocommerce, channel, template),
+            'default_attributes': self._get_woocommerce_attribute_dict(
+                woocommerce, channel, template.product_variant_ids[0]),
+            'short_description'	: template.description_sale or "",
+            'description'		: template.description or "",
+            'weight'            :str(template.weight),
+        }
+        returnDict = request(resource, productDict).json()
+        if 'message' in returnDict:
+            raise UserError(f'Error in exporting/updating product : {returnDict["message"]}')
+        imageIds = [image['id'] for image in returnDict['images'] if image['position'] !=0]
+        storeTemplateId = returnDict["id"]
+        returnList = operation(
+            woocommerce, channel, storeTemplateId, template, image_ids=imageIds)
+        return returnDict['id'], returnList
+
+    def _create_update_woocommerce_simple_product(self, woocommerce, channel, template):
+        request = woocommerce.post
+        resource = 'products'
+        toUpdate = self._context.get('update')
+        remoteId = self._context.get('remoteId')
+        if toUpdate and remoteId :
+            request = woocommerce.put
+            resource = f'products/{remoteId}'
+        productDict = {
             'name'				: template.name,
             'sku' 				: template.default_code or "",
             'regular_price'		: str(template.with_context(pricelist=channel.pricelist_name.id).price) or "",
             'type'				: 'simple',
-            'categories'		: self.set_woocommerce_product_categories(woocommerce, channel, template),
+            'categories'		: self._set_woocommerce_product_categories(woocommerce, channel, template),
             'status'			: 'publish',
             'short_description'	: template.description_sale or "",
             'description'		: template.description or "",
-            'attributes'		: self.set_woocommerce_attribute_line(woocommerce, channel, template),
-            'price'				: template.with_context(pricelist=channel.pricelist_name.id).price,
             'manage_stock'		: True,
-            'stock_quantity'	 : quantity,
-            'in_stock'		       	: True,
+            'stock_quantity'	: channel.get_quantity(template),
+            'in_stock'		    : True,
+            'weight'            : str(template.weight),
+            'images'            : self._create_woocommerce_product_image(template),
         }
-        if template.image_1920:
-        	product_dict['images'] = self.create_woocommerce_product_image(template)
-        if template.length or template.width or template.height:
-            dimensions = {
-                'width': str(template.width) or "",
-                'length': str(template.length) or "",
-                'unit': str(template.dimensions_uom_id.name) or "",
-                'height': str(template.height) or "",
-            }
-            product_dict['dimensions'] = dimensions
-        if template.weight:
-            product_dict['weight'] = str(template.weight)
-        if woocommerce:
-            return_dict = woocommerce.post('products', product_dict).json()
-        if 'message' in return_dict:
-            _logger.info('Error :- %r',return_dict["message"])
-            raise UserError(_('Simple Product Creation Failed'))
-        else:
-            return return_dict['id']
+        returnDict = request(resource, productDict).json()
+        if 'message' in returnDict:
+            raise UserError(f'Error in exporting/updating Products : {returnDict["message"]}')
+        return returnDict['id']
 
-    def set_woocommerce_product_categories(self, woocommerce, channel, template):
+    def _set_woocommerce_product_categories(self, woocommerce, channel, template):
         categ_list = []
-        if template.categ_id:
-            cat_id = self.export_woocommerce_categories_id(
-                woocommerce, channel, template.categ_id)
-            if cat_id:
-                categ_list.append({'id': cat_id})
-        if template.channel_category_ids:
-            for category_channel in template.channel_category_ids:
-                if category_channel.instance_id.id == channel.id:
-                    for category_id in category_channel.extra_category_ids:
-                        extra_categ_id = self.export_woocommerce_categories_id(
-                            woocommerce, channel, category_id)
-                        categ_list.append({'id': extra_categ_id})
+        for extra_categ in template.channel_category_ids:
+            if extra_categ.instance_id.id == channel.id:
+                categ_list = list(map(lambda ele:{'id':ele}, extra_categ.mapped('extra_category_ids.channel_mapping_ids.store_category_id')))
+                break
         return categ_list
-
-    def export_woocommerce_categories_id(self, woocommerce, channel, cat_record):
-        store_cat_id = None
-        is_cat_mapped = self.env['channel.category.mappings'].search([
-            ('channel_id', '=', channel.id),
-            ("odoo_category_id", '=', cat_record.id)
-        ])
-        if not is_cat_mapped:
-            remote_object = self.env['export.categories'].create({
-                "channel_id": channel.id,
-                "operation": 'export',
-            }).with_context({
-                "channel_id": channel,
-                "woocommerce": woocommerce,
-                }).woocommerce_export_now(cat_record, cat_record.id)
-            if remote_object[0]:
-                store_cat_id = remote_object[1].get("id")
-                _logger.info(
-                    "Product Category Exported with ID (%r)", cat_record.id)
-        else:
-            store_cat_id = is_cat_mapped.store_category_id
-        return store_cat_id
-
-    def update_woocommerce_quantity(self, woocommerce, quantity, product_map_rec):
-        quantity  = int(quantity)
-        if quantity > 0:
-            product_dict = {"stock_quantity" : quantity, "manage_stock" : True}
-            if product_map_rec.store_variant_id in ['No Variants']:
-                return_dict = woocommerce.put('products/'+str(product_map_rec.store_product_id),product_dict).json()
-            else:
-                return_dict = woocommerce.put('products/'+str(product_map_rec.store_product_id)+"/variations/"+product_map_rec.store_variant_id,product_dict).json()
-            if 'message' in return_dict:
-                if self.channel_id.debug == "enable":
-                    raise UserError(_("Can't update product stock , "+str(return_dict['message'])))
-                _logger.info("Error in updating Product Stock: %r", str(return_dict["message"]))

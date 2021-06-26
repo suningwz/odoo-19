@@ -1,3 +1,6 @@
+	------------------------------ Version 2.1.0 (09-04-2021) --------------------------------
+	+ [ADD] python package "woocommerce==3.0.0"
+
 	------------------------------ Version 2.0.0 (29-05-2020) --------------------------------
 	+ [Fix] Import Taxes added .
 	+ [Fix] Upgrade from WOCv13 old to WOCv13 new.

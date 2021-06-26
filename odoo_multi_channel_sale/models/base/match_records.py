@@ -7,7 +7,6 @@
 
 from odoo import models, api, _
 
-
 class MultiChannelSale(models.Model):
 	_inherit = 'multi.channel.sale'
 
@@ -28,12 +27,12 @@ class MultiChannelSale(models.Model):
 		return self._match_obj(mapping_obj, domain, limit)
 
 	@api.model
-	def get_channel_domain(self, pre_domain=None):
-		domain = []
+	def get_channel_domain(self,pre_domain=None):
+		domain= []
 		if type(self.id) == int:
-			domain += [('channel_id', '=', self.id)]
+			domain+= [('channel_id', '=', self.id)]
 		if pre_domain:
-			domain += pre_domain
+			domain+=pre_domain
 		return domain
 
 	@api.model
@@ -63,7 +62,7 @@ class MultiChannelSale(models.Model):
 
 	@api.model
 	def match_attribute_mappings(self, store_attribute_id=None,
-								 odoo_attribute_id=None, domain=None, limit=1):
+	odoo_attribute_id=None,domain = None, limit=1):
 
 		map_domain = self.get_channel_domain(domain)
 
@@ -74,23 +73,25 @@ class MultiChannelSale(models.Model):
 
 		return self.env['channel.attribute.mappings'].search(map_domain, limit=limit)
 
+
 	@api.model
 	def match_attribute_value_mappings(self, store_attribute_value_id=None,
-									   attribute_value_id=None, domain=None, limit=1):
+		attribute_value_id=None,domain = None, limit=1):
 
 		map_domain = self.get_channel_domain(domain)
 		if store_attribute_value_id:
-			map_domain += [('store_attribute_value_id', '=', store_attribute_value_id)]
+			map_domain +=  [('store_attribute_value_id', '=', store_attribute_value_id)]
 		if attribute_value_id:
-			map_domain += [('odoo_attribute_value_id', '=', attribute_value_id)]
+			map_domain +=   [('odoo_attribute_value_id', '=', attribute_value_id)]
 		return self.env['channel.attribute.value.mappings'].search(map_domain, limit=limit)
+
 
 	@api.model
 	def match_product_mappings(self, store_product_id=None, line_variant_ids=None,
-							   domain=None, limit=1, **kwargs):
+			domain=None,limit=1,**kwargs):
 		map_domain = self.get_channel_domain(domain)
 		if store_product_id:
-			map_domain += [('store_product_id', '=', store_product_id), ]
+			map_domain+=[('store_product_id', '=', store_product_id), ]
 		if line_variant_ids:
 			map_domain += [('store_variant_id', '=', line_variant_ids)]
 		if kwargs.get('default_code'):
@@ -100,7 +101,7 @@ class MultiChannelSale(models.Model):
 		return self.env['channel.product.mappings'].search(map_domain, limit=limit)
 
 	@api.model
-	def match_template_mappings(self, store_product_id=None, domain=None, limit=1, **kwargs):
+	def match_template_mappings(self, store_product_id = None, domain = None, limit = 1,**kwargs):
 		map_domain = self.get_channel_domain(domain)
 		if store_product_id:
 			map_domain += [('store_product_id', '=', store_product_id)]
@@ -111,28 +112,31 @@ class MultiChannelSale(models.Model):
 		return self.env['channel.template.mappings'].search(map_domain, limit=limit)
 
 	@api.model
-	def match_partner_mappings(self, store_id=None, _type='contact', domain=None, limit=1):
-		map_domain = self.get_channel_domain(domain) + [('type', '=', _type)]
+	def match_partner_mappings(self, store_id = None, _type='contact',domain=None, limit=1):
+		map_domain = self.get_channel_domain(domain)+[('type', '=', _type)]
 		if store_id:
-			map_domain += [('store_customer_id', '=', store_id)]
+			map_domain +=[('store_customer_id', '=', store_id)]
 		return self.env['channel.partner.mappings'].search(map_domain, limit=limit)
 
+
 	@api.model
-	def match_order_mappings(self, store_order_id=None, domain=None, limit=1):
+	def match_order_mappings(self, store_order_id=None,domain=None, limit=1):
 		map_domain = self.get_channel_domain(domain)
 		if store_order_id:
 			map_domain += [('store_order_id', '=', store_order_id)]
 		return self.env['channel.order.mappings'].search(map_domain, limit=limit)
 
+
 	@api.model
 	def match_carrier_mappings(self, shipping_service_name=None, domain=None, limit=1):
 		map_domain = self.get_channel_domain(domain)
 		if shipping_service_name:
-			map_domain += [('shipping_service', '=', shipping_service_name)]
+			map_domain +=[('shipping_service', '=', shipping_service_name)]
 		return self.env['channel.shipping.mappings'].search(map_domain, limit=limit)
 
+
 	@api.model
-	def match_category_mappings(self, store_category_id=None, odoo_category_id=None, domain=None, limit=1):
+	def match_category_mappings(self, store_category_id=None,odoo_category_id=None, domain=None, limit=1):
 		map_domain = self.get_channel_domain(domain)
 		if store_category_id:
 			map_domain += [('store_category_id', '=', store_category_id)]
@@ -140,64 +144,68 @@ class MultiChannelSale(models.Model):
 			map_domain += [('odoo_category_id', '=', odoo_category_id)]
 		return self.env['channel.category.mappings'].search(map_domain, limit=limit)
 
-	@api.model
-	def match_category_feeds(self, store_id=None, domain=None, limit=1):
-		map_domain = self.get_channel_domain(domain)
-		if store_id:
-			map_domain += [('store_id', '=', store_id)]
-		return self.env['category.feed'].search(map_domain, limit=limit)
 
 	@api.model
-	def match_product_feeds(self, store_id=None, domain=None, limit=1):
+	def match_category_feeds(self, store_id=None,domain=None,limit=1):
 		map_domain = self.get_channel_domain(domain)
 		if store_id:
-			map_domain += [('store_id', '=', store_id)]
+			map_domain  += [('store_id', '=', store_id)]
+		return self.env['category.feed'].search(map_domain, limit=limit)
+
+
+	@api.model
+	def match_product_feeds(self, store_id=None,domain=None,limit=1):
+		map_domain = self.get_channel_domain(domain)
+		if store_id:
+			map_domain  += [('store_id', '=', store_id)]
 
 		return self.env['product.feed'].search(map_domain, limit=limit)
 
-	@api.model
-	def match_product_variant_feeds(self, store_id=None, domain=None, limit=1):
-		map_domain = self.get_channel_domain(domain)
-		if store_id: map_domain += [('store_id', '=', store_id)]
-		map_domain += [('feed_templ_id', '!=', False)]
-		return self.env['product.variant.feed'].search(map_domain, limit=limit)
 
 	@api.model
-	def match_partner_feeds(self, store_id=None, _type='contact', domain=None, limit=1):
-		map_domain = self.get_channel_domain(domain) + [('type', '=', _type)]
+	def match_product_variant_feeds(self, store_id=None,domain=None,limit=1):
+		map_domain = self.get_channel_domain(domain)
+		if store_id:map_domain  += [('store_id', '=', store_id)]
+		map_domain+=[('feed_templ_id', '!=',False)]
+		return self.env['product.variant.feed'].search(map_domain, limit=limit)
+
+
+	@api.model
+	def match_partner_feeds(self, store_id=None, _type='contact',domain=None,limit=1):
+		map_domain = self.get_channel_domain(domain)+[('type', '=', _type)]
 		if store_id:
-			map_domain += [('store_id', '=', store_id)]
+			map_domain  += [('store_id', '=', store_id)]
 		return self.env['partner.feed'].search(map_domain, limit=limit)
 
 	@api.model
-	def match_order_feeds(self, store_id=None, domain=None, limit=1):
+	def match_order_feeds(self, store_id=None,domain=None,limit=1):
 		map_domain = self.get_channel_domain(domain)
 		if store_id:
-			map_domain += [('store_id', '=', store_id)]
+			map_domain  += [('store_id', '=', store_id)]
 
 		return self.env['order.feed'].search(map_domain, limit=limit)
 
 	@api.model
-	def match_odoo_template(self, vals, variant_lines):
+	def match_odoo_template(self, vals,variant_lines):
 		Template = self.env['product.template']
-		record = self.env['product.template']
+		record  = self.env['product.template']
 		# Ensure barcode constraints first
-		barcode = vals.get('barcode')
+		barcode =  vals.get('barcode')
 		if barcode:
 			record = Template.search([('barcode', '=', barcode)], limit=1)
 		if not record:
 			# Now check avoid_duplicity using default_code
 			ir_values = self.default_multi_channel_values()
-			default_code = vals.get('default_code')
-			#  and (not len(variant_lines))
+			default_code =  vals.get('default_code')
+				#  and (not len(variant_lines))
 			if ir_values.get('avoid_duplicity') and default_code:
 				record = Template.search([('default_code', '=', default_code)], limit=1)
 			if not record:
 				# It's time to check the child
 				for var in variant_lines:
-					match = self.match_odoo_product(var.read([])[0])
+					match  =self.match_odoo_product(var.read([])[0])
 					if match:
-						record = match.product_tmpl_id
+						record= match.product_tmpl_id
 		return record
 
 	@api.model
@@ -205,11 +213,11 @@ class MultiChannelSale(models.Model):
 		oe_env = self.env[obj]
 		record = False
 		# check avoid_duplicity using default_code
-		barcode = vals.get('barcode')
+		barcode =  vals.get('barcode')
 		if barcode:
 			record = oe_env.search([('barcode', '=', barcode)], limit=1)
 		if not record:
-			default_code = vals.get('default_code')
+			default_code =  vals.get('default_code')
 			ir_values = self.default_multi_channel_values()
 			if ir_values.get('avoid_duplicity') and default_code:
 				record = oe_env.search([('default_code', '=', default_code)], limit=1)
@@ -226,17 +234,17 @@ class MultiChannelSale(models.Model):
 
 	@api.model
 	def _match_create_product_categ(self, vals):
-		match = self.match_category_feeds(store_id=vals.get('store_id'))
+		match = self.match_category_feeds(store_id= vals.get('store_id'))
 		feed_obj = self.env['category.feed']
 		update = False
 		if match:
 			vals['state'] = 'update'
-			vals.pop('store_id', '')
-			update = match.write(vals)
+			vals.pop('store_id','')
+			update  = match.write(vals)
 			data = match
 		else:
 			data = self._create_feed(feed_obj, vals)
 		return dict(
-			data=data,
-			update=update
+			data = data,
+			update = update
 		)

@@ -14,7 +14,13 @@ class WoocommerceImportOperation(models.TransientModel):
     woocommerce_object_id = fields.Char()
     woocommerce_import_date_from = fields.Datetime()
     woocommerce_filter_type = fields.Selection(
-        [('all', 'All'), ("by_id", "By Id"), ("by_date", "By Date")], default='all')
+        selection=[
+            ('all', 'All'),
+            ('by_id', 'By Id'),
+            ('by_date', 'By Date')]
+        ,
+        default='all'
+    )
 
     def woocommerce_get_filter(self):
         return dict(

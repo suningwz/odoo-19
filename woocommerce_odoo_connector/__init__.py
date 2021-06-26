@@ -1,16 +1,8 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#################################################################################
-#
-#    Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>)
-#
-#################################################################################
-
+##############################################################################
+# Copyright (c) 2015-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>)
+# See LICENSE file for full copyright and licensing details.
+# License URL : <https://store.webkul.com/license.html/>
+##############################################################################
 from . import models
 from . import wizard
-def pre_init_check(cr):
-    try:
-        from woocommerce import API
-    except ImportError:
-        raise Warning('Please Install Woocommerce Python Api (command: pip install woocommerce)')
-    return True

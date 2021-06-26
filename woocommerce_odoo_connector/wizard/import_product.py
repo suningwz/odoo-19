@@ -5,6 +5,8 @@
 #   Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>)
 #    See LICENSE file for full copyright and licensing details.
 ##########H########Y#########P#########N#########O##########S##################
+from dateutil.parser import parse
+
 import logging
 _logger = logging.getLogger(__name__)
 from odoo import api, fields, models
@@ -18,74 +20,56 @@ class ImportWoocommerceProducts(models.TransientModel):
     _description = "Import Woocommerce Products"
 
     def _get_product_basics(self, woocommerce, channel, product_data):
-        name = product_data.get("name")
-        categ = ""
-        store_id = product_data.get("id")
-        default_code = product_data.get("sku")
-        qty_available = product_data.get("stock_quantity")
-        if product_data.get("images"):
-            image_url = product_data.get("images")[0].get('src')
-        list_price = product_data.get("price")
-        for category in product_data['categories']:
-            category_id = category['id']
-            url = 'products/categories/%s' % category_id
-            category_data = woocommerce.get(url).json()
-            if "message" in category_data:
-                message =  "Error in importing category : {}".format(category_data["message"])
-                _logger.info(message)
-            else:
-                self._woocommerce_create_product_categories(
-                    woocommerce, category_data)
-            categ = categ+str(category['id'])+","
-
-        length = product_data['dimensions'].get("length")
-        width = product_data['dimensions'].get("width")
-        height = product_data['dimensions'].get("height")
-        weight = product_data.get("weight")
-        description_sale = remove_tags(product_data.get("short_description"))
-        description_purchase = remove_tags(product_data.get("description"))
-        vals = dict(
-            name=name,
+        feed_vals = dict(
+            name=product_data["name"],
             channel_id=channel.id,
             channel=channel.channel,
-            store_id=store_id,
-            list_price=list_price,
-            extra_categ_ids=categ,
-            length=length,
-            width=width,
-            height=height,
-            weight=weight,
-            description_sale=description_sale,
-            description_purchase=description_purchase,
-            image_url=image_url,
+            store_id=product_data["id"],
+            list_price=product_data.get("price"),
+            extra_categ_ids = self._get_category_string(woocommerce, channel, product_data['categories']),
+            weight=product_data.get("weight"),
+            description_sale=remove_tags(product_data.get("short_description")),
+            description_purchase=remove_tags(product_data.get("description")),
+            default_code = product_data.get("sku"),
+            qty_available = product_data.get("stock_quantity"),
         )
-        if default_code:
-            vals["default_code"] = default_code
-        if qty_available:
-            vals["qty_available"] = qty_available
-        return vals
+        try:
+            feed_vals['image_url'] = product_data.get("images")[0].get('src') 
+        except:
+            pass
+        return feed_vals
 
-    def get_product_all(self, woocommerce, channel, **kwargs):
-        vals_list = []
-        url = 'products?page={}&per_page={}&order=asc'.format(kwargs.get("page"), kwargs.get("page_size"))
-        products = woocommerce.get(url).json()
+    
+    def _get_category_string(self, woocommerce, channel, categories):
+        str_ids = ','.join([str(category["id"]) for category in categories])
+        if str_ids:
+            cat_list = woocommerce.get(f'products/categories?include={str_ids}').json()
+            self._woocommerce_create_product_categories(
+                    woocommerce, channel, cat_list)
+        return str_ids
+
+    def _get_product_all(self, woocommerce, channel, **kwargs):
+        products = woocommerce.get(
+            'products',
+            params={
+                'page': kwargs.get('page'),
+                'per_page': kwargs.get('page_size'),
+                'order': 'asc'
+            }
+        ).json()
         if "message" in products:
             message = "Error in getting products : {}".format(products["message"])
             _logger.info(message)
             raise UserError(message)
-        if products:
-            vals_list = list(map(lambda x: self.get_product_by_id(woocommerce, channel,x),products))
-        return vals_list
+        return list(map(lambda x: self._get_product_dict(woocommerce, channel,x),products))
 
-    def _woocommerce_create_product_categories(self, woocommerce, data):
+    def _woocommerce_create_product_categories(self, woocommerce, channel, datas):
         import_category_obj = self.env['import.woocommerce.categories'].create({
-            "channel_id":self.channel_id.id,
+            "channel_id":channel.id,
             "operation":"import"
         })
-        category_data = import_category_obj.get_category_vals(data)
-        feed_obj = self.env['category.feed']
-        feed_id = self.channel_id._create_feed(feed_obj, category_data)
-        _logger.info("feed_id ======> %r",feed_id)
+        [self.env['category.feed'].create(import_category_obj._get_category_vals(data))
+            for data in datas]
 
     def _get_feed_variants(self, woocommerce, channel, product_id, variation_ids):
         variant_list = []
@@ -95,72 +79,44 @@ class ImportWoocommerceProducts(models.TransientModel):
             variant = woocommerce.get(
                 'products/'+str(product_id)+"/variations/"+str(variant_id)).json()
             if "message" in variant:
-                _logger.info("Error in getting Variants ===> %r",variant["message"])
+                _logger.info("Error in getting Variants : %r",variant["message"])
                 continue
             if variant['attributes']:
-                attribute_list = []
-                for attributes in variant['attributes']:
-                    attrib_name_id = self.env['channel.attribute.mappings'].search([
-                        ('store_attribute_name', '=', attributes['name']),
-                        ('store_attribute_id', '=', attributes['id']),
-                        ('channel_id', '=', channel.id)])
-
-                    attrib_value_id = self.env['channel.attribute.value.mappings'].search([
-                        ('channel_id', '=', channel.id),
-                        ('store_attribute_value_name','=', attributes['option']),
-                        ('attribute_value_name.attribute_id.id', '=', attrib_name_id.attribute_name.id)])
-                    attr = {}
-                    attr['name'] = str(attributes['name'])
-                    attr['value'] = str(attributes['option'])
-                    attr['attrib_name_id'] = attrib_name_id.store_attribute_id
-                    attr['attrib_value_id'] = attrib_value_id.store_attribute_value_id
-                    attribute_list.append(attr)
-                    if isinstance(variant['image'], list):
-                        image = variant['images'][0]['src']
-                    else:
-                        image = variant['image']['src']
-            try:
-                variant['price'] = float(variant['price'])
-            except:
-                pass
-            variant_dict = {
+                attribute_list = [{
+                    'name':attribute['name'],
+                    'value':attribute['option'],
+                    'attrib_name_id': attribute["id"],
+                    'attrib_value_id':attribute['option']
+                } for attribute in variant['attributes']]
+                if isinstance(variant['image'], list):
+                    image = variant['images'][0]['src']
+                else:
+                    image = variant['image']['src']
+            variant_list.append({
                 'image_url': image,
                 'name_value': attribute_list,
                 'store_id': variant['id'],
-                'list_price': variant['price'],
+                'list_price': float(variant['price']),
                 'qty_available': variant['stock_quantity'],
-                'weight': variant['weight'] or "",
-                # 'weight_unit'        : "kg",
-                'length': variant['dimensions']['length'] or "",
-                'width': variant['dimensions']['width'] or "",
-                'height': variant['dimensions']['height'] or "",
-                # 'dimension_unit'    : variant['dimensions']['unit'] or "",
-            }
-            if variant["sku"]:
-                variant_dict['default_code'] = variant['sku']
-            variant_list.append(variant_dict)
+                'weight': variant.get("weight"),
+                'default_code':variant.get('sku'),
+            })
         return variant_list
 
-    def get_product_by_id(self, woocommerce, channel, product):
-        vals = {}
-        variants = []
-        if product:
-            product_basics = self._get_product_basics(
-                woocommerce, channel, product)
-            vals.update(product_basics)
-            if product['type'] == 'variable':
-                variation_ids = product['variations']
-                variants = self._get_feed_variants(
-                    woocommerce, channel, product['id'], variation_ids)
-            vals.update(variants=variants)
-            return vals
+    def _get_product_dict(self, woocommerce, channel, product):
+        vals = self._get_product_basics(
+            woocommerce, channel, product)
+        if product['type'] == 'variable':
+            vals.update(variants=self._get_feed_variants(
+                woocommerce, channel, product['id'], product['variations']))
+        return vals
 
     def woocommerce_create_product_feed(self, woocommerce,channel_id,product_id):
         vals = {}
         url = 'products/%s' % product_id
         product = woocommerce.get(url).json()
         if "message" in product:
-            _logger.info('Error:- %s' % product['message'])
+            _logger.info("Error in getting Product : %r", product['message'])
             return False
         product_basics = self._get_product_basics(
             woocommerce, channel_id, product)
@@ -171,43 +127,50 @@ class ImportWoocommerceProducts(models.TransientModel):
                 woocommerce, channel_id, product['id'], variation_ids)
             variants = [(0,0,variant) for variant in variants]
             vals.update(feed_variants=variants)
-        feed_obj = self.env['product.feed']
-        feed_id = self.channel_id._create_feed(feed_obj, vals)
-        return feed_id
+        
+        match = self.channel_id.match_product_feeds(vals['store_id'])
+        if not match:
+            return self.env['product.feed'].create(vals)
+        else:
+            match.write(vals)
+            return match
+    
+    def _get_product_by_id(self, woocommerce, channel_id, **kwargs):
+        product = woocommerce.get(f"products/{kwargs.get('woocommerce_object_id')}").json()
+        if "message" in product: 
+            raise UserError(f"Error in getting products : {product['message']}")
+        return [self._get_product_dict(woocommerce, channel_id, product)]
 
     def import_now(self, **kwargs):
-        data_list = []
         woocommerce = self._context.get('woocommerce')
         channel = self._context.get('channel_id')
-        product_id = kwargs.get('woocommerce_object_id')
-        if product_id:
-            url = 'products/%s' % product_id
-            product = woocommerce.get(url).json()
-            if product.get('message'):
-                _logger.info('Error:- %s' % product['message'])
-                return data_list
-            vals = self.get_product_by_id(woocommerce, channel, product)
-            data_list.append(vals)
+        if kwargs.get('woocommerce_object_id'):
+            data_list = self._get_product_by_id(woocommerce, channel, **kwargs)
         elif kwargs.get('woocommerce_import_date_from'):
             data_list = self._filter_product_using_date(
                 woocommerce, channel, **kwargs)
         else:
-            data_list = self.get_product_all(woocommerce, channel, **kwargs)
+            data_list = self._get_product_all(woocommerce, channel, **kwargs)
         return data_list
 
     def _filter_product_using_date(self, woocommerce, channel, **kwargs):
         vals_list = []
-        date_created = None
-        product_import_date = kwargs.get("woocommerce_import_date_from").isoformat()
-        url = 'products?after={}&page={}&per_page={}&order=asc'.format(product_import_date,kwargs.get("page"),kwargs.get("page_size") )
-        products = woocommerce.get(url).json()
-        if "message" in products:
-            _logger.info('Error in getting product data :- %r', products['message'])
-            if not kwargs.get("from_cron"):
-                raise UserError("Error in getting Product data :- {}".format(products.get("message")))
-        if products:
-            vals_list = list(map(lambda x: self.get_product_by_id(woocommerce, channel,x),products))
+        products = woocommerce.get(
+            'products',
+            params={
+                'after': kwargs.get('woocommerce_import_date_from'),
+                'page': kwargs.get('page'),
+                'per_page': kwargs.get('page_size'),
+                'order':'asc' if kwargs.get("from_cron") else 'desc'
+            }
+        ).json()
+        try:
+            vals_list = list(map(lambda x: self._get_product_dict(woocommerce, channel,x),products))
             if kwargs.get("from_cron"):
-                date_created = products[-1].get("date_created")
-                channel.import_product_date = fields.Datetime.to_datetime(" ".join(date_created.split("T")))
+                channel.import_product_date = parse(products[-1].get("date_created_gmt"))
+        except:
+            msg = f"Error in getting product data :{products['message']}"
+            _logger.info(msg)
+            if not kwargs.get("from_cron"):
+                raise UserError(msg)
         return vals_list

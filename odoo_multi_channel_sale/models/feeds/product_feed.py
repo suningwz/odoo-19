@@ -30,21 +30,8 @@ class ProductFeed(models.Model):
 		inverse_name = 'feed_templ_id'
 	)
 
-	@api.model
-	def _create_feeds(self,product_data_list):
-		success_ids,error_ids = [],[]
-		self = self.contextualize_feeds('product')
-		for product_data in product_data_list:
-			feed = self._create_feed(product_data)
-			if feed:
-				self += feed
-				success_ids.append(product_data.get('store_id'))
-			else:
-				error_ids.append(product_data.get('store_id'))
-		return success_ids,error_ids,self
-
 	def _create_feed(self,product_data):
-		variant_data_list = product_data.pop('variants')
+		variant_data_list = product_data.pop('variants', [])
 		channel_id = product_data.get('channel_id')
 		store_id = str(product_data.get('store_id'))
 		feed_id = self._context.get('product_feeds').get(channel_id,{}).get(store_id)
@@ -134,7 +121,6 @@ class ProductFeed(models.Model):
 				exists = self.env['channel.product.mappings'].browse(exists)
 				attribute_value_ids = prod_env.with_context(context).check_for_new_attrs(
 					template_id,variant)
-				_logger.info("attribute_value_ids ----%r", attribute_value_ids)
 				if variant.list_price:
 					exists.product_name.wk_extra_price = parse_float(
 						variant.list_price) - parse_float(template_id.list_price)
@@ -301,33 +287,30 @@ class ProductFeed(models.Model):
 
 	def check_attribute_value(self,variant_ids):
 		state,message= 'done',''
-
 		for variant in variant_ids:
 			name_values = eval(variant.name_value)
 			cnt = Counter()
 			for name_value in name_values:
 				cnt[name_value.get('name')]+=1
-			multi_occur = filter(lambda i:i[1]!=1,cnt.items())
-			for multi_oc in multi_occur:
+			multi_occur = list(filter(lambda i:i[1]!=1,cnt.items()))
+			if multi_occur:
 				state = 'error'
-				items = map(lambda item:'%s(%s times)'%(item[0],item[1]),multi_occur)
+				items = list(map(lambda item:'%s(%s times)'%(item[0],item[1]),multi_occur))
 				message += 'Attributes  are duplicate \n %r'%(','.join(items))
 				return dict(message=message,state=state)
 		return dict(message=message,state=state)
 
 	def import_product(self,channel_id):
 		self.ensure_one()
-		message = ""
-		create_id = None
-		update_id = None
-		context = dict(self._context)
+		message, create_id, update_id = "", None, None
+		context = dict(self._context or {})
 		context.update({
 			'pricelist':channel_id.pricelist_name.id,
 			'lang':channel_id.language_id.code,
 		})
 		vals = EL(self.read(self.get_product_fields()))
 		store_id = vals.pop('store_id')
-
+		vals['wk_length'] = vals.pop('length',0)
 		state = 'done'
 		if not vals.get('name'):
 			message += "<br/>Product without name can't evaluated"
@@ -374,8 +357,7 @@ class ProductFeed(models.Model):
 			vals ,variant_lines=feed_variants)
 		vals.pop('website_message_ids','')
 		vals.pop('message_follower_ids','')
-		if 'length' in vals:
-			vals['wk_length'] = vals.pop('length')
+
 		if state == 'done':
 			if match:
 				match = self.env['channel.template.mappings'].browse(match)

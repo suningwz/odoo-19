@@ -18,55 +18,47 @@ class ImportWoocommerceCategories(models.TransientModel):
     _description = "Import Woocommerce Categories"
 
     def get_category_all(self, woocommerce, **kwargs):
-        vals_list = []
-        cat_url = 'products/categories?page={}&per_page={}&order=asc'.format(kwargs.get("page"),kwargs.get("page_size"))
-        category_data = woocommerce.get(cat_url).json()
+        category_data = woocommerce.get(
+            'products/categories',
+            params={
+                'page': kwargs.get('page'),
+                'per_page': kwargs.get('page_size'),
+                'order': 'asc'
+            }
+        ).json()
         if "message" in category_data:
-            error_message = "Error in getting Category data:- {}".format(category_data["message"])
-            _logger.info(error_message)
-            raise UserError(error_message)
-        if category_data:
-            vals_list = list(map(lambda x: self.get_category_vals(x),category_data))
-        return vals_list
+            raise UserError(f'Error in getting Category data : {category_data["message"]}')
+        return list(map(lambda x: self._get_category_vals(x),category_data))
 
-    def get_category_by_id(self, woocommerce, category_id):
+    def _get_category_by_id(self, woocommerce, category_id):
         vals_list = []
         parent_data  = None
-        cat_url = "products/categories/%s" % category_id
-        category_data = woocommerce.get(cat_url).json()
+        category_data = woocommerce.get(f'products/categories/{category_id}').json()
         if "message" in category_data:
-            error_message = "Error in getting Category data:- {}".format(category_data["message"])
-            _logger.info(error_message)
-            raise UserError(error_message)
-        if category_data:
-            parent_id = category_data.get("parent")
-            if parent_id:
-                parent_data = self.get_category_by_id(woocommerce, parent_id)
-                vals_list += parent_data
-            data = self.get_category_vals(category_data)
-            vals_list.append(data)
-            return vals_list
-    
-    def get_category_vals(self, category_data):
-        if category_data:
-            parent_id = category_data.get("parent")
-            vals =  {
-                            "channel_id": self.channel_id.id,
-                            "channel": self.channel_id.channel,
-                            "leaf_category": True if parent_id else False,
-                            "store_id": category_data.get("id"),
-                            "name": category_data.get("name"),
-                        }
-            if parent_id != 0:
-                vals["parent_id"] = parent_id
-            return vals
+            raise UserError(f'Error in getting Category Data : {category_data["message"]}')
+        parent_id = category_data.get("parent")
+        if parent_id:
+            parent_data = self._get_category_by_id(woocommerce, parent_id)
+            vals_list += parent_data
+        data = self._get_category_vals(category_data)
+        vals_list.append(data)
+        return vals_list
+
+    def _get_category_vals(self, category_data):
+        return {
+                    "channel_id"   : self.channel_id.id,
+                    "channel"      : self.channel_id.channel,
+                    "leaf_category": True if category_data.get("parent") else False,
+                    "parent_id"    : category_data.get("parent") or "",
+                    "store_id"     : category_data.get("id"),
+                    "name"         : category_data.get("name"),
+                }
 
     def import_now(self,**kwargs):
-        data_list = []
         woocommerce = self._context.get('woocommerce')
         category_id = kwargs.get('woocommerce_object_id')
         if category_id:
-            data_list = self.get_category_by_id(woocommerce, category_id)
+            data_list = self._get_category_by_id(woocommerce, category_id)
         else:
             data_list = self.get_category_all(woocommerce, **kwargs)
         return data_list

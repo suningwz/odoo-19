@@ -15,10 +15,10 @@
 
 
 ## Requirements
-* WooCommerce python library version 1.2.1.
+* WooCommerce python library version 3.0.0
 
 ```bash
-pip3 install woocommerce==1.2.1
+pip3 install woocommerce==3.0.0
 ```
 * Odoo Version 14.0.
 * [Odoo Multi Channel Sale Module](https://store.webkul.com/Odoo-Multi-Channel-Sale.html)
