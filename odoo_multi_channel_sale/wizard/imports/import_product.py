@@ -4,7 +4,8 @@
 # See LICENSE file for full copyright and licensing details.
 # License URL : <https://store.webkul.com/license.html/>
 ##############################################################################
-from odoo import api,fields,models
+from odoo import api, fields, models
+
 
 class ImportProduct(models.TransientModel):
 	_name = 'import.products'
@@ -12,11 +13,11 @@ class ImportProduct(models.TransientModel):
 	_inherit = 'import.operation'
 
 	product_ids = fields.Text('Product ID(s)')
-	source      = fields.Selection(
+	source = fields.Selection(
 		selection=[
-			('all','All'),
-			('product_ids','Product ID(s)'),
+			('all', 'All'),
+			('product_ids', 'Product ID(s)'),
 		],
-		required = True,
-		default  = 'all'
+		required=True,
+		default='all'
 	)

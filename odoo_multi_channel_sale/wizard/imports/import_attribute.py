@@ -4,7 +4,8 @@
 # See LICENSE file for full copyright and licensing details.
 # License URL : <https://store.webkul.com/license.html/>
 ##############################################################################
-from odoo import api,fields,models
+from odoo import api, fields, models
+
 
 class ImportAttribute(models.TransientModel):
 	_name = 'import.attributes'
