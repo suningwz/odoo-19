@@ -17,7 +17,7 @@
     "name":  "Odoo Multichannel Woocommerce connector",
     "summary":  """Woocommerce Odoo Connector integrates Odoo with Woocommerce. Manage your Woocommerce store in Odoo. Handle Woocommerce orders in Odoo. Ecommerce Connector""",
     "category":  "Website",
-    "version":  "2.1.1",
+    "version":  "2.0.9",
     "sequence":  1,
     "author":  "Webkul Software Pvt. Ltd.",
     "license":  "Other proprietary",
@@ -45,15 +45,13 @@
     "qweb":  ["views/inherit_multi_channel_template.xml", ],
     "data":  [
         'security/ir.model.access.csv',
-
+        'data/demo.xml',
         'views/woc_config_views.xml',
         'views/inherited_woocommerce_dashboard_view.xml',
-
-        'wizard/export_category_view.xml',
-        'wizard/export_template_view.xml',
         'wizard/import_operation.xml',
-
-        'data/demo.xml',
+        'wizard/export_product_view.xml',
+        'wizard/export_template_view.xml',
+        'wizard/export_category_view.xml',
     ],
     "images":  ['static/description/banner.gif'],
     "application":  True,

@@ -13,6 +13,9 @@ from odoo.exceptions import UserError
 class ExportWoocommerceCategories(models.TransientModel):
     _inherit = "export.categories"
 
+    def action_woocommerce_export_category(self):
+        return self.export_button()
+
     def woocommerce_export_now(self, record, initial_record_id):
         return_list = [False, ""]
         channel = self._context.get('channel_id')
@@ -25,14 +28,15 @@ class ExportWoocommerceCategories(models.TransientModel):
                 ])
             if cat_mapped:
                 return [True,{"id":cat_mapped.store_category_id}]
-        cat_id = self._woocommerce_sync_categories(
+        cat_id = self.woocommerce_sync_categories(
             channel, woocommerce, record, initial_record_id, with_product)
         if cat_id:
             return_list = [True, {"id":cat_id}]
         return return_list
 
-    def _woocommerce_sync_categories(self, channel, woocommerce, record, initial_record_id, with_product):
+    def woocommerce_sync_categories(self, channel, woocommerce, record, initial_record_id, with_product):
         p_cat_id = 0
+        res = ''
         parent_id = record.parent_id
         if parent_id.id:
             is_parent_mapped = self.env['channel.category.mappings'].search([
@@ -45,22 +49,27 @@ class ExportWoocommerceCategories(models.TransientModel):
                     'woocommerce': woocommerce,
                 }).woocommerce_export_now(parent_id, initial_record_id)
                 if p_cat_id[0]:
-                    p_cat_id = p_cat_id[1].get('id')
+                    p_cat_id = p_cat_id[1].id
             else:
                 p_cat_id = is_parent_mapped.store_category_id
-        return self._woocommerce_create_category(
+        res = self.woocommerce_create_category(
             woocommerce, channel, record, initial_record_id, p_cat_id, with_product)
+        return res
 
-    def _woocommerce_create_category(self, woocommerce, channel, record, initial_record_id, p_cat_id, with_product=False):
+    def woocommerce_create_category(self, woocommerce, channel, record, initial_record_id, p_cat_id, with_product=False):
         returnid = False
-        return_dict = woocommerce.post(
-            'products/categories',  {
-            "name": record.name,
+        cat_name = record.name
+        category_dict = {
+            "name": cat_name,
             "parent": p_cat_id,
-        }).json()
+        }
+        return_dict = woocommerce.post(
+            'products/categories', category_dict).json()
         if 'message' in return_dict:
-            raise UserError(f"Error in creating categories : {return_dict['message']}")
+            _logger.info('Error in Creating Categories : ' +
+                            str(return_dict['message']))
+            return False
         returnid = return_dict.get("id")
         if record.id != initial_record_id:
             channel.create_category_mapping(record, returnid)
-        return returnid
+        return returnid 
