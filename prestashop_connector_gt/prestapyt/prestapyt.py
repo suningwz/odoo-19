@@ -20,18 +20,18 @@ from which I also inspired my library.
 Questions, comments? guewen.baconnier@gmail.com
 """
 
-from future.standard_library import install_aliases
-install_aliases()
+# from future.standard_library import install_aliases
+# install_aliases()
 
 from urllib.parse import urlencode
 
 import warnings
 import requests
 import mimetypes
-
+import base64
 from . import xml2dict
 from . import dict2xml
-
+import json
 from xml.parsers.expat import ExpatError
 from distutils.version import LooseVersion
 try:
@@ -296,6 +296,19 @@ class PrestaShopWebService(object):
             'filter', 'display', 'sort','ws_key',
             'limit', 'schema', 'date', 'id_shop', 'id_group_shop',
         )
+        # supported = ('description_short', 'visibility', 'isbn', 'supplier_reference', 'manufacturer_name', 'delivery_in_stock',
+        #  'available_for_order', 'width', 'quantity_discount', 'additional_shipping_cost', 'unit_price_ratio',
+        #  'low_stock_alert', 'id_supplier', 'state', 'id_tax_rules_group', 'additional_delivery_times',
+        #  'cache_has_attachments', 'text_fields', 'reference', 'available_now', 'available_later', 'is_virtual',
+        #  'pack_stock_type', 'description', 'online_only', 'uploadable_files', 'advanced_stock_management',
+        #  'show_condition', 'cache_is_pack', 'price', 'id_category_default', 'type', 'ean13', 'id_default_combination',
+        #  'wholesale_price', 'meta_keywords', 'weight', 'delivery_out_stock', 'id_shop_default', 'id_default_image',
+        #  'date_add', 'on_sale', 'link_rewrite', 'show_price', 'condition', 'low_stock_threshold',
+        #  'cache_default_attribute', 'customizable', 'indexed', 'date_upd', 'meta_title', 'id_manufacturer', 'active',
+        #  'height', 'redirect_type', 'id_type_redirected', 'unity', 'upc', 'ecotax', 'new', 'associations',
+        #  'available_date', 'depth', 'id', 'location', 'name', 'quantity', 'minimal_quantity', 'position_in_category',
+        #  'meta_description''filter', 'display', 'sort', 'ws_key',
+        #  'limit', 'schema', 'date', 'id_shop', 'id_group_shop',)
         # filter[firstname] (as e.g.) is allowed
         # so check only the part before a [
         unsupported = set([
@@ -400,6 +413,7 @@ class PrestaShopWebService(object):
         if options is not None:
             self._validate_query_options(options)
             full_url += "?%s" % (self._options_to_querystring(options),)
+        print(self.get_with_url(full_url))
         return self.get_with_url(full_url)
 
     def get_with_url(self, url):
@@ -562,6 +576,7 @@ class PrestaShopWebServiceDict(PrestaShopWebService):
 
         elems = dive(response, level=2)
         # when there is only 1 resource, we do not have a list in the response
+        print('elems---',elems)
         if not elems:
             return []
         elif isinstance(elems, list):
@@ -705,3 +720,25 @@ if __name__ == '__main__':
                                     'postcode': '95014',
                                     'vat_number': ''})
     prestashop.add('addresses', address_data)
+
+class PrestaShopWebServiceImage(PrestaShopWebServiceDict):
+
+    def get_image(self,url):
+        res={}
+        try:
+            response = self._execute(url, 'GET')
+            if response.content:
+                image_content = base64.b64encode(response.content)
+            else:
+                image_content = ''
+            if str(response.headers['content-type']) == 'image/jpeg':
+                extension = '.jpg'
+            else:
+                extension=str(response.headers['content-type']).split('/')[1]
+            res.update({
+                    'image_content':image_content,
+                    'type': extension
+                 })
+        except Exception as e:
+            print('e----------',e)
+        return res

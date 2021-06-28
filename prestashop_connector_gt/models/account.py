@@ -18,7 +18,7 @@
 
 from odoo import api, fields, models, _
 
-class account_invoice(models.Model):
+class AccountMove(models.Model):
     _inherit = "account.move"
                 
     is_prestashop=fields.Boolean('Prestashop')
@@ -44,5 +44,23 @@ class account_invoice(models.Model):
         self.pay_and_reconcile(journal_id,accountinvoice_link.amount_total, False, False)
         return True    
     
-account_invoice()
+class AccountTax(models.Model):
+    _inherit = "account.tax"
 
+    is_presta = fields.Boolean("Is Prestashop")
+    presta_id = fields.Char(string='Presta Id')
+
+class AccountTaxGroup(models.Model):
+    _inherit = "account.tax.group"
+
+    is_presta = fields.Boolean("Is Prestashop")
+    presta_id = fields.Char(string='Presta Id')
+
+class PrestashopTaxRule(models.Model):
+    _name = "prestashop.tax.rule"
+
+    presta_id = fields.Char(string='Presta Id')
+    country_id = fields.Many2one('res.country','Country')
+    state_id = fields.Many2one('res.country.state','state')
+    tax_id = fields.Many2one('account.tax','Tax')
+    group_id = fields.Many2one('account.tax.group','Tax Group')

@@ -27,7 +27,7 @@ import socket
 from datetime import timedelta, datetime, date, time
 import time
 from odoo import SUPERUSER_ID
-# import mx.DateTime as dt
+#import mx.DateTime as dt
 from odoo import netsvc
 from odoo.tools.translate import _
 from operator import itemgetter
@@ -37,7 +37,6 @@ import string, random
 import binascii
 import logging
 import cgi
-
 logger = logging.getLogger('__name__')
 
 import logging
@@ -46,7 +45,6 @@ logger = logging.getLogger('stock')
 from odoo.exceptions import UserError
 import html2text
 
-
 # try:
 #     from urllib.request import urlopen
 # except ImportError:
@@ -54,60 +52,68 @@ import html2text
 
 
 class SaleShop(models.Model):
-    _inherit = "sale.shop"
+	_inherit = "sale.shop"
 
-    # @api.multi
-    def import_prestashop_orders_scheduler(self, cron_mode=True):
-        instance_obj = self.env['sale.shop']
-        search_ids = self.search([])
-        search_ids.import_orders()
-        return True
+	
+	# @api.multi
+	def import_prestashop_orders_scheduler(self, cron_mode=True):
+		instance_obj = self.env['sale.shop']
+		search_ids = self.search([])
+		search_ids.import_orders()
+		return True
 
-    # @api.multi
-    def import_prestashop_product_scheduler(self, cron_mode=True):
-        instance_obj = self.env['sale.shop']
-        search_ids = self.search([])
-        search_ids.import_products()
-        return True
+	def import_prestashop_import_address_scheduler(self, cron_mode=True):
+		instance_obj = self.env['sale.shop']
+		search_ids = self.search([])
+		search_ids.import_addresses()
+		return True
 
-    # @api.multi
-    def import_prestashop_customer_scheduler(self, cron_mode=True):
-        instance_obj = self.env['sale.shop']
-        search_ids = self.search([])
-        search_ids.import_customers()
-        return True
+	# @api.multi
+	def import_prestashop_product_scheduler(self, cron_mode=True):
+		instance_obj = self.env['sale.shop']
+		search_ids = self.search([])
+		search_ids.import_products()
+		return True
 
-    # @api.multi
-    def import_prestashop_product_inventory_scheduler(self, cron_mode=True):
-        instance_obj = self.env['sale.shop']
-        search_ids = self.search([])
-        search_ids.import_product_inventory()
-        return True
+	# @api.multi
+	def import_prestashop_customer_scheduler(self, cron_mode=True):
+		instance_obj = self.env['sale.shop']
+		search_ids = self.search([])
+		search_ids.import_customers()
+		return True
 
-    # @api.multi
-    def prestashop_update_product_scheduler(self, cron_mode=True):
-        instance_obj = self.env['sale.shop']
-        search_ids = self.search([])
-        search_ids.update_products()
-        return True
+	# @api.multi
+	def import_prestashop_product_inventory_scheduler(self, cron_mode=True):
+		instance_obj = self.env['sale.shop']
+		search_ids = self.search([])
+		search_ids.import_product_inventory()
+		return True
 
-    # @api.multi
-    def prestashop_update_product_inventory_scheduler(self, cron_mode=True):
-        instance_obj = self.env['sale.shop']
-        search_ids = self.search([])
-        search_ids.update_presta_product_inventory()
-        return True
+	# @api.multi
+	def prestashop_update_product_scheduler(self, cron_mode=True):
+		instance_obj = self.env['sale.shop']
+		search_ids = self.search([])
+		search_ids.update_products()
+		return True
 
-    # @api.multi
-    def prestashop_product_export_scheduler(self, cron_mode=True):
-        instance_obj = self.env['sale.shop']
-        search_ids = self.search([])
-        search_ids.export_presta_products()
-        return True
+	# @api.multi
+	def prestashop_update_product_inventory_scheduler(self, cron_mode=True):
+		instance_obj = self.env['sale.shop']
+		search_ids = self.search([])
+		search_ids.update_presta_product_inventory()
+		return True
 
-    # @api.multi
-    def pres_export_customer_scheduler(self, cron_mode=True):
-        instance_obj = self.env['sale.shop']
-        search_ids = self.search([])
-        search_ids.export_presta_customers()
-        return True
+	# @api.multi
+	def prestashop_product_export_scheduler(self, cron_mode=True):
+		instance_obj = self.env['sale.shop']
+		search_ids = self.search([])
+		search_ids.export_presta_products()
+		return True
+
+	# @api.multi
+	def pres_export_customer_scheduler(self, cron_mode=True):
+		instance_obj = self.env['sale.shop']
+		search_ids = self.search([])
+		search_ids.export_presta_customers()
+		return True
+
