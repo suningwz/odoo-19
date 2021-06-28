@@ -39,8 +39,9 @@
 								</group>
 								<group name="main_configuration" string="Main Configuration">
 									<field name="warehouse_id" required="True"/>
-									<!-- <field name="taxes_included"/>
-                                   <field name="discount_product_id" /> -->
+									 <field name="tax_type"/>
+									 <field name="mapped_product_by"/>
+<!--                                   <field name="discount_product_id" />-->
 									<field name="shipping_product_id" required='True'/>
 								</group>
 							</page>

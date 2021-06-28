@@ -70,7 +70,7 @@
                  </xpath>
                 <xpath expr="//field[@name='title']" position="before">
                     <field name="prestashop_customer" invisible="1"/>
-                    <field name="prestashop_paswrd" attrs="{'invisible':[('prestashop_customer','=',False)],'required':[('prestashop_customer','!=',False)]}" password="True"/>
+                    <field name="prestashop_paswrd" attrs="{'invisible':[('prestashop_customer','=',False)]}" password="True"/>
                 </xpath>
                 <xpath expr="//field[@name='street']" position="attributes">
                     <attribute name="attrs">{'required':[('to_be_exported','=',True)]}</attribute>
@@ -92,11 +92,13 @@
                     <field name="manufacturer"/>
                     <field name="supplier_rank" invisible="1"/>
                     <field name="customer_rank" invisible="1"/>
+                    <field name="shop_ids" attrs="{'invisible':[('supplier_rank','!=',0),('manufacturer','!=',True)],'readonly': [('customer_rank','!=',0)]}"/>
+
                 </xpath>
-                <xpath expr="//field[@name='website']" position="after">
+<!--                <xpath expr="//field[@name='website']" position="after">-->
                    <!--  <field name="shop_ids" readonly="0" attrs="{'invisible':[('supplier_rank','=',True)],'invisible':[('manufacturer','=',True)]}"/> -->
-                    <field name="shop_ids" attrs="{'invisible':[('supplier_rank','=',True),('manufacturer','=',True)],'readonly': [('customer_rank','=',True)]}"/>
-                </xpath>
+<!--                    <field name="shop_ids" attrs="{'invisible':[('supplier_rank','!=',0),('manufacturer','!=',True)],'readonly': [('customer_rank','!=',0)]}"/>-->
+<!--                </xpath>-->
                 <!--<xpath expr="//field[@name='manufacturer']" position="after">-->
                     <!--<field name="newsletter"/>-->
                     <!--<field name="ads_opt_in"/>-->
@@ -135,8 +137,8 @@
             <field name="name">Customers</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">res.partner</field>
-            <field name="domain">['|',('to_be_exported', '=', True),('presta_id', '!=', False),('customer_rank','=',True)]</field>
-            <field name = "context">{'default_to_be_exported' : True,'default_customer_rank' :True }</field>
+            <field name="domain">[('prestashop_customer', '=', True)]</field>
+            <field name = "context">{'default_to_be_exported' : True,'default_prestashop_customer' :True }</field>
             <field name="view_mode">kanban,tree,form</field>
 <!--             <field name="view_type">form</field>
  -->        </record>
@@ -148,7 +150,8 @@
             <field name="name">Suppliers</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">res.partner</field>
-            <field name="domain">[('presta_id', '!=', False),('supplier_rank','=',True)]</field>
+            <field name="domain">[('prestashop_supplier','=',True)]</field>
+            <field name = "context">{'default_to_be_exported' : True,'default_prestashop_supplier' :True }</field>
             <field name="view_mode">kanban,tree,form</field>
 <!--             <field name="view_type">form</field>
  -->        </record>
@@ -157,10 +160,19 @@
             <field name="name">Manufacturers</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">res.partner</field>
-            <field name="domain">[('presta_id', '!=', False),('manufacturer','=',True)]</field>
+            <field name="domain">[('manufacturer','=',True)]</field>
+              <field name = "context">{'default_to_be_exported' : True,'default_manufacturer' :True }</field>
             <field name="view_mode">kanban,tree,form</field>
 <!--             <field name="view_type">form</field>
  -->        </record>
+        <record id="action_partner_address_form" model="ir.actions.act_window">
+            <field name="name">Address</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="domain">[('prestashop_address', '=', True)]</field>
+            <field name = "context">{'default_to_be_exported' : True,'default_prestashop_address' :True }</field>
+            <field name="view_mode">kanban,tree,form</field>
+        </record>
     </data>
 </odoo>
 

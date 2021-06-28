@@ -19,17 +19,10 @@
 
 import logging
 logger = logging.getLogger('stock')
-import pytz
-from datetime import datetime
 from odoo import api, fields, models, _
-from xml.dom.minidom import parse, parseString
-import xml.etree.ElementTree as ET
-# from odoo.osv import expression
-from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from odoo.addons.prestashop_connector_gt.prestapyt.prestapyt import PrestaShopWebServiceError as PrestaShopWebServiceError
-from odoo.addons.prestashop_connector_gt.prestapyt.prestapyt import PrestaShopWebService as PrestaShopWebService
 from odoo.addons.prestashop_connector_gt.prestapyt.prestapyt import PrestaShopWebServiceDict as PrestaShopWebServiceDict
-
+from odoo.addons.prestashop_connector_gt.prestapyt_old.prestapyt import PrestaShopWebServiceDict as PrestaShopWebServiceDict
+from odoo.exceptions import UserError, ValidationError
 
     
 class prestashop_instance(models.Model):
@@ -48,9 +41,11 @@ class prestashop_instance(models.Model):
     location = fields.Char('Location',default='http://localhost/prestashop',required=True)
     webservice_key = fields.Char('Webservice key',help="You have to put it in 'username' of the PrestaShop ""Webservice api path invite",required=True)
     warehouse_id=fields.Many2one('stock.warehouse','Warehouse', help='Warehouse used to compute the stock quantities.')
-    company_id= fields.Many2one('res.company', 'Company', default=lambda s: s.env['res.company']._company_default_get('stock.warehouse'))
-    shipping_product_id=fields.Many2one('product.product', 'Shipping Product', select=1)
-
+    company_id= fields.Many2one('res.company', 'Company', default=lambda self: self.env.company)
+    shipping_product_id=fields.Many2one('product.product', 'Shipping Product')
+    included_tax=fields.Boolean('Tax Include?', help='If this check box are false tax consider as excluded')
+    tax_type = fields.Selection([('tax_include','Tax Include?'),('tax_exclude','Tax Exclude?')], string='Tax Consider in Odoo', default='tax_exclude')
+    mapped_product_by = fields.Selection([('presta_id','Prestashop Id'),('default_code','Refrence'),('barcode','Barcode')], string='Mapped Product By', default='presta_id')
 #     Count Button For Sale Shop
     presta_id = fields.Char(string='shop Id')
     sale_shop_count = fields.Integer(string='Shops\s Count', compute='get_shop_count', default=0)
@@ -86,7 +81,6 @@ class prestashop_instance(models.Model):
 
     # @api.one
     def create_shop(self, shop_val):
-        print( "======shop_valshop_valshop_valshop_valshop_val==>",shop_val)
         sale_shop_obj = self.env['sale.shop']
         price_list_obj = self.env['product.pricelist']
         journal_obj = self.env['account.journal']
@@ -110,8 +104,6 @@ class prestashop_instance(models.Model):
         def_gift_ids = product_prod_obj.search([('type', '=', 'service'), ('name', 'like', '%Gift%')])
         def_warehouse_ids = warehouse_obj.search([])
 
-        print("self.get_value_data(shop_val.get('name'))[0]===",self.get_value_data(shop_val.get('name'))[0],self.get_value_data(shop_val.get('name')))
-        
         shop_vals = {
             # 'name' : shop_val.get('name').get('value'),
             'name' : self.get_value_data(shop_val.get('name')),
@@ -134,8 +126,6 @@ class prestashop_instance(models.Model):
             'partner_id' : def_partner_ids and def_partner_ids[0].id,
             'workflow_id': def_workflow_ids and def_workflow_ids[0].id,
         }
-        print("shop_vals newwwwwww===============>",shop_vals)
-        
         # shop_ids = sale_shop_obj.search([('prestashop_instance_id', '=', self[0].id), ('name', '=', shop_val.get('name').get('value'))])
         shop_ids = sale_shop_obj.search([('prestashop_instance_id', '=', self[0].id),('name', '=',  self.get_value_data(shop_val.get('name'))[0])])
 
@@ -156,59 +146,58 @@ class prestashop_instance(models.Model):
                     
     # @api.multi
     def create_prestashop_shop_action(self):
-       lang_obj = self.env['prestashop.language']
-       sale_shop_obj = self.env['sale.shop']
-       shop_ids = []
-       for instance in self:
-           prestashop = PrestaShopWebServiceDict(instance.location, instance.webservice_key)
-           print ("prestashopp=====>",prestashop)
-           shops = prestashop.get('shops')
-           print ("get shops=====>",shops)
-           # print "instance.shop_physical_url=====>",instance.shop_physical_url
+        try:
+           lang_obj = self.env['prestashop.language']
+           sale_shop_obj = self.env['sale.shop']
+           shop_ids = []
+           for instance in self:
+               prestashop = PrestaShopWebServiceDict(instance.location, instance.webservice_key)
+               shops = prestashop.get('shops')
+               # print "instance.shop_physical_url=====>",instance.shop_physical_url
 
-           if shops.get('shops') and shops.get('shops').get('shop'):
-               shops = shops.get('shops').get('shop')
-               if isinstance(shops, list):
-                   shops_val = shops
-               else:
-                   shops_val = [shops]
+               if shops.get('shops') and shops.get('shops').get('shop'):
+                   shops = shops.get('shops').get('shop')
+                   if isinstance(shops, list):
+                       shops_val = shops
+                   else:
+                       shops_val = [shops]
 
-               for shop_id in shops_val:
-                   print ("====shop_id====>",shop_id)
-                   id = shop_id.get('attrs').get('id')
-                   data = prestashop.get('shops', id)
-                   if data.get('shop'):
-                       shop_id = sale_shop_obj.search([('presta_id','=',self.get_value_data(data.get('shop').get('id'))[0])])
-                       if not shop_id:
-                            shop_ids.append(instance.create_shop(data.get('shop')))
-               
-               languages = prestashop.get('languages')
-               lan_vals = languages.get('languages').get('language')
-               if isinstance(lan_vals, list):
+                   for shop_id in shops_val:
+                       id = shop_id.get('attrs').get('id')
+                       data = prestashop.get('shops', id)
+                       if data.get('shop'):
+                           shop_id = sale_shop_obj.search([('presta_id','=',self.get_value_data(data.get('shop').get('id'))[0])])
+                           if not shop_id:
+                                shop_ids.append(instance.create_shop(data.get('shop')))
+
+                   languages = prestashop.get('languages')
                    lan_vals = languages.get('languages').get('language')
-               else:
-                   lan_vals = [languages.get('languages').get('language')]
-               for lang in lan_vals:
-                   logger.info('lang ===> %s', lang)
-                   lang_vals = prestashop.get('languages', lang.get('attrs').get('id'))
-                   print ("=====lang_vals=====>",lang_vals)
-                   logger.info('lang_vals===> %s', lang_vals)
-                   # vals = {
-                   #     'name': lang_vals.get('language').get('name').get('value'),
-                   #     'code': lang_vals.get('language').get('iso_code').get('value'),
-                   #     'presta_id' : lang_vals.get('language').get('id').get('value'),
-                   #     'presta_instance_id' : instance.id
-                   # }
-                   vals = {
-                       'name': self.get_value_data(lang_vals.get('language').get('name')),
-                       'code': self.get_value_data(lang_vals.get('language').get('iso_code')),
-                       'presta_id' : self.get_value_data(lang_vals.get('language').get('id')),
-                       'presta_instance_id' : instance.id
-                   }
-                   # l_ids = lang_obj.search([('presta_id','=', lang_vals.get('language').get('id').get('value')),('presta_instance_id','=', instance.id)])
-                   l_ids = lang_obj.search([('presta_id','=', self.get_value_data(lang_vals.get('language').get('id'))[0]),('presta_instance_id','=', instance.id)])
-                   if not l_ids:
-                       lang_obj.create(vals)
-#                 if shop_ids:
-#                     shop_ids.import_product_attributes()
-       return True
+                   if isinstance(lan_vals, list):
+                       lan_vals = languages.get('languages').get('language')
+                   else:
+                       lan_vals = [languages.get('languages').get('language')]
+                   for lang in lan_vals:
+                       logger.info('lang ===> %s', lang)
+                       lang_vals = prestashop.get('languages', lang.get('attrs').get('id'))
+                       logger.info('lang_vals===> %s', lang_vals)
+                       # vals = {
+                       #     'name': lang_vals.get('language').get('name').get('value'),
+                       #     'code': lang_vals.get('language').get('iso_code').get('value'),
+                       #     'presta_id' : lang_vals.get('language').get('id').get('value'),
+                       #     'presta_instance_id' : instance.id
+                       # }
+                       vals = {
+                           'name': self.get_value_data(lang_vals.get('language').get('name')),
+                           'code': self.get_value_data(lang_vals.get('language').get('iso_code')),
+                           'presta_id' : self.get_value_data(lang_vals.get('language').get('id')),
+                           'presta_instance_id' : instance.id
+                       }
+                       # l_ids = lang_obj.search([('presta_id','=', lang_vals.get('language').get('id').get('value')),('presta_instance_id','=', instance.id)])
+                       l_ids = lang_obj.search([('presta_id','=', self.get_value_data(lang_vals.get('language').get('id'))[0]),('presta_instance_id','=', instance.id)])
+                       if not l_ids:
+                           lang_obj.create(vals)
+    #                 if shop_ids:
+    #                     shop_ids.import_product_attributes()
+        except Exception as e:
+           raise ValidationError(_(str(e)))
+        return True
