@@ -17,7 +17,7 @@ class Task(models.Model):
     done = fields.Boolean(string='Finalizada')
     phase = fields.Many2one('dlg_projects.phase', string="Fase", required=False)
     user = fields.Char("Usuario", default=lambda self: self.env.user.name)
-    user_assigned = fields.Many2one('res.users', sring="Asignado a")
+    user_assigned = fields.Many2one('res.users', string="Asignado a")
     color = fields.Integer()
     attachments = fields.One2many('ir.attachment', 'res_id', string='Attachments', copy=True, auto_join=True)
     header = fields.Char('Cabecera')
